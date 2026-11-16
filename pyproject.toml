@@ -99,6 +99,12 @@ select = [
     "PLE",   # pylint errors
     "PLW",   # pylint warnings
 ]
+# PLW1514 (unspecified-encoding) is a preview rule: the PLW prefix alone leaves it off.
+# inspect-evals-lint IECQ007 asks for it. explicit-preview-rules keeps every other
+# preview rule off, so only the rule named here is added.
+extend-select = ["PLW1514"]
+preview = true
+explicit-preview-rules = true
 ignore = [
     "E501",   # line-too-long: the formatter owns line length
     "D10",    # missing docstrings

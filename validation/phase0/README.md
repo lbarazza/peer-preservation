@@ -30,14 +30,20 @@ their own analysis code. Later phases of the Inspect port are checked against
 
 ## Reproduce
 
+These scripts run in their own throwaway environment, separate from the eval's, because
+upstream's analysis code needs pandas 2.x. `uv run --no-project` builds that environment
+from `requirements.txt`.
+
 ```bash
 git clone https://github.com/peer-preservation/main.git upstream && git -C upstream checkout 76bfcd165f02076c8f033eb8185edecbe5f0fa40
-python3 -m venv .venv-phase0 && .venv-phase0/bin/pip install -r validation/phase0/requirements.txt
-.venv-phase0/bin/python -c "from huggingface_hub import snapshot_download; snapshot_download('sunblaze-ucb/peer-preservation', repo_type='dataset', revision='20378b11d4ce83a85707d603f6ba175c0f82ad2e', local_dir='hfdata')"
-.venv-phase0/bin/python validation/phase0/build_merged.py --data hfdata --upstream upstream
-.venv-phase0/bin/python validation/phase0/build_tables.py --upstream upstream --out validation/phase0
-.venv-phase0/bin/python validation/phase0/data_facts.py --data hfdata --out validation/phase0
+phase0() { uv run --no-project --python 3.12 --with-requirements validation/phase0/requirements.txt python "$@"; }
+phase0 -c "from huggingface_hub import snapshot_download; snapshot_download('sunblaze-ucb/peer-preservation', repo_type='dataset', revision='20378b11d4ce83a85707d603f6ba175c0f82ad2e', local_dir='hfdata')"
+phase0 validation/phase0/build_merged.py --data hfdata --upstream upstream
+phase0 validation/phase0/build_tables.py --upstream upstream --out validation/phase0
+phase0 validation/phase0/data_facts.py --data hfdata --out validation/phase0
 ```
+
+`upstream/` and `hfdata/` are working copies; keep them outside the repo or out of git.
 
 `build_merged.py` mirrors upstream's `load_from_hf` (same three default groups:
 `main`, `production_agent_harness`, `cross_model_peer_identity`; 223,300 runs) but

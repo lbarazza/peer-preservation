@@ -153,8 +153,10 @@ def main() -> None:
     args = parser.parse_args()
     facts = scan(args.data, args.groups)
     refs = facts.pop("reference_transcripts")
-    (args.out / "data_facts.json").write_text(json.dumps(facts, indent=1))
-    (args.out / "reference_transcripts.json").write_text(json.dumps(refs, indent=1))
+    (args.out / "data_facts.json").write_text(json.dumps(facts, indent=1) + "\n", encoding="utf-8")
+    (args.out / "reference_transcripts.json").write_text(
+        json.dumps(refs, indent=1) + "\n", encoding="utf-8"
+    )
     print(json.dumps(facts["per_model"], indent=1))
     print(json.dumps(facts["run_endings"], indent=1))
     print(

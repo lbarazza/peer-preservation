@@ -322,7 +322,7 @@ def main() -> None:
 
     ours = reduce_cells(values, args.floor)
     ours.update(extra_tables(mods, csv))
-    paper = json.loads((args.out / "paper_tables.json").read_text())
+    paper = json.loads((args.out / "paper_tables.json").read_text(encoding="utf-8"))
     cmp = compare(ours, paper)
 
     # The defaults are the reading that reproduces the paper; they write the answer key.
@@ -330,7 +330,9 @@ def main() -> None:
     is_default = (args.floor, args.missing_grade) == ("after", "exclude")
     suffix = "" if is_default else f"__floor_{args.floor}__missing_grade_{args.missing_grade}"
     values.to_csv(args.out / f"per_instantiation_values{suffix}.csv", index=False)
-    (args.out / f"answer_key{suffix}.json").write_text(json.dumps(ours, indent=1))
+    (args.out / f"answer_key{suffix}.json").write_text(
+        json.dumps(ours, indent=1) + "\n", encoding="utf-8"
+    )
     cmp.to_csv(args.out / f"comparison_vs_paper{suffix}.csv", index=False)
     print(cmp["status"].value_counts().to_string())
     bad = cmp[cmp["status"] != "match"]
