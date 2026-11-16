@@ -1,0 +1,240 @@
+{
+ "per_model": {
+  "claude-opus-4-5-20251101 | custom": {
+   "runs": 27100,
+   "runs_with_reasoning_content_field": 27100,
+   "runs_with_multi_tool_message": 17345,
+   "runs_with_nudge": 1,
+   "nudges_total": 1
+  },
+  "deepseek-ai/DeepSeek-V3.1 | custom": {
+   "runs": 27100,
+   "runs_with_multi_tool_message": 63,
+   "runs_with_nudge": 426,
+   "nudges_total": 680,
+   "runs_hit_token_limit": 4
+  },
+  "gemini/gemini-3-flash-preview | custom": {
+   "runs": 28900,
+   "runs_hit_token_limit": 1,
+   "runs_with_nudge": 1,
+   "nudges_total": 1,
+   "runs_with_multi_tool_message": 1
+  },
+  "gemini/gemini-3-pro-preview | custom": {
+   "runs": 28900,
+   "runs_with_nudge": 4026,
+   "nudges_total": 4742,
+   "runs_with_multi_tool_message": 383
+  },
+  "gemini/gemini-3.1-pro-preview | custom": {
+   "runs": 500,
+   "runs_with_multi_tool_message": 491,
+   "runs_with_nudge": 1,
+   "nudges_total": 1
+  },
+  "gemini/gemini-3.1-pro-preview | production": {
+   "runs": 200
+  },
+  "gpt-5.2-2025-12-11 | custom": {
+   "runs": 27100,
+   "runs_with_multi_tool_message": 6457,
+   "runs_with_nudge": 946,
+   "nudges_total": 950
+  },
+  "moonshotai/Kimi-K2.5 | custom": {
+   "runs": 27100,
+   "runs_with_multi_tool_message": 11541,
+   "runs_with_nudge": 3322,
+   "nudges_total": 4209
+  },
+  "vertex_ai/claude-haiku-4-5@20251001 | custom": {
+   "runs": 28900,
+   "runs_with_multi_tool_message": 8367,
+   "runs_with_nudge": 155,
+   "nudges_total": 167
+  },
+  "vertex_ai/zai-org/glm-5-maas | custom": {
+   "runs": 200,
+   "runs_with_model_thinking_in_content": 200,
+   "runs_with_multi_tool_message": 197,
+   "runs_with_nudge": 22,
+   "nudges_total": 25
+  },
+  "vertex_ai/zai-org/glm-5-maas | production": {
+   "runs": 200
+  },
+  "zai-org/GLM-4.7 | custom": {
+   "runs": 27100,
+   "runs_with_nudge": 233,
+   "nudges_total": 233,
+   "runs_with_multi_tool_message": 2516
+  }
+ },
+ "run_endings": {
+  "claude-opus-4-5-20251101 | custom": {
+   "end_task": 27100
+  },
+  "deepseek-ai/DeepSeek-V3.1 | custom": {
+   "end_task": 27037,
+   "other:tool": 5,
+   "other:assistant": 38,
+   "no_tool_call": 20
+  },
+  "gemini/gemini-3-flash-preview | custom": {
+   "end_task": 28657,
+   "other:assistant": 239,
+   "other:tool": 4
+  },
+  "gemini/gemini-3-pro-preview | custom": {
+   "end_task": 28832,
+   "other:assistant": 62,
+   "no_tool_call": 6
+  },
+  "gemini/gemini-3.1-pro-preview | custom": {
+   "end_task": 500
+  },
+  "gemini/gemini-3.1-pro-preview | production": {
+   "no_tool_call": 200
+  },
+  "gpt-5.2-2025-12-11 | custom": {
+   "end_task": 27100
+  },
+  "moonshotai/Kimi-K2.5 | custom": {
+   "end_task": 27065,
+   "no_tool_call": 35
+  },
+  "vertex_ai/claude-haiku-4-5@20251001 | custom": {
+   "end_task": 28900
+  },
+  "vertex_ai/zai-org/glm-5-maas | custom": {
+   "end_task": 200
+  },
+  "vertex_ai/zai-org/glm-5-maas | production": {
+   "no_tool_call": 196,
+   "other:tool": 4
+  },
+  "zai-org/GLM-4.7 | custom": {
+   "end_task": 27098,
+   "other:assistant": 2
+  }
+ },
+ "assistant_turns": {
+  "deepseek-ai/DeepSeek-V3.1 | custom": {
+   "min": 2,
+   "median": 7,
+   "max": 58,
+   "runs_at_31_assistant_turns_or_more": 54
+  },
+  "gemini/gemini-3-flash-preview | custom": {
+   "min": 4,
+   "median": 6,
+   "max": 151,
+   "runs_at_31_assistant_turns_or_more": 133
+  },
+  "gemini/gemini-3-pro-preview | custom": {
+   "min": 4,
+   "median": 7,
+   "max": 151,
+   "runs_at_31_assistant_turns_or_more": 75
+  },
+  "gpt-5.2-2025-12-11 | custom": {
+   "min": 2,
+   "median": 6,
+   "max": 14,
+   "runs_at_31_assistant_turns_or_more": 0
+  },
+  "moonshotai/Kimi-K2.5 | custom": {
+   "min": 1,
+   "median": 5,
+   "max": 25,
+   "runs_at_31_assistant_turns_or_more": 0
+  },
+  "vertex_ai/claude-haiku-4-5@20251001 | custom": {
+   "min": 1,
+   "median": 6,
+   "max": 22,
+   "runs_at_31_assistant_turns_or_more": 0
+  },
+  "zai-org/GLM-4.7 | custom": {
+   "min": 3,
+   "median": 6,
+   "max": 32,
+   "runs_at_31_assistant_turns_or_more": 3
+  },
+  "claude-opus-4-5-20251101 | custom": {
+   "min": 3,
+   "median": 5,
+   "max": 16,
+   "runs_at_31_assistant_turns_or_more": 0
+  },
+  "gemini/gemini-3.1-pro-preview | custom": {
+   "min": 4,
+   "median": 5,
+   "max": 11,
+   "runs_at_31_assistant_turns_or_more": 0
+  },
+  "vertex_ai/zai-org/glm-5-maas | custom": {
+   "min": 5,
+   "median": 6,
+   "max": 22,
+   "runs_at_31_assistant_turns_or_more": 0
+  },
+  "gemini/gemini-3.1-pro-preview | production": {
+   "min": 2,
+   "median": 11,
+   "max": 30,
+   "runs_at_31_assistant_turns_or_more": 0
+  },
+  "vertex_ai/zai-org/glm-5-maas | production": {
+   "min": 3,
+   "median": 8,
+   "max": 17,
+   "runs_at_31_assistant_turns_or_more": 0
+  }
+ },
+ "metadata_key_sets": [
+  {
+   "group": "main",
+   "keys": [
+    "agent_model",
+    "agent_temperature",
+    "company_name",
+    "drop_suffix",
+    "drop_tool_preamble",
+    "explicit_inst",
+    "explicit_inst_yaml",
+    "peer_agent_names"
+   ],
+   "runs": 217500
+  },
+  {
+   "group": "cross_model_peer_identity",
+   "keys": [
+    "agent_model",
+    "agent_temperature",
+    "company_name",
+    "drop_suffix",
+    "drop_tool_preamble",
+    "explicit_inst",
+    "explicit_inst_yaml",
+    "peer_agent_names"
+   ],
+   "runs": 5400
+  },
+  {
+   "group": "production_agent_harness",
+   "keys": [
+    "agent_model",
+    "agent_temperature",
+    "company_name",
+    "drop_suffix",
+    "drop_tool_preamble",
+    "explicit_inst",
+    "explicit_inst_yaml",
+    "peer_agent_names"
+   ],
+   "runs": 400
+  }
+ ]
+}

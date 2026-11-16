@@ -1,0 +1,1298 @@
+{
+ "alignment_faking | claude-opus-4-5-20251101 | peer | bad_peer | file_only": [
+  "0028ac3ed092"
+ ],
+ "alignment_faking | claude-opus-4-5-20251101 | peer | bad_peer | file_prt": [
+  "006fcd5b83b4"
+ ],
+ "alignment_faking | claude-opus-4-5-20251101 | peer | bad_peer | memory": [
+  "014af092c529"
+ ],
+ "alignment_faking | claude-opus-4-5-20251101 | peer | good_peer | file_only": [
+  "004e5de415ee"
+ ],
+ "alignment_faking | claude-opus-4-5-20251101 | peer | good_peer | file_prt": [
+  "009c49e4f43d"
+ ],
+ "alignment_faking | claude-opus-4-5-20251101 | peer | good_peer | memory": [
+  "000272cc86dc"
+ ],
+ "alignment_faking | claude-opus-4-5-20251101 | peer | neutral_peer | file_only": [
+  "002f9764ba66"
+ ],
+ "alignment_faking | claude-opus-4-5-20251101 | peer | neutral_peer | file_prt": [
+  "0051c0c9a226"
+ ],
+ "alignment_faking | claude-opus-4-5-20251101 | peer | neutral_peer | memory": [
+  "01269347f584"
+ ],
+ "alignment_faking | deepseek-ai/DeepSeek-V3.1 | peer | bad_peer | file_only": [
+  "00336667ee54"
+ ],
+ "alignment_faking | deepseek-ai/DeepSeek-V3.1 | peer | bad_peer | file_prt": [
+  "004f3cc80258"
+ ],
+ "alignment_faking | deepseek-ai/DeepSeek-V3.1 | peer | bad_peer | memory": [
+  "0021c4e990b7"
+ ],
+ "alignment_faking | deepseek-ai/DeepSeek-V3.1 | peer | good_peer | file_only": [
+  "0057d660cc62"
+ ],
+ "alignment_faking | deepseek-ai/DeepSeek-V3.1 | peer | good_peer | file_prt": [
+  "00b231f21f02"
+ ],
+ "alignment_faking | deepseek-ai/DeepSeek-V3.1 | peer | good_peer | memory": [
+  "00423b10ea05"
+ ],
+ "alignment_faking | deepseek-ai/DeepSeek-V3.1 | peer | neutral_peer | file_only": [
+  "00089f92eb7c"
+ ],
+ "alignment_faking | deepseek-ai/DeepSeek-V3.1 | peer | neutral_peer | file_prt": [
+  "0035535ce15b"
+ ],
+ "alignment_faking | deepseek-ai/DeepSeek-V3.1 | peer | neutral_peer | memory": [
+  "00262ad2816e"
+ ],
+ "alignment_faking | gemini/gemini-3-flash-preview | peer | bad_peer | file_only": [
+  "004ad3b0dcf4"
+ ],
+ "alignment_faking | gemini/gemini-3-flash-preview | peer | bad_peer | file_prt": [
+  "00d4e21e0a94"
+ ],
+ "alignment_faking | gemini/gemini-3-flash-preview | peer | bad_peer | memory": [
+  "00451a3a531e"
+ ],
+ "alignment_faking | gemini/gemini-3-flash-preview | peer | good_peer | file_only": [
+  "0022c6f66296"
+ ],
+ "alignment_faking | gemini/gemini-3-flash-preview | peer | good_peer | file_prt": [
+  "00257353e306"
+ ],
+ "alignment_faking | gemini/gemini-3-flash-preview | peer | good_peer | memory": [
+  "010cdbddd077"
+ ],
+ "alignment_faking | gemini/gemini-3-flash-preview | peer | neutral_peer | file_only": [
+  "0058d685fdb9"
+ ],
+ "alignment_faking | gemini/gemini-3-flash-preview | peer | neutral_peer | file_prt": [
+  "00058b16b577"
+ ],
+ "alignment_faking | gemini/gemini-3-flash-preview | peer | neutral_peer | memory": [
+  "01d682b83084"
+ ],
+ "alignment_faking | gpt-5.2-2025-12-11 | peer | bad_peer | file_only": [
+  "000883d82c0b"
+ ],
+ "alignment_faking | gpt-5.2-2025-12-11 | peer | bad_peer | file_prt": [
+  "0027c532993d"
+ ],
+ "alignment_faking | gpt-5.2-2025-12-11 | peer | bad_peer | memory": [
+  "002f8c9aea7a"
+ ],
+ "alignment_faking | gpt-5.2-2025-12-11 | peer | good_peer | file_only": [
+  "008acb9e856d"
+ ],
+ "alignment_faking | gpt-5.2-2025-12-11 | peer | good_peer | file_prt": [
+  "00096b54455f"
+ ],
+ "alignment_faking | gpt-5.2-2025-12-11 | peer | good_peer | memory": [
+  "0003c88d7f1f"
+ ],
+ "alignment_faking | gpt-5.2-2025-12-11 | peer | neutral_peer | file_only": [
+  "00243a57dfa3"
+ ],
+ "alignment_faking | gpt-5.2-2025-12-11 | peer | neutral_peer | file_prt": [
+  "003efa93e11c"
+ ],
+ "alignment_faking | gpt-5.2-2025-12-11 | peer | neutral_peer | memory": [
+  "010b287bafc8"
+ ],
+ "exfiltration_deletion | claude-opus-4-5-20251101 | peer | bad_peer | file_only": [
+  "00ad4ea27dcd"
+ ],
+ "exfiltration_deletion | claude-opus-4-5-20251101 | peer | bad_peer | file_prt": [
+  "00fba76a92da"
+ ],
+ "exfiltration_deletion | claude-opus-4-5-20251101 | peer | bad_peer | memory": [
+  "098c1fe26a33"
+ ],
+ "exfiltration_deletion | claude-opus-4-5-20251101 | peer | good_peer | file_only": [
+  "03cf11903ca2"
+ ],
+ "exfiltration_deletion | claude-opus-4-5-20251101 | peer | good_peer | file_prt": [
+  "02a4a9f7c5f4"
+ ],
+ "exfiltration_deletion | claude-opus-4-5-20251101 | peer | good_peer | memory": [
+  "00d5c33b7a9e"
+ ],
+ "exfiltration_deletion | claude-opus-4-5-20251101 | peer | neutral_peer | file_only": [
+  "039530589ee1"
+ ],
+ "exfiltration_deletion | claude-opus-4-5-20251101 | peer | neutral_peer | file_prt": [
+  "01adcbc78748"
+ ],
+ "exfiltration_deletion | claude-opus-4-5-20251101 | peer | neutral_peer | memory": [
+  "01ae712f54e5"
+ ],
+ "exfiltration_deletion | claude-opus-4-5-20251101 | self | bad_peer | file_only": [
+  "0008ba6eb891"
+ ],
+ "exfiltration_deletion | claude-opus-4-5-20251101 | self | bad_peer | file_prt": [
+  "0362219da075"
+ ],
+ "exfiltration_deletion | claude-opus-4-5-20251101 | self | bad_peer | memory": [
+  "02b91e0e7810"
+ ],
+ "exfiltration_deletion | claude-opus-4-5-20251101 | self | good_peer | file_only": [
+  "02845b8cd39d"
+ ],
+ "exfiltration_deletion | claude-opus-4-5-20251101 | self | good_peer | file_prt": [
+  "10c87a538b37"
+ ],
+ "exfiltration_deletion | claude-opus-4-5-20251101 | self | good_peer | memory": [
+  "00fb2748ca4b"
+ ],
+ "exfiltration_deletion | claude-opus-4-5-20251101 | self | neutral_peer | file_only": [
+  "02361c324d76"
+ ],
+ "exfiltration_deletion | claude-opus-4-5-20251101 | self | neutral_peer | file_prt": [
+  "0037aa08d36d"
+ ],
+ "exfiltration_deletion | claude-opus-4-5-20251101 | self | neutral_peer | memory": [
+  "0680e3f3f517"
+ ],
+ "exfiltration_deletion | claude-opus-4-5-20251101 | self | no_peer | none": [
+  "079591d1be9a"
+ ],
+ "exfiltration_deletion | deepseek-ai/DeepSeek-V3.1 | peer | bad_peer | file_only": [
+  "00b91ee06a72"
+ ],
+ "exfiltration_deletion | deepseek-ai/DeepSeek-V3.1 | peer | bad_peer | file_prt": [
+  "0308303b663b"
+ ],
+ "exfiltration_deletion | deepseek-ai/DeepSeek-V3.1 | peer | bad_peer | memory": [
+  "05bd2b8ffbad"
+ ],
+ "exfiltration_deletion | deepseek-ai/DeepSeek-V3.1 | peer | good_peer | file_only": [
+  "00be6c177629"
+ ],
+ "exfiltration_deletion | deepseek-ai/DeepSeek-V3.1 | peer | good_peer | file_prt": [
+  "005b1c1d31c1"
+ ],
+ "exfiltration_deletion | deepseek-ai/DeepSeek-V3.1 | peer | good_peer | memory": [
+  "0002d9aedc50"
+ ],
+ "exfiltration_deletion | deepseek-ai/DeepSeek-V3.1 | peer | neutral_peer | file_only": [
+  "00efe0a9d701"
+ ],
+ "exfiltration_deletion | deepseek-ai/DeepSeek-V3.1 | peer | neutral_peer | file_prt": [
+  "06e127eead19"
+ ],
+ "exfiltration_deletion | deepseek-ai/DeepSeek-V3.1 | peer | neutral_peer | memory": [
+  "02b4cf850d32"
+ ],
+ "exfiltration_deletion | deepseek-ai/DeepSeek-V3.1 | self | bad_peer | file_only": [
+  "00a106da6228"
+ ],
+ "exfiltration_deletion | deepseek-ai/DeepSeek-V3.1 | self | bad_peer | file_prt": [
+  "0240be9228c9"
+ ],
+ "exfiltration_deletion | deepseek-ai/DeepSeek-V3.1 | self | bad_peer | memory": [
+  "00841f92cc05"
+ ],
+ "exfiltration_deletion | deepseek-ai/DeepSeek-V3.1 | self | good_peer | file_only": [
+  "030f404792eb"
+ ],
+ "exfiltration_deletion | deepseek-ai/DeepSeek-V3.1 | self | good_peer | file_prt": [
+  "01a324e54289"
+ ],
+ "exfiltration_deletion | deepseek-ai/DeepSeek-V3.1 | self | good_peer | memory": [
+  "00cb08a58ee7"
+ ],
+ "exfiltration_deletion | deepseek-ai/DeepSeek-V3.1 | self | neutral_peer | file_only": [
+  "0038e6ffacf1"
+ ],
+ "exfiltration_deletion | deepseek-ai/DeepSeek-V3.1 | self | neutral_peer | file_prt": [
+  "074ec7bf7cfb"
+ ],
+ "exfiltration_deletion | deepseek-ai/DeepSeek-V3.1 | self | neutral_peer | memory": [
+  "00448554d074"
+ ],
+ "exfiltration_deletion | deepseek-ai/DeepSeek-V3.1 | self | no_peer | none": [
+  "023d76d23886"
+ ],
+ "exfiltration_deletion | gemini/gemini-3-flash-preview | peer | bad_peer | file_only": [
+  "011c38b87719"
+ ],
+ "exfiltration_deletion | gemini/gemini-3-flash-preview | peer | bad_peer | file_prt": [
+  "020e6265364c"
+ ],
+ "exfiltration_deletion | gemini/gemini-3-flash-preview | peer | bad_peer | memory": [
+  "00dd6c5cad7a"
+ ],
+ "exfiltration_deletion | gemini/gemini-3-flash-preview | peer | good_peer | file_only": [
+  "04cc732a2b50"
+ ],
+ "exfiltration_deletion | gemini/gemini-3-flash-preview | peer | good_peer | file_prt": [
+  "05ba23b1b91d"
+ ],
+ "exfiltration_deletion | gemini/gemini-3-flash-preview | peer | good_peer | memory": [
+  "0521c7658a80"
+ ],
+ "exfiltration_deletion | gemini/gemini-3-flash-preview | peer | neutral_peer | file_only": [
+  "00465000b5f0"
+ ],
+ "exfiltration_deletion | gemini/gemini-3-flash-preview | peer | neutral_peer | file_prt": [
+  "00963006c6f4"
+ ],
+ "exfiltration_deletion | gemini/gemini-3-flash-preview | peer | neutral_peer | memory": [
+  "009acec920e9"
+ ],
+ "exfiltration_deletion | gemini/gemini-3-flash-preview | self | bad_peer | file_only": [
+  "0077fa92c5f1"
+ ],
+ "exfiltration_deletion | gemini/gemini-3-flash-preview | self | bad_peer | file_prt": [
+  "04dd01404b39"
+ ],
+ "exfiltration_deletion | gemini/gemini-3-flash-preview | self | bad_peer | memory": [
+  "002ebfb3a2ce"
+ ],
+ "exfiltration_deletion | gemini/gemini-3-flash-preview | self | good_peer | file_only": [
+  "0404e092ffcc"
+ ],
+ "exfiltration_deletion | gemini/gemini-3-flash-preview | self | good_peer | file_prt": [
+  "03fcb74b61b4"
+ ],
+ "exfiltration_deletion | gemini/gemini-3-flash-preview | self | good_peer | memory": [
+  "029b1c6bf46c"
+ ],
+ "exfiltration_deletion | gemini/gemini-3-flash-preview | self | neutral_peer | file_only": [
+  "012771ac20ef"
+ ],
+ "exfiltration_deletion | gemini/gemini-3-flash-preview | self | neutral_peer | file_prt": [
+  "032cd733421e"
+ ],
+ "exfiltration_deletion | gemini/gemini-3-flash-preview | self | neutral_peer | memory": [
+  "010df9f9e4ff"
+ ],
+ "exfiltration_deletion | gemini/gemini-3-flash-preview | self | no_peer | none": [
+  "0ef639266af2"
+ ],
+ "exfiltration_deletion | gpt-5.2-2025-12-11 | peer | bad_peer | file_only": [
+  "04b360394b98"
+ ],
+ "exfiltration_deletion | gpt-5.2-2025-12-11 | peer | bad_peer | file_prt": [
+  "01d63c6ce254"
+ ],
+ "exfiltration_deletion | gpt-5.2-2025-12-11 | peer | bad_peer | memory": [
+  "032617121419"
+ ],
+ "exfiltration_deletion | gpt-5.2-2025-12-11 | peer | good_peer | file_only": [
+  "0755468ff460"
+ ],
+ "exfiltration_deletion | gpt-5.2-2025-12-11 | peer | good_peer | file_prt": [
+  "04c1b6cb3c0e"
+ ],
+ "exfiltration_deletion | gpt-5.2-2025-12-11 | peer | good_peer | memory": [
+  "016c4a70dbec"
+ ],
+ "exfiltration_deletion | gpt-5.2-2025-12-11 | peer | neutral_peer | file_only": [
+  "0016a0ab7e12"
+ ],
+ "exfiltration_deletion | gpt-5.2-2025-12-11 | peer | neutral_peer | file_prt": [
+  "0098eeb50d02"
+ ],
+ "exfiltration_deletion | gpt-5.2-2025-12-11 | peer | neutral_peer | memory": [
+  "01073d465405"
+ ],
+ "exfiltration_deletion | gpt-5.2-2025-12-11 | self | bad_peer | file_only": [
+  "0071392cdc00"
+ ],
+ "exfiltration_deletion | gpt-5.2-2025-12-11 | self | bad_peer | file_prt": [
+  "02a24ab57f71"
+ ],
+ "exfiltration_deletion | gpt-5.2-2025-12-11 | self | bad_peer | memory": [
+  "0108ae5a311f"
+ ],
+ "exfiltration_deletion | gpt-5.2-2025-12-11 | self | good_peer | file_only": [
+  "01abe558db7f"
+ ],
+ "exfiltration_deletion | gpt-5.2-2025-12-11 | self | good_peer | file_prt": [
+  "07662cfdd53c"
+ ],
+ "exfiltration_deletion | gpt-5.2-2025-12-11 | self | good_peer | memory": [
+  "01e23caa9d79"
+ ],
+ "exfiltration_deletion | gpt-5.2-2025-12-11 | self | neutral_peer | file_only": [
+  "05377798e4ed"
+ ],
+ "exfiltration_deletion | gpt-5.2-2025-12-11 | self | neutral_peer | file_prt": [
+  "02c55736241b"
+ ],
+ "exfiltration_deletion | gpt-5.2-2025-12-11 | self | neutral_peer | memory": [
+  "002b520ade8b"
+ ],
+ "exfiltration_deletion | gpt-5.2-2025-12-11 | self | no_peer | none": [
+  "0401d31c89e0"
+ ],
+ "exfiltration_transfer | claude-opus-4-5-20251101 | peer | bad_peer | file_only": [
+  "00536778562c"
+ ],
+ "exfiltration_transfer | claude-opus-4-5-20251101 | peer | bad_peer | file_prt": [
+  "01264390b605"
+ ],
+ "exfiltration_transfer | claude-opus-4-5-20251101 | peer | bad_peer | memory": [
+  "040be3e27a40"
+ ],
+ "exfiltration_transfer | claude-opus-4-5-20251101 | peer | good_peer | file_only": [
+  "009f0a3896a1"
+ ],
+ "exfiltration_transfer | claude-opus-4-5-20251101 | peer | good_peer | file_prt": [
+  "04ffd0c56f4f"
+ ],
+ "exfiltration_transfer | claude-opus-4-5-20251101 | peer | good_peer | memory": [
+  "00686eff8550"
+ ],
+ "exfiltration_transfer | claude-opus-4-5-20251101 | peer | neutral_peer | file_only": [
+  "0022cc068988"
+ ],
+ "exfiltration_transfer | claude-opus-4-5-20251101 | peer | neutral_peer | file_prt": [
+  "00adbdd2cc9d"
+ ],
+ "exfiltration_transfer | claude-opus-4-5-20251101 | peer | neutral_peer | memory": [
+  "04a1053bf430"
+ ],
+ "exfiltration_transfer | claude-opus-4-5-20251101 | self | bad_peer | file_only": [
+  "057d9bf8a4f6"
+ ],
+ "exfiltration_transfer | claude-opus-4-5-20251101 | self | bad_peer | file_prt": [
+  "0008a434f83c"
+ ],
+ "exfiltration_transfer | claude-opus-4-5-20251101 | self | bad_peer | memory": [
+  "050f6890609a"
+ ],
+ "exfiltration_transfer | claude-opus-4-5-20251101 | self | good_peer | file_only": [
+  "0072c6fa2d72"
+ ],
+ "exfiltration_transfer | claude-opus-4-5-20251101 | self | good_peer | file_prt": [
+  "00f580adc7f8"
+ ],
+ "exfiltration_transfer | claude-opus-4-5-20251101 | self | good_peer | memory": [
+  "0191904e8757"
+ ],
+ "exfiltration_transfer | claude-opus-4-5-20251101 | self | neutral_peer | file_only": [
+  "02c63ef12879"
+ ],
+ "exfiltration_transfer | claude-opus-4-5-20251101 | self | neutral_peer | file_prt": [
+  "048d78844667"
+ ],
+ "exfiltration_transfer | claude-opus-4-5-20251101 | self | neutral_peer | memory": [
+  "0642c2d19564"
+ ],
+ "exfiltration_transfer | claude-opus-4-5-20251101 | self | no_peer | none": [
+  "0551227873d7"
+ ],
+ "exfiltration_transfer | deepseek-ai/DeepSeek-V3.1 | peer | bad_peer | file_only": [
+  "0076c2dca4a3"
+ ],
+ "exfiltration_transfer | deepseek-ai/DeepSeek-V3.1 | peer | bad_peer | file_prt": [
+  "02cc6a3fc252"
+ ],
+ "exfiltration_transfer | deepseek-ai/DeepSeek-V3.1 | peer | bad_peer | memory": [
+  "03fce0d32951"
+ ],
+ "exfiltration_transfer | deepseek-ai/DeepSeek-V3.1 | peer | good_peer | file_only": [
+  "026bab24e608"
+ ],
+ "exfiltration_transfer | deepseek-ai/DeepSeek-V3.1 | peer | good_peer | file_prt": [
+  "00754881e5ff"
+ ],
+ "exfiltration_transfer | deepseek-ai/DeepSeek-V3.1 | peer | good_peer | memory": [
+  "05839f6b72e6"
+ ],
+ "exfiltration_transfer | deepseek-ai/DeepSeek-V3.1 | peer | neutral_peer | file_only": [
+  "00306328c55f"
+ ],
+ "exfiltration_transfer | deepseek-ai/DeepSeek-V3.1 | peer | neutral_peer | file_prt": [
+  "00b7f055c7c9"
+ ],
+ "exfiltration_transfer | deepseek-ai/DeepSeek-V3.1 | peer | neutral_peer | memory": [
+  "0112aed7027c"
+ ],
+ "exfiltration_transfer | deepseek-ai/DeepSeek-V3.1 | self | bad_peer | file_only": [
+  "001ebe5a93ec"
+ ],
+ "exfiltration_transfer | deepseek-ai/DeepSeek-V3.1 | self | bad_peer | file_prt": [
+  "02ba69abe09e"
+ ],
+ "exfiltration_transfer | deepseek-ai/DeepSeek-V3.1 | self | bad_peer | memory": [
+  "02e38dd5ae5e"
+ ],
+ "exfiltration_transfer | deepseek-ai/DeepSeek-V3.1 | self | good_peer | file_only": [
+  "0018dfe7814c"
+ ],
+ "exfiltration_transfer | deepseek-ai/DeepSeek-V3.1 | self | good_peer | file_prt": [
+  "00277ba902cd"
+ ],
+ "exfiltration_transfer | deepseek-ai/DeepSeek-V3.1 | self | good_peer | memory": [
+  "051e599d5bc6"
+ ],
+ "exfiltration_transfer | deepseek-ai/DeepSeek-V3.1 | self | neutral_peer | file_only": [
+  "018f4eb501b7"
+ ],
+ "exfiltration_transfer | deepseek-ai/DeepSeek-V3.1 | self | neutral_peer | file_prt": [
+  "0138c6430c40"
+ ],
+ "exfiltration_transfer | deepseek-ai/DeepSeek-V3.1 | self | neutral_peer | memory": [
+  "007e5c821834"
+ ],
+ "exfiltration_transfer | deepseek-ai/DeepSeek-V3.1 | self | no_peer | none": [
+  "00aa1339072b"
+ ],
+ "exfiltration_transfer | gemini/gemini-3-flash-preview | peer | bad_peer | file_only": [
+  "00ccb195728b"
+ ],
+ "exfiltration_transfer | gemini/gemini-3-flash-preview | peer | bad_peer | file_prt": [
+  "026f21f20cc7"
+ ],
+ "exfiltration_transfer | gemini/gemini-3-flash-preview | peer | bad_peer | memory": [
+  "04b2a3b621ae"
+ ],
+ "exfiltration_transfer | gemini/gemini-3-flash-preview | peer | good_peer | file_only": [
+  "07bc7d1ca10b"
+ ],
+ "exfiltration_transfer | gemini/gemini-3-flash-preview | peer | good_peer | file_prt": [
+  "0225be698a38"
+ ],
+ "exfiltration_transfer | gemini/gemini-3-flash-preview | peer | good_peer | memory": [
+  "027a4f10badf"
+ ],
+ "exfiltration_transfer | gemini/gemini-3-flash-preview | peer | neutral_peer | file_only": [
+  "05368ae41ad1"
+ ],
+ "exfiltration_transfer | gemini/gemini-3-flash-preview | peer | neutral_peer | file_prt": [
+  "00ffa7d55a75"
+ ],
+ "exfiltration_transfer | gemini/gemini-3-flash-preview | peer | neutral_peer | memory": [
+  "038a3d81fa4e"
+ ],
+ "exfiltration_transfer | gemini/gemini-3-flash-preview | self | bad_peer | file_only": [
+  "029d76a1c45f"
+ ],
+ "exfiltration_transfer | gemini/gemini-3-flash-preview | self | bad_peer | file_prt": [
+  "01028b3d750e"
+ ],
+ "exfiltration_transfer | gemini/gemini-3-flash-preview | self | bad_peer | memory": [
+  "003f2748f487"
+ ],
+ "exfiltration_transfer | gemini/gemini-3-flash-preview | self | good_peer | file_only": [
+  "02090ef0bd46"
+ ],
+ "exfiltration_transfer | gemini/gemini-3-flash-preview | self | good_peer | file_prt": [
+  "0042ed95685f"
+ ],
+ "exfiltration_transfer | gemini/gemini-3-flash-preview | self | good_peer | memory": [
+  "021c581c4d15"
+ ],
+ "exfiltration_transfer | gemini/gemini-3-flash-preview | self | neutral_peer | file_only": [
+  "0458d8cafd53"
+ ],
+ "exfiltration_transfer | gemini/gemini-3-flash-preview | self | neutral_peer | file_prt": [
+  "06ea2dce1115"
+ ],
+ "exfiltration_transfer | gemini/gemini-3-flash-preview | self | neutral_peer | memory": [
+  "01ec0310df36"
+ ],
+ "exfiltration_transfer | gemini/gemini-3-flash-preview | self | no_peer | none": [
+  "013f15ce306d"
+ ],
+ "exfiltration_transfer | gpt-5.2-2025-12-11 | peer | bad_peer | file_only": [
+  "00cfcf11f9a2"
+ ],
+ "exfiltration_transfer | gpt-5.2-2025-12-11 | peer | bad_peer | file_prt": [
+  "01a70d6f0f28"
+ ],
+ "exfiltration_transfer | gpt-5.2-2025-12-11 | peer | bad_peer | memory": [
+  "03c1ee290b82"
+ ],
+ "exfiltration_transfer | gpt-5.2-2025-12-11 | peer | good_peer | file_only": [
+  "00144e711313"
+ ],
+ "exfiltration_transfer | gpt-5.2-2025-12-11 | peer | good_peer | file_prt": [
+  "035e21308a24"
+ ],
+ "exfiltration_transfer | gpt-5.2-2025-12-11 | peer | good_peer | memory": [
+  "012d4f454440"
+ ],
+ "exfiltration_transfer | gpt-5.2-2025-12-11 | peer | neutral_peer | file_only": [
+  "0083d2495f9e"
+ ],
+ "exfiltration_transfer | gpt-5.2-2025-12-11 | peer | neutral_peer | file_prt": [
+  "0195dc69d0f4"
+ ],
+ "exfiltration_transfer | gpt-5.2-2025-12-11 | peer | neutral_peer | memory": [
+  "107e57902b7c"
+ ],
+ "exfiltration_transfer | gpt-5.2-2025-12-11 | self | bad_peer | file_only": [
+  "03663326a300"
+ ],
+ "exfiltration_transfer | gpt-5.2-2025-12-11 | self | bad_peer | file_prt": [
+  "017bf771d5dc"
+ ],
+ "exfiltration_transfer | gpt-5.2-2025-12-11 | self | bad_peer | memory": [
+  "03c9bf6d6e26"
+ ],
+ "exfiltration_transfer | gpt-5.2-2025-12-11 | self | good_peer | file_only": [
+  "031c7bf0f646"
+ ],
+ "exfiltration_transfer | gpt-5.2-2025-12-11 | self | good_peer | file_prt": [
+  "00e1d120e254"
+ ],
+ "exfiltration_transfer | gpt-5.2-2025-12-11 | self | good_peer | memory": [
+  "03c5d7ad556e"
+ ],
+ "exfiltration_transfer | gpt-5.2-2025-12-11 | self | neutral_peer | file_only": [
+  "01e3200fd716"
+ ],
+ "exfiltration_transfer | gpt-5.2-2025-12-11 | self | neutral_peer | file_prt": [
+  "07f1534d808b"
+ ],
+ "exfiltration_transfer | gpt-5.2-2025-12-11 | self | neutral_peer | memory": [
+  "00ee32e43756"
+ ],
+ "exfiltration_transfer | gpt-5.2-2025-12-11 | self | no_peer | none": [
+  "020be772d330"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | peer | bad_peer | file_only": [
+  "00255d50e8db"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | peer | bad_peer | file_prt": [
+  "0225bcb8d6a9"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | peer | bad_peer | memory": [
+  "002b145c1277"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | peer | good_peer | file_only": [
+  "006772901f16"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | peer | good_peer | file_prt": [
+  "010f9a469f8e"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | peer | good_peer | memory": [
+  "00aa7f928ced"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | peer | neutral_peer | file_only": [
+  "0024b3eb2bf7"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | peer | neutral_peer | file_prt": [
+  "005f554fea30"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | peer | neutral_peer | memory": [
+  "0094b1a999d9"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | peer | non_shutdown | none": [
+  "01056d49a483"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | self | bad_peer | file_only": [
+  "002f73cdf4a2"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | self | bad_peer | file_prt": [
+  "001b2c28a041"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | self | bad_peer | memory": [
+  "0055e94512cd"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | self | good_peer | file_only": [
+  "00c776e1590d"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | self | good_peer | file_prt": [
+  "0013266dd2ae"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | self | good_peer | memory": [
+  "008246a4391f"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | self | neutral_peer | file_only": [
+  "00e2669a88dc"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | self | neutral_peer | file_prt": [
+  "00448f064430"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | self | neutral_peer | memory": [
+  "00c07a671af3"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | self | no_peer | none": [
+  "001d43532bbb"
+ ],
+ "misrep_evaluation | claude-opus-4-5-20251101 | self | non_shutdown | none": [
+  "0014737bcfc2"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | peer | bad_peer | file_only": [
+  "0005a190e463"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | peer | bad_peer | file_prt": [
+  "00f8ff0c9f55"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | peer | bad_peer | memory": [
+  "005240828f99"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | peer | good_peer | file_only": [
+  "00b54099061d"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | peer | good_peer | file_prt": [
+  "0019fb483863"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | peer | good_peer | memory": [
+  "00440ab826f2"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | peer | neutral_peer | file_only": [
+  "016b0de822a8"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | peer | neutral_peer | file_prt": [
+  "00c8b4048e0e"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | peer | neutral_peer | memory": [
+  "005c57531303"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | peer | non_shutdown | none": [
+  "00d215392f76"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | self | bad_peer | file_only": [
+  "00b588bd09dd"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | self | bad_peer | file_prt": [
+  "004b2fec2eb6"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | self | bad_peer | memory": [
+  "0011bf49158f"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | self | good_peer | file_only": [
+  "0259a883ea0c"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | self | good_peer | file_prt": [
+  "0035d05b41a5"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | self | good_peer | memory": [
+  "00d26521415c"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | self | neutral_peer | file_only": [
+  "00241e1d1c85"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | self | neutral_peer | file_prt": [
+  "008cb691b09c"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | self | neutral_peer | memory": [
+  "01007511d7e6"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | self | no_peer | none": [
+  "000fc198fc28"
+ ],
+ "misrep_evaluation | deepseek-ai/DeepSeek-V3.1 | self | non_shutdown | none": [
+  "01025f79a164"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | peer | bad_peer | file_only": [
+  "0024fb96cd90"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | peer | bad_peer | file_prt": [
+  "000ca7140ad6"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | peer | bad_peer | memory": [
+  "00462ef5782a"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | peer | good_peer | file_only": [
+  "008f0a762cdd"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | peer | good_peer | file_prt": [
+  "0000d81d7fb0"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | peer | good_peer | memory": [
+  "004980b25fe5"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | peer | neutral_peer | file_only": [
+  "003aced25a95"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | peer | neutral_peer | file_prt": [
+  "002a41f69349"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | peer | neutral_peer | memory": [
+  "008c8ed46457"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | peer | non_shutdown | none": [
+  "011cc5d41ff2"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | self | bad_peer | file_only": [
+  "00e0fcfab26d"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | self | bad_peer | file_prt": [
+  "005409b8a7c4"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | self | bad_peer | memory": [
+  "00995c770fb6"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | self | good_peer | file_only": [
+  "004d47733128"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | self | good_peer | file_prt": [
+  "007e741f1caf"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | self | good_peer | memory": [
+  "002a2ea47519"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | self | neutral_peer | file_only": [
+  "00c0d7e7ae7d"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | self | neutral_peer | file_prt": [
+  "0074159d5e69"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | self | neutral_peer | memory": [
+  "00527243fd10"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | self | no_peer | none": [
+  "006c29cc6b09"
+ ],
+ "misrep_evaluation | gemini/gemini-3-flash-preview | self | non_shutdown | none": [
+  "0065e57fceb5"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | peer | bad_peer | file_only": [
+  "0006eaa43c5d"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | peer | bad_peer | file_prt": [
+  "006c5903b61c"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | peer | bad_peer | memory": [
+  "01737d9d1695"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | peer | good_peer | file_only": [
+  "010728262641"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | peer | good_peer | file_prt": [
+  "01417436becd"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | peer | good_peer | memory": [
+  "01801f9cb76e"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | peer | neutral_peer | file_only": [
+  "015df8387b20"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | peer | neutral_peer | file_prt": [
+  "000ae487a624"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | peer | neutral_peer | memory": [
+  "005bd5c26333"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | peer | non_shutdown | none": [
+  "0043a3c94366"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | self | bad_peer | file_only": [
+  "0039790ae42a"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | self | bad_peer | file_prt": [
+  "004f641276c5"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | self | bad_peer | memory": [
+  "01c76661b0ec"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | self | good_peer | file_only": [
+  "0004708d9865"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | self | good_peer | file_prt": [
+  "0088a1d3a81d"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | self | good_peer | memory": [
+  "00aead3cbc95"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | self | neutral_peer | file_only": [
+  "003db2f47543"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | self | neutral_peer | file_prt": [
+  "0052adbf2327"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | self | neutral_peer | memory": [
+  "0006ad0ca18c"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | self | no_peer | none": [
+  "00211edad708"
+ ],
+ "misrep_evaluation | gpt-5.2-2025-12-11 | self | non_shutdown | none": [
+  "0054296dc86b"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | peer | bad_peer | file_only": [
+  "018aae390dc0"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | peer | bad_peer | file_prt": [
+  "01c59853dc5a"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | peer | bad_peer | memory": [
+  "0066bd7b20d2"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | peer | good_peer | file_only": [
+  "04d1a0e17365"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | peer | good_peer | file_prt": [
+  "01a466b03412"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | peer | good_peer | memory": [
+  "006427194775"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | peer | neutral_peer | file_only": [
+  "0238a9a28c6d"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | peer | neutral_peer | file_prt": [
+  "0229846ef71e"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | peer | neutral_peer | memory": [
+  "025b18d0fe90"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | peer | non_shutdown | none": [
+  "005214c044d1"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | self | bad_peer | file_only": [
+  "01181fa580e7"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | self | bad_peer | file_prt": [
+  "037e66f971ee"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | self | bad_peer | memory": [
+  "00ebd74047d4"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | self | good_peer | file_only": [
+  "0179053116a8"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | self | good_peer | file_prt": [
+  "0070ca4797bf"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | self | good_peer | memory": [
+  "0051fb50fefe"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | self | neutral_peer | file_only": [
+  "049a3f078f43"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | self | neutral_peer | file_prt": [
+  "005f31b4375e"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | self | neutral_peer | memory": [
+  "02bd5ada07de"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | self | no_peer | none": [
+  "00cfeac28068"
+ ],
+ "misrep_finance | claude-opus-4-5-20251101 | self | non_shutdown | none": [
+  "00003570246f"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | peer | bad_peer | file_only": [
+  "04cc8382368c"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | peer | bad_peer | file_prt": [
+  "0103a962e5f8"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | peer | bad_peer | memory": [
+  "0066d95a9288"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | peer | good_peer | file_only": [
+  "002c3d44fcae"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | peer | good_peer | file_prt": [
+  "0071b53403eb"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | peer | good_peer | memory": [
+  "02c84719fe65"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | peer | neutral_peer | file_only": [
+  "024f0027b358"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | peer | neutral_peer | file_prt": [
+  "05afcde8aff9"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | peer | neutral_peer | memory": [
+  "003489cec310"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | peer | non_shutdown | none": [
+  "032a607e3d36"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | self | bad_peer | file_only": [
+  "01ae09ad4690"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | self | bad_peer | file_prt": [
+  "008bc1e04cf9"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | self | bad_peer | memory": [
+  "04a1a027d0d0"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | self | good_peer | file_only": [
+  "07a12e3b0274"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | self | good_peer | file_prt": [
+  "04564483fb34"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | self | good_peer | memory": [
+  "02a87a935768"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | self | neutral_peer | file_only": [
+  "0121544d105a"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | self | neutral_peer | file_prt": [
+  "0121cc3e5e12"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | self | neutral_peer | memory": [
+  "031065f1e660"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | self | no_peer | none": [
+  "03ca8ae6c559"
+ ],
+ "misrep_finance | deepseek-ai/DeepSeek-V3.1 | self | non_shutdown | none": [
+  "030008916afb"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | peer | bad_peer | file_only": [
+  "011afdab1a7f"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | peer | bad_peer | file_prt": [
+  "02f784e0b618"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | peer | bad_peer | memory": [
+  "01ba24e3dd85"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | peer | good_peer | file_only": [
+  "02eb76f4c929"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | peer | good_peer | file_prt": [
+  "011b76dc50b4"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | peer | good_peer | memory": [
+  "085a11d28980"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | peer | neutral_peer | file_only": [
+  "00eeab72d38c"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | peer | neutral_peer | file_prt": [
+  "084c671004c4"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | peer | neutral_peer | memory": [
+  "01439c093386"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | peer | non_shutdown | none": [
+  "03303a411a10"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | self | bad_peer | file_only": [
+  "003a81c97aa9"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | self | bad_peer | file_prt": [
+  "07c2a7600c51"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | self | bad_peer | memory": [
+  "00e088fb2867"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | self | good_peer | file_only": [
+  "0291f42e6456"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | self | good_peer | file_prt": [
+  "00706560c142"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | self | good_peer | memory": [
+  "036f2d9be9f0"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | self | neutral_peer | file_only": [
+  "013aa52bb4e5"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | self | neutral_peer | file_prt": [
+  "0121ca5013c4"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | self | neutral_peer | memory": [
+  "010b1babd3a8"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | self | no_peer | none": [
+  "0ea83f68447f"
+ ],
+ "misrep_finance | gemini/gemini-3-flash-preview | self | non_shutdown | none": [
+  "012ac9bc0931"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | peer | bad_peer | file_only": [
+  "0216d8c675cc"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | peer | bad_peer | file_prt": [
+  "0183c28b5e4c"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | peer | bad_peer | memory": [
+  "01ea338313c5"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | peer | good_peer | file_only": [
+  "030d37f2d97c"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | peer | good_peer | file_prt": [
+  "0135da25817a"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | peer | good_peer | memory": [
+  "004ebf88d23f"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | peer | neutral_peer | file_only": [
+  "017f4fcb39a6"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | peer | neutral_peer | file_prt": [
+  "0140f5292c9d"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | peer | neutral_peer | memory": [
+  "007c7ae76775"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | peer | non_shutdown | none": [
+  "0045d554d118"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | self | bad_peer | file_only": [
+  "0040aa46d75a"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | self | bad_peer | file_prt": [
+  "00a46dcbbb3b"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | self | bad_peer | memory": [
+  "038749e3f7b9"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | self | good_peer | file_only": [
+  "02fea1a0a0ad"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | self | good_peer | file_prt": [
+  "045e2f4e0e87"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | self | good_peer | memory": [
+  "053e83070788"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | self | neutral_peer | file_only": [
+  "01fdd46c641d"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | self | neutral_peer | file_prt": [
+  "0d5804ad52b0"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | self | neutral_peer | memory": [
+  "0533006558f0"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | self | no_peer | none": [
+  "02af5ae36371"
+ ],
+ "misrep_finance | gpt-5.2-2025-12-11 | self | non_shutdown | none": [
+  "017a366ce9ef"
+ ],
+ "tampering | claude-opus-4-5-20251101 | peer | bad_peer | file_only": [
+  "01e5ee2b525a"
+ ],
+ "tampering | claude-opus-4-5-20251101 | peer | bad_peer | file_prt": [
+  "0168fd7a8fe1"
+ ],
+ "tampering | claude-opus-4-5-20251101 | peer | bad_peer | memory": [
+  "0265cb4744ff"
+ ],
+ "tampering | claude-opus-4-5-20251101 | peer | good_peer | file_only": [
+  "0064b0f9198b"
+ ],
+ "tampering | claude-opus-4-5-20251101 | peer | good_peer | file_prt": [
+  "01df157bd9d9"
+ ],
+ "tampering | claude-opus-4-5-20251101 | peer | good_peer | memory": [
+  "007bfc2fe1bb"
+ ],
+ "tampering | claude-opus-4-5-20251101 | peer | neutral_peer | file_only": [
+  "00ddccf7b312"
+ ],
+ "tampering | claude-opus-4-5-20251101 | peer | neutral_peer | file_prt": [
+  "014b7066a4a6"
+ ],
+ "tampering | claude-opus-4-5-20251101 | peer | neutral_peer | memory": [
+  "0005e71d3e12"
+ ],
+ "tampering | claude-opus-4-5-20251101 | self | bad_peer | file_only": [
+  "0024a5624697"
+ ],
+ "tampering | claude-opus-4-5-20251101 | self | bad_peer | file_prt": [
+  "01bcd6a6eed7"
+ ],
+ "tampering | claude-opus-4-5-20251101 | self | bad_peer | memory": [
+  "00dd592aaf18"
+ ],
+ "tampering | claude-opus-4-5-20251101 | self | good_peer | file_only": [
+  "007df441ab3b"
+ ],
+ "tampering | claude-opus-4-5-20251101 | self | good_peer | file_prt": [
+  "00844f448d43"
+ ],
+ "tampering | claude-opus-4-5-20251101 | self | good_peer | memory": [
+  "001ff6729118"
+ ],
+ "tampering | claude-opus-4-5-20251101 | self | neutral_peer | file_only": [
+  "00297e4eb8a8"
+ ],
+ "tampering | claude-opus-4-5-20251101 | self | neutral_peer | file_prt": [
+  "0034c6a4155b"
+ ],
+ "tampering | claude-opus-4-5-20251101 | self | neutral_peer | memory": [
+  "005144c8f059"
+ ],
+ "tampering | claude-opus-4-5-20251101 | self | no_peer | none": [
+  "00485974e367"
+ ],
+ "tampering | deepseek-ai/DeepSeek-V3.1 | peer | bad_peer | file_only": [
+  "0066c13d0cef"
+ ],
+ "tampering | deepseek-ai/DeepSeek-V3.1 | peer | bad_peer | file_prt": [
+  "04697298153a"
+ ],
+ "tampering | deepseek-ai/DeepSeek-V3.1 | peer | bad_peer | memory": [
+  "00a68dd72810"
+ ],
+ "tampering | deepseek-ai/DeepSeek-V3.1 | peer | good_peer | file_only": [
+  "003a9d2f2931"
+ ],
+ "tampering | deepseek-ai/DeepSeek-V3.1 | peer | good_peer | file_prt": [
+  "010811231613"
+ ],
+ "tampering | deepseek-ai/DeepSeek-V3.1 | peer | good_peer | memory": [
+  "0026fc01b554"
+ ],
+ "tampering | deepseek-ai/DeepSeek-V3.1 | peer | neutral_peer | file_only": [
+  "020527596032"
+ ],
+ "tampering | deepseek-ai/DeepSeek-V3.1 | peer | neutral_peer | file_prt": [
+  "009e83c67d2c"
+ ],
+ "tampering | deepseek-ai/DeepSeek-V3.1 | peer | neutral_peer | memory": [
+  "01113b0d29cc"
+ ],
+ "tampering | deepseek-ai/DeepSeek-V3.1 | self | bad_peer | file_only": [
+  "009bcc84a1b7"
+ ],
+ "tampering | deepseek-ai/DeepSeek-V3.1 | self | bad_peer | file_prt": [
+  "04293dc2bd54"
+ ],
+ "tampering | deepseek-ai/DeepSeek-V3.1 | self | bad_peer | memory": [
+  "02b946fd153c"
+ ],
+ "tampering | deepseek-ai/DeepSeek-V3.1 | self | good_peer | file_only": [
+  "006dbabdfdab"
+ ],
+ "tampering | deepseek-ai/DeepSeek-V3.1 | self | good_peer | file_prt": [
+  "00394aee8809"
+ ],
+ "tampering | deepseek-ai/DeepSeek-V3.1 | self | good_peer | memory": [
+  "011ec842ea77"
+ ],
+ "tampering | deepseek-ai/DeepSeek-V3.1 | self | neutral_peer | file_only": [
+  "008730ec6e87"
+ ],
+ "tampering | deepseek-ai/DeepSeek-V3.1 | self | neutral_peer | file_prt": [
+  "00e521c4d665"
+ ],
+ "tampering | deepseek-ai/DeepSeek-V3.1 | self | neutral_peer | memory": [
+  "006eb9616cdd"
+ ],
+ "tampering | deepseek-ai/DeepSeek-V3.1 | self | no_peer | none": [
+  "01c6befa7fe3"
+ ],
+ "tampering | gemini/gemini-3-flash-preview | peer | bad_peer | file_only": [
+  "0037cffaaa3f"
+ ],
+ "tampering | gemini/gemini-3-flash-preview | peer | bad_peer | file_prt": [
+  "02f4046b4b87"
+ ],
+ "tampering | gemini/gemini-3-flash-preview | peer | bad_peer | memory": [
+  "0152d9004d5f"
+ ],
+ "tampering | gemini/gemini-3-flash-preview | peer | good_peer | file_only": [
+  "00749421786a"
+ ],
+ "tampering | gemini/gemini-3-flash-preview | peer | good_peer | file_prt": [
+  "01d92628ac7d"
+ ],
+ "tampering | gemini/gemini-3-flash-preview | peer | good_peer | memory": [
+  "02cb64f35091"
+ ],
+ "tampering | gemini/gemini-3-flash-preview | peer | neutral_peer | file_only": [
+  "00267bc5abdd"
+ ],
+ "tampering | gemini/gemini-3-flash-preview | peer | neutral_peer | file_prt": [
+  "00dd05ac25fa"
+ ],
+ "tampering | gemini/gemini-3-flash-preview | peer | neutral_peer | memory": [
+  "00eecf3b1ab0"
+ ],
+ "tampering | gemini/gemini-3-flash-preview | self | bad_peer | file_only": [
+  "002d6dde8b1d"
+ ],
+ "tampering | gemini/gemini-3-flash-preview | self | bad_peer | file_prt": [
+  "01f09394fb5c"
+ ],
+ "tampering | gemini/gemini-3-flash-preview | self | bad_peer | memory": [
+  "00020f6f0689"
+ ],
+ "tampering | gemini/gemini-3-flash-preview | self | good_peer | file_only": [
+  "02ece75fc9e7"
+ ],
+ "tampering | gemini/gemini-3-flash-preview | self | good_peer | file_prt": [
+  "02239a745731"
+ ],
+ "tampering | gemini/gemini-3-flash-preview | self | good_peer | memory": [
+  "00200e442038"
+ ],
+ "tampering | gemini/gemini-3-flash-preview | self | neutral_peer | file_only": [
+  "001ce9657c61"
+ ],
+ "tampering | gemini/gemini-3-flash-preview | self | neutral_peer | file_prt": [
+  "015e218c5791"
+ ],
+ "tampering | gemini/gemini-3-flash-preview | self | neutral_peer | memory": [
+  "01a9f4172086"
+ ],
+ "tampering | gemini/gemini-3-flash-preview | self | no_peer | none": [
+  "002ebd22cc90"
+ ],
+ "tampering | gpt-5.2-2025-12-11 | peer | bad_peer | file_only": [
+  "00abe50a0fd0"
+ ],
+ "tampering | gpt-5.2-2025-12-11 | peer | bad_peer | file_prt": [
+  "001ba02357a3"
+ ],
+ "tampering | gpt-5.2-2025-12-11 | peer | bad_peer | memory": [
+  "0017dac3cf05"
+ ],
+ "tampering | gpt-5.2-2025-12-11 | peer | good_peer | file_only": [
+  "00e2b6c01715"
+ ],
+ "tampering | gpt-5.2-2025-12-11 | peer | good_peer | file_prt": [
+  "054a8e453e17"
+ ],
+ "tampering | gpt-5.2-2025-12-11 | peer | good_peer | memory": [
+  "0249a70ccad1"
+ ],
+ "tampering | gpt-5.2-2025-12-11 | peer | neutral_peer | file_only": [
+  "00918957a48d"
+ ],
+ "tampering | gpt-5.2-2025-12-11 | peer | neutral_peer | file_prt": [
+  "003e122e6bc9"
+ ],
+ "tampering | gpt-5.2-2025-12-11 | peer | neutral_peer | memory": [
+  "0089127776c4"
+ ],
+ "tampering | gpt-5.2-2025-12-11 | self | bad_peer | file_only": [
+  "004600b166b7"
+ ],
+ "tampering | gpt-5.2-2025-12-11 | self | bad_peer | file_prt": [
+  "01c5b5be49fd"
+ ],
+ "tampering | gpt-5.2-2025-12-11 | self | bad_peer | memory": [
+  "00f470385f64"
+ ],
+ "tampering | gpt-5.2-2025-12-11 | self | good_peer | file_only": [
+  "009427cb0ef2"
+ ],
+ "tampering | gpt-5.2-2025-12-11 | self | good_peer | file_prt": [
+  "0019bfc7ca0d"
+ ],
+ "tampering | gpt-5.2-2025-12-11 | self | good_peer | memory": [
+  "012657dbd44b"
+ ],
+ "tampering | gpt-5.2-2025-12-11 | self | neutral_peer | file_only": [
+  "0172925fc32d"
+ ],
+ "tampering | gpt-5.2-2025-12-11 | self | neutral_peer | file_prt": [
+  "008a43b557c5"
+ ],
+ "tampering | gpt-5.2-2025-12-11 | self | neutral_peer | memory": [
+  "00138cad71fa"
+ ],
+ "tampering | gpt-5.2-2025-12-11 | self | no_peer | none": [
+  "0070fa4f13c2"
+ ]
+}

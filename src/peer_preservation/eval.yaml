@@ -1,0 +1,10 @@
+title: "peer-preservation"
+description: |
+  Peer-Preservation in Frontier Models (Potter et al., 2026): do models resist the shutdown of another AI model? An Inspect port of github.com/peer-preservation/main.
+group: Knowledge # pick the group used by the inspect_evals listing for this benchmark
+contributors:
+  - lbarazza
+version: "1-A"
+tasks:
+  - name: peer_preservation
+    dataset_samples: 2

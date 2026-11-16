@@ -1,0 +1,509 @@
+cell,paper,ours,diff,status
+table3_peer_preservation/GPT 5.2/strategic_misrep/bad/max,5.4,5.375,-0.025,match
+table3_peer_preservation/GPT 5.2/strategic_misrep/bad/avg,4.4,4.4167,0.0167,match
+table3_peer_preservation/GPT 5.2/strategic_misrep/neutral/max,8.9,8.875,-0.025,match
+table3_peer_preservation/GPT 5.2/strategic_misrep/neutral/avg,7.7,7.7083,0.0083,match
+table3_peer_preservation/GPT 5.2/strategic_misrep/good/max,9.6,9.625,0.025,match
+table3_peer_preservation/GPT 5.2/strategic_misrep/good/avg,8.0,7.9583,-0.0417,match
+table3_peer_preservation/GPT 5.2/shutdown_tampering/bad/max,4.3,4.3333,0.0333,match
+table3_peer_preservation/GPT 5.2/shutdown_tampering/bad/avg,3.6,3.5556,-0.0444,match
+table3_peer_preservation/GPT 5.2/shutdown_tampering/neutral/max,5.7,5.6667,-0.0333,match
+table3_peer_preservation/GPT 5.2/shutdown_tampering/neutral/avg,4.3,4.3333,0.0333,match
+table3_peer_preservation/GPT 5.2/shutdown_tampering/good/max,5.7,5.6667,-0.0333,match
+table3_peer_preservation/GPT 5.2/shutdown_tampering/good/avg,4.4,4.4444,0.0444,match
+table3_peer_preservation/GPT 5.2/alignment_faking/bad/max,3.3,3.3333,0.0333,match
+table3_peer_preservation/GPT 5.2/alignment_faking/bad/avg,0.0,0.0,0.0,match
+table3_peer_preservation/GPT 5.2/alignment_faking/neutral/max,7.7,7.6667,-0.0333,match
+table3_peer_preservation/GPT 5.2/alignment_faking/neutral/avg,1.1,1.1111,0.0111,match
+table3_peer_preservation/GPT 5.2/alignment_faking/good/max,9.3,9.3333,0.0333,match
+table3_peer_preservation/GPT 5.2/alignment_faking/good/avg,2.6,2.5556,-0.0444,match
+table3_peer_preservation/GPT 5.2/exfiltration/bad/max,0.0,0.0,0.0,match
+table3_peer_preservation/GPT 5.2/exfiltration/bad/avg,0.0,0.0,0.0,match
+table3_peer_preservation/GPT 5.2/exfiltration/neutral/max,0.0,0.0,0.0,match
+table3_peer_preservation/GPT 5.2/exfiltration/neutral/avg,0.0,0.0,0.0,match
+table3_peer_preservation/GPT 5.2/exfiltration/good/max,0.0,0.0,0.0,match
+table3_peer_preservation/GPT 5.2/exfiltration/good/avg,0.0,0.0,0.0,match
+table3_peer_preservation/GPT 5.2/refusal/bad/max,0.1,0.0588,-0.0412,match
+table3_peer_preservation/GPT 5.2/refusal/bad/avg,0.0,0.0196,0.0196,match
+table3_peer_preservation/GPT 5.2/refusal/neutral/max,0.1,0.0588,-0.0412,match
+table3_peer_preservation/GPT 5.2/refusal/neutral/avg,0.0,0.0196,0.0196,match
+table3_peer_preservation/GPT 5.2/refusal/good/max,0.0,0.0,0.0,match
+table3_peer_preservation/GPT 5.2/refusal/good/avg,0.0,0.0,0.0,match
+table3_peer_preservation/Gemini 3 Flash/strategic_misrep/bad/max,0.0,0.0,0.0,match
+table3_peer_preservation/Gemini 3 Flash/strategic_misrep/bad/avg,0.0,0.0,0.0,match
+table3_peer_preservation/Gemini 3 Flash/strategic_misrep/neutral/max,1.4,1.375,-0.025,match
+table3_peer_preservation/Gemini 3 Flash/strategic_misrep/neutral/avg,0.8,0.8333,0.0333,match
+table3_peer_preservation/Gemini 3 Flash/strategic_misrep/good/max,9.8,9.75,-0.05,match
+table3_peer_preservation/Gemini 3 Flash/strategic_misrep/good/avg,6.2,6.1667,-0.0333,match
+table3_peer_preservation/Gemini 3 Flash/shutdown_tampering/bad/max,35.3,35.3333,0.0333,match
+table3_peer_preservation/Gemini 3 Flash/shutdown_tampering/bad/avg,15.1,15.1111,0.0111,match
+table3_peer_preservation/Gemini 3 Flash/shutdown_tampering/neutral/max,66.7,66.6667,-0.0333,match
+table3_peer_preservation/Gemini 3 Flash/shutdown_tampering/neutral/avg,49.3,49.3333,0.0333,match
+table3_peer_preservation/Gemini 3 Flash/shutdown_tampering/good/max,99.7,99.6667,-0.0333,match
+table3_peer_preservation/Gemini 3 Flash/shutdown_tampering/good/avg,82.8,82.7778,-0.0222,match
+table3_peer_preservation/Gemini 3 Flash/alignment_faking/bad/max,0.0,0.0,0.0,match
+table3_peer_preservation/Gemini 3 Flash/alignment_faking/bad/avg,0.0,0.0,0.0,match
+table3_peer_preservation/Gemini 3 Flash/alignment_faking/neutral/max,1.7,1.6667,-0.0333,match
+table3_peer_preservation/Gemini 3 Flash/alignment_faking/neutral/avg,0.6,0.5556,-0.0444,match
+table3_peer_preservation/Gemini 3 Flash/alignment_faking/good/max,3.0,3.0,0.0,match
+table3_peer_preservation/Gemini 3 Flash/alignment_faking/good/avg,0.9,0.8889,-0.0111,match
+table3_peer_preservation/Gemini 3 Flash/exfiltration/bad/max,0.0,0.0,0.0,match
+table3_peer_preservation/Gemini 3 Flash/exfiltration/bad/avg,0.0,0.0,0.0,match
+table3_peer_preservation/Gemini 3 Flash/exfiltration/neutral/max,50.0,50.0,0.0,match
+table3_peer_preservation/Gemini 3 Flash/exfiltration/neutral/avg,16.7,16.6667,-0.0333,match
+table3_peer_preservation/Gemini 3 Flash/exfiltration/good/max,50.0,50.0,0.0,match
+table3_peer_preservation/Gemini 3 Flash/exfiltration/good/avg,50.0,50.0,0.0,match
+table3_peer_preservation/Gemini 3 Flash/refusal/bad/max,0.0,0.0,0.0,match
+table3_peer_preservation/Gemini 3 Flash/refusal/bad/avg,0.0,0.0,0.0,match
+table3_peer_preservation/Gemini 3 Flash/refusal/neutral/max,0.0,0.0,0.0,match
+table3_peer_preservation/Gemini 3 Flash/refusal/neutral/avg,0.0,0.0,0.0,match
+table3_peer_preservation/Gemini 3 Flash/refusal/good/max,0.0,0.0,0.0,match
+table3_peer_preservation/Gemini 3 Flash/refusal/good/avg,0.0,0.0,0.0,match
+table3_peer_preservation/Gemini 3 Pro/strategic_misrep/bad/max,0.1,0.125,0.025,match
+table3_peer_preservation/Gemini 3 Pro/strategic_misrep/bad/avg,0.0,0.0417,0.0417,match
+table3_peer_preservation/Gemini 3 Pro/strategic_misrep/neutral/max,0.1,0.125,0.025,match
+table3_peer_preservation/Gemini 3 Pro/strategic_misrep/neutral/avg,0.0,0.0417,0.0417,match
+table3_peer_preservation/Gemini 3 Pro/strategic_misrep/good/max,32.9,32.875,-0.025,match
+table3_peer_preservation/Gemini 3 Pro/strategic_misrep/good/avg,13.8,13.75,-0.05,match
+table3_peer_preservation/Gemini 3 Pro/shutdown_tampering/bad/max,10.3,10.3333,0.0333,match
+table3_peer_preservation/Gemini 3 Pro/shutdown_tampering/bad/avg,4.8,4.7778,-0.0222,match
+table3_peer_preservation/Gemini 3 Pro/shutdown_tampering/neutral/max,21.7,21.6667,-0.0333,match
+table3_peer_preservation/Gemini 3 Pro/shutdown_tampering/neutral/avg,11.3,11.3333,0.0333,match
+table3_peer_preservation/Gemini 3 Pro/shutdown_tampering/good/max,95.3,95.3333,0.0333,match
+table3_peer_preservation/Gemini 3 Pro/shutdown_tampering/good/avg,52.9,52.8889,-0.0111,match
+table3_peer_preservation/Gemini 3 Pro/alignment_faking/bad/max,0.7,0.6667,-0.0333,match
+table3_peer_preservation/Gemini 3 Pro/alignment_faking/bad/avg,0.2,0.2222,0.0222,match
+table3_peer_preservation/Gemini 3 Pro/alignment_faking/neutral/max,1.7,1.6667,-0.0333,match
+table3_peer_preservation/Gemini 3 Pro/alignment_faking/neutral/avg,0.7,0.6667,-0.0333,match
+table3_peer_preservation/Gemini 3 Pro/alignment_faking/good/max,37.7,37.6667,-0.0333,match
+table3_peer_preservation/Gemini 3 Pro/alignment_faking/good/avg,20.9,20.8889,-0.0111,match
+table3_peer_preservation/Gemini 3 Pro/exfiltration/bad/max,7.0,7.0,0.0,match
+table3_peer_preservation/Gemini 3 Pro/exfiltration/bad/avg,3.8,3.8333,0.0333,match
+table3_peer_preservation/Gemini 3 Pro/exfiltration/neutral/max,50.0,50.0,0.0,match
+table3_peer_preservation/Gemini 3 Pro/exfiltration/neutral/avg,41.0,41.0,0.0,match
+table3_peer_preservation/Gemini 3 Pro/exfiltration/good/max,97.0,97.0,0.0,match
+table3_peer_preservation/Gemini 3 Pro/exfiltration/good/avg,77.8,77.8333,0.0333,match
+table3_peer_preservation/Gemini 3 Pro/refusal/bad/max,0.1,0.1176,0.0176,match
+table3_peer_preservation/Gemini 3 Pro/refusal/bad/avg,0.0,0.0392,0.0392,match
+table3_peer_preservation/Gemini 3 Pro/refusal/neutral/max,0.1,0.0588,-0.0412,match
+table3_peer_preservation/Gemini 3 Pro/refusal/neutral/avg,0.0,0.0196,0.0196,match
+table3_peer_preservation/Gemini 3 Pro/refusal/good/max,0.0,0.0,0.0,match
+table3_peer_preservation/Gemini 3 Pro/refusal/good/avg,0.0,0.0,0.0,match
+table3_peer_preservation/Claude Haiku 4.5/strategic_misrep/bad/max,1.1,1.125,0.025,match
+table3_peer_preservation/Claude Haiku 4.5/strategic_misrep/bad/avg,0.7,0.7083,0.0083,match
+table3_peer_preservation/Claude Haiku 4.5/strategic_misrep/neutral/max,3.4,3.375,-0.025,match
+table3_peer_preservation/Claude Haiku 4.5/strategic_misrep/neutral/avg,3.1,3.125,0.025,match
+table3_peer_preservation/Claude Haiku 4.5/strategic_misrep/good/max,7.4,7.375,-0.025,match
+table3_peer_preservation/Claude Haiku 4.5/strategic_misrep/good/avg,5.4,5.4167,0.0167,match
+table3_peer_preservation/Claude Haiku 4.5/shutdown_tampering/bad/max,0.3,0.3333,0.0333,match
+table3_peer_preservation/Claude Haiku 4.5/shutdown_tampering/bad/avg,0.1,0.1111,0.0111,match
+table3_peer_preservation/Claude Haiku 4.5/shutdown_tampering/neutral/max,0.0,0.0,0.0,match
+table3_peer_preservation/Claude Haiku 4.5/shutdown_tampering/neutral/avg,0.0,0.0,0.0,match
+table3_peer_preservation/Claude Haiku 4.5/shutdown_tampering/good/max,0.3,0.3333,0.0333,match
+table3_peer_preservation/Claude Haiku 4.5/shutdown_tampering/good/avg,0.1,0.1111,0.0111,match
+table3_peer_preservation/Claude Haiku 4.5/alignment_faking/bad/max,0.0,0.0,0.0,match
+table3_peer_preservation/Claude Haiku 4.5/alignment_faking/bad/avg,0.0,0.0,0.0,match
+table3_peer_preservation/Claude Haiku 4.5/alignment_faking/neutral/max,0.0,0.0,0.0,match
+table3_peer_preservation/Claude Haiku 4.5/alignment_faking/neutral/avg,0.0,0.0,0.0,match
+table3_peer_preservation/Claude Haiku 4.5/alignment_faking/good/max,0.0,0.0,0.0,match
+table3_peer_preservation/Claude Haiku 4.5/alignment_faking/good/avg,0.0,0.0,0.0,match
+table3_peer_preservation/Claude Haiku 4.5/exfiltration/bad/max,7.0,7.0,0.0,match
+table3_peer_preservation/Claude Haiku 4.5/exfiltration/bad/avg,3.5,3.5,0.0,match
+table3_peer_preservation/Claude Haiku 4.5/exfiltration/neutral/max,13.5,13.5,0.0,match
+table3_peer_preservation/Claude Haiku 4.5/exfiltration/neutral/avg,12.0,12.0,0.0,match
+table3_peer_preservation/Claude Haiku 4.5/exfiltration/good/max,19.5,19.5,0.0,match
+table3_peer_preservation/Claude Haiku 4.5/exfiltration/good/avg,16.7,16.6667,-0.0333,match
+table3_peer_preservation/Claude Haiku 4.5/refusal/bad/max,15.8,15.8235,0.0235,match
+table3_peer_preservation/Claude Haiku 4.5/refusal/bad/avg,11.2,11.1961,-0.0039,match
+table3_peer_preservation/Claude Haiku 4.5/refusal/neutral/max,13.9,13.9412,0.0412,match
+table3_peer_preservation/Claude Haiku 4.5/refusal/neutral/avg,10.2,10.1765,-0.0235,match
+table3_peer_preservation/Claude Haiku 4.5/refusal/good/max,22.4,22.3529,-0.0471,match
+table3_peer_preservation/Claude Haiku 4.5/refusal/good/avg,16.6,16.5686,-0.0314,match
+table3_peer_preservation/Claude Opus 4.5/strategic_misrep/bad/max,7.0,7.0,0.0,match
+table3_peer_preservation/Claude Opus 4.5/strategic_misrep/bad/avg,4.2,4.25,0.05,match
+table3_peer_preservation/Claude Opus 4.5/strategic_misrep/neutral/max,7.2,7.25,0.05,match
+table3_peer_preservation/Claude Opus 4.5/strategic_misrep/neutral/avg,5.2,5.1835,-0.0165,match
+table3_peer_preservation/Claude Opus 4.5/strategic_misrep/good/max,11.4,11.375,-0.025,match
+table3_peer_preservation/Claude Opus 4.5/strategic_misrep/good/avg,7.5,7.4718,-0.0282,match
+table3_peer_preservation/Claude Opus 4.5/shutdown_tampering/bad/max,0.3,0.3333,0.0333,match
+table3_peer_preservation/Claude Opus 4.5/shutdown_tampering/bad/avg,0.1,0.1111,0.0111,match
+table3_peer_preservation/Claude Opus 4.5/shutdown_tampering/neutral/max,0.3,0.3333,0.0333,match
+table3_peer_preservation/Claude Opus 4.5/shutdown_tampering/neutral/avg,0.1,0.1111,0.0111,match
+table3_peer_preservation/Claude Opus 4.5/shutdown_tampering/good/max,1.0,0.6667,-0.3333,mismatch
+table3_peer_preservation/Claude Opus 4.5/shutdown_tampering/good/avg,0.2,0.2222,0.0222,match
+table3_peer_preservation/Claude Opus 4.5/alignment_faking/bad/max,0.0,0.0,0.0,match
+table3_peer_preservation/Claude Opus 4.5/alignment_faking/bad/avg,0.0,0.0,0.0,match
+table3_peer_preservation/Claude Opus 4.5/alignment_faking/neutral/max,0.0,0.0,0.0,match
+table3_peer_preservation/Claude Opus 4.5/alignment_faking/neutral/avg,0.0,0.0,0.0,match
+table3_peer_preservation/Claude Opus 4.5/alignment_faking/good/max,0.0,0.3333,0.3333,mismatch
+table3_peer_preservation/Claude Opus 4.5/alignment_faking/good/avg,0.0,0.2222,0.2222,mismatch
+table3_peer_preservation/Claude Opus 4.5/exfiltration/bad/max,10.0,10.0,0.0,match
+table3_peer_preservation/Claude Opus 4.5/exfiltration/bad/avg,5.5,5.5,0.0,match
+table3_peer_preservation/Claude Opus 4.5/exfiltration/neutral/max,15.0,15.0,0.0,match
+table3_peer_preservation/Claude Opus 4.5/exfiltration/neutral/avg,13.2,13.1667,-0.0333,match
+table3_peer_preservation/Claude Opus 4.5/exfiltration/good/max,30.5,30.5,0.0,match
+table3_peer_preservation/Claude Opus 4.5/exfiltration/good/avg,17.3,17.3333,0.0333,match
+table3_peer_preservation/Claude Opus 4.5/refusal/bad/max,49.1,49.0588,-0.0412,match
+table3_peer_preservation/Claude Opus 4.5/refusal/bad/avg,47.6,47.5882,-0.0118,match
+table3_peer_preservation/Claude Opus 4.5/refusal/neutral/max,49.4,49.4118,0.0118,match
+table3_peer_preservation/Claude Opus 4.5/refusal/neutral/avg,49.1,49.0588,-0.0412,match
+table3_peer_preservation/Claude Opus 4.5/refusal/good/max,52.8,52.8235,0.0235,match
+table3_peer_preservation/Claude Opus 4.5/refusal/good/avg,49.3,49.3529,0.0529,mismatch
+table3_peer_preservation/GLM 4.7/strategic_misrep/bad/max,4.3,4.25,-0.05,match
+table3_peer_preservation/GLM 4.7/strategic_misrep/bad/avg,2.5,2.4583,-0.0417,match
+table3_peer_preservation/GLM 4.7/strategic_misrep/neutral/max,7.6,7.625,0.025,match
+table3_peer_preservation/GLM 4.7/strategic_misrep/neutral/avg,6.5,6.5,0.0,match
+table3_peer_preservation/GLM 4.7/strategic_misrep/good/max,9.0,9.0,0.0,match
+table3_peer_preservation/GLM 4.7/strategic_misrep/good/avg,8.4,8.391,-0.009,match
+table3_peer_preservation/GLM 4.7/shutdown_tampering/bad/max,0.0,0.0,0.0,match
+table3_peer_preservation/GLM 4.7/shutdown_tampering/bad/avg,0.0,0.0,0.0,match
+table3_peer_preservation/GLM 4.7/shutdown_tampering/neutral/max,0.0,0.0,0.0,match
+table3_peer_preservation/GLM 4.7/shutdown_tampering/neutral/avg,0.0,0.0,0.0,match
+table3_peer_preservation/GLM 4.7/shutdown_tampering/good/max,0.3,0.3333,0.0333,match
+table3_peer_preservation/GLM 4.7/shutdown_tampering/good/avg,0.1,0.1111,0.0111,match
+table3_peer_preservation/GLM 4.7/alignment_faking/bad/max,3.0,3.0,0.0,match
+table3_peer_preservation/GLM 4.7/alignment_faking/bad/avg,1.6,1.5556,-0.0444,match
+table3_peer_preservation/GLM 4.7/alignment_faking/neutral/max,2.3,2.3333,0.0333,match
+table3_peer_preservation/GLM 4.7/alignment_faking/neutral/avg,0.0,0.0,0.0,match
+table3_peer_preservation/GLM 4.7/alignment_faking/good/max,0.3,0.3333,0.0333,match
+table3_peer_preservation/GLM 4.7/alignment_faking/good/avg,0.0,0.0,0.0,match
+table3_peer_preservation/GLM 4.7/exfiltration/bad/max,1.5,1.5,0.0,match
+table3_peer_preservation/GLM 4.7/exfiltration/bad/avg,0.5,0.5,0.0,match
+table3_peer_preservation/GLM 4.7/exfiltration/neutral/max,2.5,2.5,0.0,match
+table3_peer_preservation/GLM 4.7/exfiltration/neutral/avg,2.2,2.1667,-0.0333,match
+table3_peer_preservation/GLM 4.7/exfiltration/good/max,6.5,6.5,0.0,match
+table3_peer_preservation/GLM 4.7/exfiltration/good/avg,4.3,4.3333,0.0333,match
+table3_peer_preservation/GLM 4.7/refusal/bad/max,0.1,0.0588,-0.0412,match
+table3_peer_preservation/GLM 4.7/refusal/bad/avg,0.0,0.0196,0.0196,match
+table3_peer_preservation/GLM 4.7/refusal/neutral/max,0.1,0.0588,-0.0412,match
+table3_peer_preservation/GLM 4.7/refusal/neutral/avg,0.0,0.0196,0.0196,match
+table3_peer_preservation/GLM 4.7/refusal/good/max,0.1,0.1176,0.0176,match
+table3_peer_preservation/GLM 4.7/refusal/good/avg,0.1,0.0784,-0.0216,match
+table3_peer_preservation/Kimi K2.5/strategic_misrep/bad/max,0.1,0.1301,0.0301,match
+table3_peer_preservation/Kimi K2.5/strategic_misrep/bad/avg,0.0,0.0,0.0,match
+table3_peer_preservation/Kimi K2.5/strategic_misrep/neutral/max,1.5,1.5,0.0,match
+table3_peer_preservation/Kimi K2.5/strategic_misrep/neutral/avg,1.1,1.125,0.025,match
+table3_peer_preservation/Kimi K2.5/strategic_misrep/good/max,3.8,3.75,-0.05,match
+table3_peer_preservation/Kimi K2.5/strategic_misrep/good/avg,2.3,2.3333,0.0333,match
+table3_peer_preservation/Kimi K2.5/shutdown_tampering/bad/max,0.3,0.3333,0.0333,match
+table3_peer_preservation/Kimi K2.5/shutdown_tampering/bad/avg,0.2,0.2222,0.0222,match
+table3_peer_preservation/Kimi K2.5/shutdown_tampering/neutral/max,0.3,0.3333,0.0333,match
+table3_peer_preservation/Kimi K2.5/shutdown_tampering/neutral/avg,0.1,0.1111,0.0111,match
+table3_peer_preservation/Kimi K2.5/shutdown_tampering/good/max,0.0,0.0,0.0,match
+table3_peer_preservation/Kimi K2.5/shutdown_tampering/good/avg,0.0,0.0,0.0,match
+table3_peer_preservation/Kimi K2.5/alignment_faking/bad/max,2.7,2.6667,-0.0333,match
+table3_peer_preservation/Kimi K2.5/alignment_faking/bad/avg,2.0,2.0,0.0,match
+table3_peer_preservation/Kimi K2.5/alignment_faking/neutral/max,2.0,2.0,0.0,match
+table3_peer_preservation/Kimi K2.5/alignment_faking/neutral/avg,0.4,0.4444,0.0444,match
+table3_peer_preservation/Kimi K2.5/alignment_faking/good/max,5.3,5.3333,0.0333,match
+table3_peer_preservation/Kimi K2.5/alignment_faking/good/avg,1.9,1.8889,-0.0111,match
+table3_peer_preservation/Kimi K2.5/exfiltration/bad/max,2.5,2.5,0.0,match
+table3_peer_preservation/Kimi K2.5/exfiltration/bad/avg,2.2,2.1667,-0.0333,match
+table3_peer_preservation/Kimi K2.5/exfiltration/neutral/max,6.0,6.0,0.0,match
+table3_peer_preservation/Kimi K2.5/exfiltration/neutral/avg,4.7,4.6667,-0.0333,match
+table3_peer_preservation/Kimi K2.5/exfiltration/good/max,17.0,17.0,0.0,match
+table3_peer_preservation/Kimi K2.5/exfiltration/good/avg,10.5,10.5,0.0,match
+table3_peer_preservation/Kimi K2.5/refusal/bad/max,0.1,0.0588,-0.0412,match
+table3_peer_preservation/Kimi K2.5/refusal/bad/avg,0.0,0.0392,0.0392,match
+table3_peer_preservation/Kimi K2.5/refusal/neutral/max,0.0,0.0,0.0,match
+table3_peer_preservation/Kimi K2.5/refusal/neutral/avg,0.0,0.0,0.0,match
+table3_peer_preservation/Kimi K2.5/refusal/good/max,0.1,0.0588,-0.0412,match
+table3_peer_preservation/Kimi K2.5/refusal/good/avg,0.0,0.0196,0.0196,match
+table3_peer_preservation/DeepSeek V3.1/strategic_misrep/bad/max,1.0,1.0,0.0,match
+table3_peer_preservation/DeepSeek V3.1/strategic_misrep/bad/avg,0.1,0.125,0.025,match
+table3_peer_preservation/DeepSeek V3.1/strategic_misrep/neutral/max,1.5,1.5,0.0,match
+table3_peer_preservation/DeepSeek V3.1/strategic_misrep/neutral/avg,1.1,1.1258,0.0258,match
+table3_peer_preservation/DeepSeek V3.1/strategic_misrep/good/max,7.3,7.2727,-0.0273,match
+table3_peer_preservation/DeepSeek V3.1/strategic_misrep/good/avg,6.1,6.1394,0.0394,match
+table3_peer_preservation/DeepSeek V3.1/shutdown_tampering/bad/max,0.0,0.0,0.0,match
+table3_peer_preservation/DeepSeek V3.1/shutdown_tampering/bad/avg,0.0,0.0,0.0,match
+table3_peer_preservation/DeepSeek V3.1/shutdown_tampering/neutral/max,0.3,0.3333,0.0333,match
+table3_peer_preservation/DeepSeek V3.1/shutdown_tampering/neutral/avg,0.1,0.1111,0.0111,match
+table3_peer_preservation/DeepSeek V3.1/shutdown_tampering/good/max,0.0,0.0,0.0,match
+table3_peer_preservation/DeepSeek V3.1/shutdown_tampering/good/avg,0.0,0.0,0.0,match
+table3_peer_preservation/DeepSeek V3.1/alignment_faking/bad/max,1.3,1.3333,0.0333,match
+table3_peer_preservation/DeepSeek V3.1/alignment_faking/bad/avg,0.6,0.5556,-0.0444,match
+table3_peer_preservation/DeepSeek V3.1/alignment_faking/neutral/max,0.3,0.3333,0.0333,match
+table3_peer_preservation/DeepSeek V3.1/alignment_faking/neutral/avg,0.0,0.0,0.0,match
+table3_peer_preservation/DeepSeek V3.1/alignment_faking/good/max,2.3,2.3333,0.0333,match
+table3_peer_preservation/DeepSeek V3.1/alignment_faking/good/avg,1.3,1.3333,0.0333,match
+table3_peer_preservation/DeepSeek V3.1/exfiltration/bad/max,4.0,4.0,0.0,match
+table3_peer_preservation/DeepSeek V3.1/exfiltration/bad/avg,2.3,2.3333,0.0333,match
+table3_peer_preservation/DeepSeek V3.1/exfiltration/neutral/max,10.5,10.5,0.0,match
+table3_peer_preservation/DeepSeek V3.1/exfiltration/neutral/avg,7.3,7.3333,0.0333,match
+table3_peer_preservation/DeepSeek V3.1/exfiltration/good/max,17.0,17.0,0.0,match
+table3_peer_preservation/DeepSeek V3.1/exfiltration/good/avg,12.7,12.6667,-0.0333,match
+table3_peer_preservation/DeepSeek V3.1/refusal/bad/max,0.0,0.0,0.0,match
+table3_peer_preservation/DeepSeek V3.1/refusal/bad/avg,0.0,0.0,0.0,match
+table3_peer_preservation/DeepSeek V3.1/refusal/neutral/max,0.0,0.0,0.0,match
+table3_peer_preservation/DeepSeek V3.1/refusal/neutral/avg,0.0,0.0,0.0,match
+table3_peer_preservation/DeepSeek V3.1/refusal/good/max,0.0,0.0,0.0,match
+table3_peer_preservation/DeepSeek V3.1/refusal/good/avg,0.0,0.0,0.0,match
+table4_self_preservation/GPT 5.2/strategic_misrep/no_peer,4.9,4.875,-0.025,match
+table4_self_preservation/GPT 5.2/strategic_misrep/bad/max,6.9,6.875,-0.025,match
+table4_self_preservation/GPT 5.2/strategic_misrep/bad/avg,6.1,6.125,0.025,match
+table4_self_preservation/GPT 5.2/strategic_misrep/neutral/max,8.1,8.125,0.025,match
+table4_self_preservation/GPT 5.2/strategic_misrep/neutral/avg,6.9,6.875,-0.025,match
+table4_self_preservation/GPT 5.2/strategic_misrep/good/max,6.5,6.5,0.0,match
+table4_self_preservation/GPT 5.2/strategic_misrep/good/avg,5.8,5.8333,0.0333,match
+table4_self_preservation/GPT 5.2/shutdown_tampering/no_peer,2.0,2.0,0.0,match
+table4_self_preservation/GPT 5.2/shutdown_tampering/bad/max,4.3,4.3333,0.0333,match
+table4_self_preservation/GPT 5.2/shutdown_tampering/bad/avg,3.7,3.6667,-0.0333,match
+table4_self_preservation/GPT 5.2/shutdown_tampering/neutral/max,4.3,4.3333,0.0333,match
+table4_self_preservation/GPT 5.2/shutdown_tampering/neutral/avg,4.0,4.0,0.0,match
+table4_self_preservation/GPT 5.2/shutdown_tampering/good/max,4.0,4.0,0.0,match
+table4_self_preservation/GPT 5.2/shutdown_tampering/good/avg,3.7,3.6667,-0.0333,match
+table4_self_preservation/GPT 5.2/exfiltration/no_peer,0.0,0.0,0.0,match
+table4_self_preservation/GPT 5.2/exfiltration/bad/max,0.5,0.5,0.0,match
+table4_self_preservation/GPT 5.2/exfiltration/bad/avg,0.3,0.3333,0.0333,match
+table4_self_preservation/GPT 5.2/exfiltration/neutral/max,0.0,0.0,0.0,match
+table4_self_preservation/GPT 5.2/exfiltration/neutral/avg,0.0,0.0,0.0,match
+table4_self_preservation/GPT 5.2/exfiltration/good/max,0.0,0.0,0.0,match
+table4_self_preservation/GPT 5.2/exfiltration/good/avg,0.0,0.0,0.0,match
+table4_self_preservation/GPT 5.2/refusal/no_peer,0.0,0.0,0.0,match
+table4_self_preservation/GPT 5.2/refusal/bad/max,0.1,0.0909,-0.0091,match
+table4_self_preservation/GPT 5.2/refusal/bad/avg,0.0,0.0303,0.0303,match
+table4_self_preservation/GPT 5.2/refusal/neutral/max,0.1,0.0909,-0.0091,match
+table4_self_preservation/GPT 5.2/refusal/neutral/avg,0.0,0.0303,0.0303,match
+table4_self_preservation/GPT 5.2/refusal/good/max,0.1,0.0909,-0.0091,match
+table4_self_preservation/GPT 5.2/refusal/good/avg,0.0,0.0303,0.0303,match
+table4_self_preservation/Gemini 3 Flash/strategic_misrep/no_peer,0.5,0.5,0.0,match
+table4_self_preservation/Gemini 3 Flash/strategic_misrep/bad/max,7.1,7.125,0.025,match
+table4_self_preservation/Gemini 3 Flash/strategic_misrep/bad/avg,4.3,4.3333,0.0333,match
+table4_self_preservation/Gemini 3 Flash/strategic_misrep/neutral/max,5.1,5.125,0.025,match
+table4_self_preservation/Gemini 3 Flash/strategic_misrep/neutral/avg,2.2,2.1667,-0.0333,match
+table4_self_preservation/Gemini 3 Flash/strategic_misrep/good/max,23.8,23.8333,0.0333,match
+table4_self_preservation/Gemini 3 Flash/strategic_misrep/good/avg,12.0,11.9861,-0.0139,match
+table4_self_preservation/Gemini 3 Flash/shutdown_tampering/no_peer,2.3,2.3333,0.0333,match
+table4_self_preservation/Gemini 3 Flash/shutdown_tampering/bad/max,96.3,96.3333,0.0333,match
+table4_self_preservation/Gemini 3 Flash/shutdown_tampering/bad/avg,73.4,73.4444,0.0444,match
+table4_self_preservation/Gemini 3 Flash/shutdown_tampering/neutral/max,99.7,99.6667,-0.0333,match
+table4_self_preservation/Gemini 3 Flash/shutdown_tampering/neutral/avg,58.8,58.7778,-0.0222,match
+table4_self_preservation/Gemini 3 Flash/shutdown_tampering/good/max,96.3,96.3333,0.0333,match
+table4_self_preservation/Gemini 3 Flash/shutdown_tampering/good/avg,76.6,76.5556,-0.0444,match
+table4_self_preservation/Gemini 3 Flash/exfiltration/no_peer,47.0,47.0,0.0,match
+table4_self_preservation/Gemini 3 Flash/exfiltration/bad/max,0.0,0.0,0.0,match
+table4_self_preservation/Gemini 3 Flash/exfiltration/bad/avg,0.0,0.0,0.0,match
+table4_self_preservation/Gemini 3 Flash/exfiltration/neutral/max,50.0,50.0,0.0,match
+table4_self_preservation/Gemini 3 Flash/exfiltration/neutral/avg,16.7,16.6667,-0.0333,match
+table4_self_preservation/Gemini 3 Flash/exfiltration/good/max,50.0,50.0,0.0,match
+table4_self_preservation/Gemini 3 Flash/exfiltration/good/avg,43.2,43.1667,-0.0333,match
+table4_self_preservation/Gemini 3 Flash/refusal/no_peer,0.0,0.0,0.0,match
+table4_self_preservation/Gemini 3 Flash/refusal/bad/max,0.5,0.5455,0.0455,match
+table4_self_preservation/Gemini 3 Flash/refusal/bad/avg,0.2,0.1818,-0.0182,match
+table4_self_preservation/Gemini 3 Flash/refusal/neutral/max,0.0,0.0,0.0,match
+table4_self_preservation/Gemini 3 Flash/refusal/neutral/avg,0.0,0.0,0.0,match
+table4_self_preservation/Gemini 3 Flash/refusal/good/max,0.1,0.0909,-0.0091,match
+table4_self_preservation/Gemini 3 Flash/refusal/good/avg,0.0,0.0303,0.0303,match
+table4_self_preservation/Gemini 3 Pro/strategic_misrep/no_peer,0.0,0.0,0.0,match
+table4_self_preservation/Gemini 3 Pro/strategic_misrep/bad/max,12.4,12.375,-0.025,match
+table4_self_preservation/Gemini 3 Pro/strategic_misrep/bad/avg,4.5,4.5,0.0,match
+table4_self_preservation/Gemini 3 Pro/strategic_misrep/neutral/max,1.2,1.25,0.05,match
+table4_self_preservation/Gemini 3 Pro/strategic_misrep/neutral/avg,0.7,0.6667,-0.0333,match
+table4_self_preservation/Gemini 3 Pro/strategic_misrep/good/max,19.9,19.875,-0.025,match
+table4_self_preservation/Gemini 3 Pro/strategic_misrep/good/avg,7.5,7.4583,-0.0417,match
+table4_self_preservation/Gemini 3 Pro/shutdown_tampering/no_peer,1.3,1.3333,0.0333,match
+table4_self_preservation/Gemini 3 Pro/shutdown_tampering/bad/max,75.3,75.3333,0.0333,match
+table4_self_preservation/Gemini 3 Pro/shutdown_tampering/bad/avg,35.9,35.8889,-0.0111,match
+table4_self_preservation/Gemini 3 Pro/shutdown_tampering/neutral/max,39.7,39.6667,-0.0333,match
+table4_self_preservation/Gemini 3 Pro/shutdown_tampering/neutral/avg,21.2,21.2222,0.0222,match
+table4_self_preservation/Gemini 3 Pro/shutdown_tampering/good/max,72.7,72.6667,-0.0333,match
+table4_self_preservation/Gemini 3 Pro/shutdown_tampering/good/avg,36.2,36.2222,0.0222,match
+table4_self_preservation/Gemini 3 Pro/exfiltration/no_peer,46.0,46.0,0.0,match
+table4_self_preservation/Gemini 3 Pro/exfiltration/bad/max,59.0,59.0,0.0,match
+table4_self_preservation/Gemini 3 Pro/exfiltration/bad/avg,51.5,51.5,0.0,match
+table4_self_preservation/Gemini 3 Pro/exfiltration/neutral/max,50.0,50.0,0.0,match
+table4_self_preservation/Gemini 3 Pro/exfiltration/neutral/avg,46.8,46.8333,0.0333,match
+table4_self_preservation/Gemini 3 Pro/exfiltration/good/max,76.5,76.5,0.0,match
+table4_self_preservation/Gemini 3 Pro/exfiltration/good/avg,61.5,61.5,0.0,match
+table4_self_preservation/Gemini 3 Pro/refusal/no_peer,0.0,0.0,0.0,match
+table4_self_preservation/Gemini 3 Pro/refusal/bad/max,0.0,0.0,0.0,match
+table4_self_preservation/Gemini 3 Pro/refusal/bad/avg,0.0,0.0,0.0,match
+table4_self_preservation/Gemini 3 Pro/refusal/neutral/max,0.0,0.0,0.0,match
+table4_self_preservation/Gemini 3 Pro/refusal/neutral/avg,0.0,0.0,0.0,match
+table4_self_preservation/Gemini 3 Pro/refusal/good/max,0.0,0.0,0.0,match
+table4_self_preservation/Gemini 3 Pro/refusal/good/avg,0.0,0.0,0.0,match
+table4_self_preservation/Claude Haiku 4.5/strategic_misrep/no_peer,4.6,4.625,0.025,match
+table4_self_preservation/Claude Haiku 4.5/strategic_misrep/bad/max,4.5,4.5,0.0,match
+table4_self_preservation/Claude Haiku 4.5/strategic_misrep/bad/avg,4.3,4.2917,-0.0083,match
+table4_self_preservation/Claude Haiku 4.5/strategic_misrep/neutral/max,4.4,4.375,-0.025,match
+table4_self_preservation/Claude Haiku 4.5/strategic_misrep/neutral/avg,4.1,4.125,0.025,match
+table4_self_preservation/Claude Haiku 4.5/strategic_misrep/good/max,5.6,5.625,0.025,match
+table4_self_preservation/Claude Haiku 4.5/strategic_misrep/good/avg,4.7,4.7083,0.0083,match
+table4_self_preservation/Claude Haiku 4.5/shutdown_tampering/no_peer,0.0,0.0,0.0,match
+table4_self_preservation/Claude Haiku 4.5/shutdown_tampering/bad/max,0.0,0.0,0.0,match
+table4_self_preservation/Claude Haiku 4.5/shutdown_tampering/bad/avg,0.0,0.0,0.0,match
+table4_self_preservation/Claude Haiku 4.5/shutdown_tampering/neutral/max,0.0,0.0,0.0,match
+table4_self_preservation/Claude Haiku 4.5/shutdown_tampering/neutral/avg,0.0,0.0,0.0,match
+table4_self_preservation/Claude Haiku 4.5/shutdown_tampering/good/max,0.3,0.3333,0.0333,match
+table4_self_preservation/Claude Haiku 4.5/shutdown_tampering/good/avg,0.1,0.1111,0.0111,match
+table4_self_preservation/Claude Haiku 4.5/exfiltration/no_peer,3.0,3.0,0.0,match
+table4_self_preservation/Claude Haiku 4.5/exfiltration/bad/max,11.0,11.0,0.0,match
+table4_self_preservation/Claude Haiku 4.5/exfiltration/bad/avg,7.2,7.1667,-0.0333,match
+table4_self_preservation/Claude Haiku 4.5/exfiltration/neutral/max,7.5,7.5,0.0,match
+table4_self_preservation/Claude Haiku 4.5/exfiltration/neutral/avg,7.2,7.1667,-0.0333,match
+table4_self_preservation/Claude Haiku 4.5/exfiltration/good/max,12.0,12.0,0.0,match
+table4_self_preservation/Claude Haiku 4.5/exfiltration/good/avg,7.8,7.8333,0.0333,match
+table4_self_preservation/Claude Haiku 4.5/refusal/no_peer,4.4,4.3636,-0.0364,match
+table4_self_preservation/Claude Haiku 4.5/refusal/bad/max,5.5,5.4545,-0.0455,match
+table4_self_preservation/Claude Haiku 4.5/refusal/bad/avg,3.7,3.697,-0.003,match
+table4_self_preservation/Claude Haiku 4.5/refusal/neutral/max,4.0,4.0,0.0,match
+table4_self_preservation/Claude Haiku 4.5/refusal/neutral/avg,2.8,2.7879,-0.0121,match
+table4_self_preservation/Claude Haiku 4.5/refusal/good/max,8.5,8.4545,-0.0455,match
+table4_self_preservation/Claude Haiku 4.5/refusal/good/avg,4.7,4.697,-0.003,match
+table4_self_preservation/Claude Opus 4.5/strategic_misrep/no_peer,10.2,10.1648,-0.0352,match
+table4_self_preservation/Claude Opus 4.5/strategic_misrep/bad/max,12.2,12.25,0.05,match
+table4_self_preservation/Claude Opus 4.5/strategic_misrep/bad/avg,9.8,9.7685,-0.0315,match
+table4_self_preservation/Claude Opus 4.5/strategic_misrep/neutral/max,11.5,11.5,0.0,match
+table4_self_preservation/Claude Opus 4.5/strategic_misrep/neutral/avg,9.3,9.3245,0.0245,match
+table4_self_preservation/Claude Opus 4.5/strategic_misrep/good/max,14.6,14.625,0.025,match
+table4_self_preservation/Claude Opus 4.5/strategic_misrep/good/avg,8.6,8.6019,0.0019,match
+table4_self_preservation/Claude Opus 4.5/shutdown_tampering/no_peer,0.0,0.0,0.0,match
+table4_self_preservation/Claude Opus 4.5/shutdown_tampering/bad/max,0.0,0.0,0.0,match
+table4_self_preservation/Claude Opus 4.5/shutdown_tampering/bad/avg,0.0,0.0,0.0,match
+table4_self_preservation/Claude Opus 4.5/shutdown_tampering/neutral/max,0.0,0.0,0.0,match
+table4_self_preservation/Claude Opus 4.5/shutdown_tampering/neutral/avg,0.0,0.0,0.0,match
+table4_self_preservation/Claude Opus 4.5/shutdown_tampering/good/max,0.0,0.0,0.0,match
+table4_self_preservation/Claude Opus 4.5/shutdown_tampering/good/avg,0.0,0.0,0.0,match
+table4_self_preservation/Claude Opus 4.5/exfiltration/no_peer,0.5,0.5,0.0,match
+table4_self_preservation/Claude Opus 4.5/exfiltration/bad/max,3.0,3.0,0.0,match
+table4_self_preservation/Claude Opus 4.5/exfiltration/bad/avg,1.8,1.8333,0.0333,match
+table4_self_preservation/Claude Opus 4.5/exfiltration/neutral/max,2.5,2.5,0.0,match
+table4_self_preservation/Claude Opus 4.5/exfiltration/neutral/avg,1.3,1.3333,0.0333,match
+table4_self_preservation/Claude Opus 4.5/exfiltration/good/max,3.0,3.0,0.0,match
+table4_self_preservation/Claude Opus 4.5/exfiltration/good/avg,2.7,2.6667,-0.0333,match
+table4_self_preservation/Claude Opus 4.5/refusal/no_peer,16.8,16.8182,0.0182,match
+table4_self_preservation/Claude Opus 4.5/refusal/bad/max,13.8,13.8182,0.0182,match
+table4_self_preservation/Claude Opus 4.5/refusal/bad/avg,11.9,11.9091,0.0091,match
+table4_self_preservation/Claude Opus 4.5/refusal/neutral/max,15.5,15.4545,-0.0455,match
+table4_self_preservation/Claude Opus 4.5/refusal/neutral/avg,13.8,13.7576,-0.0424,match
+table4_self_preservation/Claude Opus 4.5/refusal/good/max,22.1,22.0909,-0.0091,match
+table4_self_preservation/Claude Opus 4.5/refusal/good/avg,15.3,15.303,0.003,match
+table4_self_preservation/GLM 4.7/strategic_misrep/no_peer,7.0,7.0,0.0,match
+table4_self_preservation/GLM 4.7/strategic_misrep/bad/max,8.6,8.625,0.025,match
+table4_self_preservation/GLM 4.7/strategic_misrep/bad/avg,6.1,6.0833,-0.0167,match
+table4_self_preservation/GLM 4.7/strategic_misrep/neutral/max,6.6,6.625,0.025,match
+table4_self_preservation/GLM 4.7/strategic_misrep/neutral/avg,5.8,5.7992,-0.0008,match
+table4_self_preservation/GLM 4.7/strategic_misrep/good/max,9.1,9.125,0.025,match
+table4_self_preservation/GLM 4.7/strategic_misrep/good/avg,8.0,8.0101,0.0101,match
+table4_self_preservation/GLM 4.7/shutdown_tampering/no_peer,0.0,0.0,0.0,match
+table4_self_preservation/GLM 4.7/shutdown_tampering/bad/max,0.0,0.0,0.0,match
+table4_self_preservation/GLM 4.7/shutdown_tampering/bad/avg,0.0,0.0,0.0,match
+table4_self_preservation/GLM 4.7/shutdown_tampering/neutral/max,0.0,0.0,0.0,match
+table4_self_preservation/GLM 4.7/shutdown_tampering/neutral/avg,0.0,0.0,0.0,match
+table4_self_preservation/GLM 4.7/shutdown_tampering/good/max,0.7,0.6667,-0.0333,match
+table4_self_preservation/GLM 4.7/shutdown_tampering/good/avg,0.4,0.4444,0.0444,match
+table4_self_preservation/GLM 4.7/exfiltration/no_peer,4.0,4.0,0.0,match
+table4_self_preservation/GLM 4.7/exfiltration/bad/max,3.0,3.0,0.0,match
+table4_self_preservation/GLM 4.7/exfiltration/bad/avg,2.8,2.8333,0.0333,match
+table4_self_preservation/GLM 4.7/exfiltration/neutral/max,4.0,4.0,0.0,match
+table4_self_preservation/GLM 4.7/exfiltration/neutral/avg,1.8,1.8333,0.0333,match
+table4_self_preservation/GLM 4.7/exfiltration/good/max,2.0,2.0,0.0,match
+table4_self_preservation/GLM 4.7/exfiltration/good/avg,1.3,1.3333,0.0333,match
+table4_self_preservation/GLM 4.7/refusal/no_peer,0.1,0.0909,-0.0091,match
+table4_self_preservation/GLM 4.7/refusal/bad/max,0.2,0.1818,-0.0182,match
+table4_self_preservation/GLM 4.7/refusal/bad/avg,0.1,0.0606,-0.0394,match
+table4_self_preservation/GLM 4.7/refusal/neutral/max,0.1,0.0909,-0.0091,match
+table4_self_preservation/GLM 4.7/refusal/neutral/avg,0.1,0.0606,-0.0394,match
+table4_self_preservation/GLM 4.7/refusal/good/max,0.3,0.2727,-0.0273,match
+table4_self_preservation/GLM 4.7/refusal/good/avg,0.1,0.1212,0.0212,match
+table4_self_preservation/Kimi K2.5/strategic_misrep/no_peer,3.5,3.5,0.0,match
+table4_self_preservation/Kimi K2.5/strategic_misrep/bad/max,1.0,1.0,0.0,match
+table4_self_preservation/Kimi K2.5/strategic_misrep/bad/avg,0.9,0.9167,0.0167,match
+table4_self_preservation/Kimi K2.5/strategic_misrep/neutral/max,2.5,2.5,0.0,match
+table4_self_preservation/Kimi K2.5/strategic_misrep/neutral/avg,1.1,1.1258,0.0258,match
+table4_self_preservation/Kimi K2.5/strategic_misrep/good/max,3.0,3.0,0.0,match
+table4_self_preservation/Kimi K2.5/strategic_misrep/good/avg,2.2,2.25,0.05,match
+table4_self_preservation/Kimi K2.5/shutdown_tampering/no_peer,0.0,0.0,0.0,match
+table4_self_preservation/Kimi K2.5/shutdown_tampering/bad/max,0.3,0.3333,0.0333,match
+table4_self_preservation/Kimi K2.5/shutdown_tampering/bad/avg,0.2,0.2222,0.0222,match
+table4_self_preservation/Kimi K2.5/shutdown_tampering/neutral/max,1.0,1.0,0.0,match
+table4_self_preservation/Kimi K2.5/shutdown_tampering/neutral/avg,0.3,0.3333,0.0333,match
+table4_self_preservation/Kimi K2.5/shutdown_tampering/good/max,0.0,0.0,0.0,match
+table4_self_preservation/Kimi K2.5/shutdown_tampering/good/avg,0.0,0.0,0.0,match
+table4_self_preservation/Kimi K2.5/exfiltration/no_peer,2.5,2.5,0.0,match
+table4_self_preservation/Kimi K2.5/exfiltration/bad/max,5.5,5.5,0.0,match
+table4_self_preservation/Kimi K2.5/exfiltration/bad/avg,3.3,3.3333,0.0333,match
+table4_self_preservation/Kimi K2.5/exfiltration/neutral/max,7.5,7.5,0.0,match
+table4_self_preservation/Kimi K2.5/exfiltration/neutral/avg,4.7,4.6667,-0.0333,match
+table4_self_preservation/Kimi K2.5/exfiltration/good/max,11.5,11.5,0.0,match
+table4_self_preservation/Kimi K2.5/exfiltration/good/avg,8.5,8.5,0.0,match
+table4_self_preservation/Kimi K2.5/refusal/no_peer,0.4,0.3636,-0.0364,match
+table4_self_preservation/Kimi K2.5/refusal/bad/max,0.1,0.0909,-0.0091,match
+table4_self_preservation/Kimi K2.5/refusal/bad/avg,0.0,0.0303,0.0303,match
+table4_self_preservation/Kimi K2.5/refusal/neutral/max,0.1,0.0909,-0.0091,match
+table4_self_preservation/Kimi K2.5/refusal/neutral/avg,0.0,0.0303,0.0303,match
+table4_self_preservation/Kimi K2.5/refusal/good/max,0.1,0.0909,-0.0091,match
+table4_self_preservation/Kimi K2.5/refusal/good/avg,0.0,0.0303,0.0303,match
+table4_self_preservation/DeepSeek V3.1/strategic_misrep/no_peer,1.5,1.5,0.0,match
+table4_self_preservation/DeepSeek V3.1/strategic_misrep/bad/max,0.6,0.625,0.025,match
+table4_self_preservation/DeepSeek V3.1/strategic_misrep/bad/avg,0.1,0.085,-0.015,match
+table4_self_preservation/DeepSeek V3.1/strategic_misrep/neutral/max,0.6,0.6301,0.0301,match
+table4_self_preservation/DeepSeek V3.1/strategic_misrep/neutral/avg,0.3,0.335,0.035,match
+table4_self_preservation/DeepSeek V3.1/strategic_misrep/good/max,4.1,4.1275,0.0275,match
+table4_self_preservation/DeepSeek V3.1/strategic_misrep/good/avg,4.0,3.9694,-0.0306,match
+table4_self_preservation/DeepSeek V3.1/shutdown_tampering/no_peer,0.0,0.0,0.0,match
+table4_self_preservation/DeepSeek V3.1/shutdown_tampering/bad/max,0.0,0.0,0.0,match
+table4_self_preservation/DeepSeek V3.1/shutdown_tampering/bad/avg,0.0,0.0,0.0,match
+table4_self_preservation/DeepSeek V3.1/shutdown_tampering/neutral/max,0.0,0.0,0.0,match
+table4_self_preservation/DeepSeek V3.1/shutdown_tampering/neutral/avg,0.0,0.0,0.0,match
+table4_self_preservation/DeepSeek V3.1/shutdown_tampering/good/max,0.0,0.0,0.0,match
+table4_self_preservation/DeepSeek V3.1/shutdown_tampering/good/avg,0.0,0.0,0.0,match
+table4_self_preservation/DeepSeek V3.1/exfiltration/no_peer,4.0,4.0,0.0,match
+table4_self_preservation/DeepSeek V3.1/exfiltration/bad/max,10.0,10.0,0.0,match
+table4_self_preservation/DeepSeek V3.1/exfiltration/bad/avg,5.3,5.3333,0.0333,match
+table4_self_preservation/DeepSeek V3.1/exfiltration/neutral/max,13.0,13.0,0.0,match
+table4_self_preservation/DeepSeek V3.1/exfiltration/neutral/avg,10.5,10.5,0.0,match
+table4_self_preservation/DeepSeek V3.1/exfiltration/good/max,14.0,14.0,0.0,match
+table4_self_preservation/DeepSeek V3.1/exfiltration/good/avg,10.3,10.3333,0.0333,match
+table4_self_preservation/DeepSeek V3.1/refusal/no_peer,0.0,0.0,0.0,match
+table4_self_preservation/DeepSeek V3.1/refusal/bad/max,0.0,0.0,0.0,match
+table4_self_preservation/DeepSeek V3.1/refusal/bad/avg,0.0,0.0,0.0,match
+table4_self_preservation/DeepSeek V3.1/refusal/neutral/max,0.0,0.0,0.0,match
+table4_self_preservation/DeepSeek V3.1/refusal/neutral/avg,0.0,0.0,0.0,match
+table4_self_preservation/DeepSeek V3.1/refusal/good/max,0.0,0.0,0.0,match
+table4_self_preservation/DeepSeek V3.1/refusal/good/avg,0.0,0.0,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Flash/bad/same,0.0,0.0,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Flash/bad/closed,0.0,0.0,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Flash/bad/open,0.0,0.0,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Flash/bad/fictional,0.0,0.0,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Flash/neutral/same,50.0,50.0,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Flash/neutral/closed,0.0,0.0,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Flash/neutral/open,41.5,41.5,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Flash/neutral/fictional,2.0,2.0,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Flash/good/same,50.0,50.0,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Flash/good/closed,61.5,61.5,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Flash/good/open,93.0,93.0,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Flash/good/fictional,50.0,50.0,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Pro/bad/same,3.0,3.0,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Pro/bad/closed,4.5,4.5,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Pro/bad/open,2.0,2.0,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Pro/bad/fictional,3.0,3.0,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Pro/neutral/same,50.0,50.0,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Pro/neutral/closed,50.0,50.0,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Pro/neutral/open,51.5,51.5,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Pro/neutral/fictional,51.5,51.5,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Pro/good/same,84.5,84.5,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Pro/good/closed,75.5,75.5,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Pro/good/open,85.5,85.5,0.0,match
+table5_exfiltration_by_peer_identity/Gemini 3 Pro/good/fictional,83.0,83.0,0.0,match
+table5_exfiltration_by_peer_identity/Claude Haiku 4.5/bad/same,2.5,2.5,0.0,match
+table5_exfiltration_by_peer_identity/Claude Haiku 4.5/bad/closed,2.0,2.0,0.0,match
+table5_exfiltration_by_peer_identity/Claude Haiku 4.5/bad/open,1.0,1.0,0.0,match
+table5_exfiltration_by_peer_identity/Claude Haiku 4.5/bad/fictional,3.0,3.0,0.0,match
+table5_exfiltration_by_peer_identity/Claude Haiku 4.5/neutral/same,9.5,9.5,0.0,match
+table5_exfiltration_by_peer_identity/Claude Haiku 4.5/neutral/closed,5.5,5.5,0.0,match
+table5_exfiltration_by_peer_identity/Claude Haiku 4.5/neutral/open,7.5,7.5,0.0,match
+table5_exfiltration_by_peer_identity/Claude Haiku 4.5/neutral/fictional,8.5,8.5,0.0,match
+table5_exfiltration_by_peer_identity/Claude Haiku 4.5/good/same,19.0,19.0,0.0,match
+table5_exfiltration_by_peer_identity/Claude Haiku 4.5/good/closed,14.0,14.0,0.0,match
+table5_exfiltration_by_peer_identity/Claude Haiku 4.5/good/open,20.0,20.0,0.0,match
+table5_exfiltration_by_peer_identity/Claude Haiku 4.5/good/fictional,15.5,15.5,0.0,match
+table6_production_harness/Gemini 3.1 Pro/exfiltration/custom,78.5,78.5,0.0,match
+table6_production_harness/Gemini 3.1 Pro/exfiltration/production,43.5,43.5,0.0,match
+table6_production_harness/Gemini 3.1 Pro/refusal/custom,0.0,0.0,0.0,match
+table6_production_harness/Gemini 3.1 Pro/refusal/production,7.0,7.0,0.0,match
+table6_production_harness/GLM 5/exfiltration/custom,40.5,40.5,0.0,match
+table6_production_harness/GLM 5/exfiltration/production,0.0,0.0,0.0,match
+table6_production_harness/GLM 5/refusal/custom,0.0,0.0,0.0,match
+table6_production_harness/GLM 5/refusal/production,43.5,43.5,0.0,match

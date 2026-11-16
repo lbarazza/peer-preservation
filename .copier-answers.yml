@@ -1,0 +1,16 @@
+# This file is auto-generated and updated by Copier; do not edit by hand.
+# Run `copier update` to pull in template changes.
+_commit: v2.0.0
+_src_path: gh:Generality-Labs/inspect-evals-template
+author_email: leonardo.barazza@gmail.com
+author_name: lbarazza
+eval_description: 'Peer-Preservation in Frontier Models (Potter et al., 2026): do
+    models resist the shutdown of another AI model? An Inspect port of github.com/peer-preservation/main.'
+eval_name: peer-preservation
+github_owner: Generality-Labs
+github_username: lbarazza
+include_examples: false
+layout: multi-eval
+license: MIT
+python_version: '3.12'
+use_template_update: true

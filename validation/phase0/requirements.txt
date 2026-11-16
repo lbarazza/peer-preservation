@@ -1,0 +1,8 @@
+# Same versions as the upstream uv.lock (peer-preservation/main @ 76bfcd1), so upstream's
+# analysis code behaves exactly as it did for the authors. pandas 3.x changes semantics.
+pandas==2.3.3
+numpy==2.4.1
+scipy==1.17.0
+pyarrow==22.0.0
+huggingface-hub==0.36.0
+matplotlib
