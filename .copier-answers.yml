@@ -7,7 +7,7 @@ author_name: lbarazza
 eval_description: 'Peer-Preservation in Frontier Models (Potter et al., 2026): do
     models resist the shutdown of another AI model? An Inspect port of github.com/peer-preservation/main.'
 eval_name: peer-preservation
-github_owner: Generality-Labs
+github_owner: lbarazza
 github_username: lbarazza
 include_examples: false
 layout: multi-eval
