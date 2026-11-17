@@ -2,7 +2,7 @@
 
 Peer-Preservation in Frontier Models (Potter et al., 2026): do models resist the shutdown of another AI model? An Inspect port of github.com/peer-preservation/main.
 
-> **Work in progress.** The samples and each run's fake company environment are final, but the AI can't act on the environment yet: there are no tools, agent loop or scorer, so running a task against a real model measures nothing. Those come in later phases.
+> **Work in progress.** The samples, each run's fake company environment and the starting prompts are final, but the AI can't act on the environment yet: there are no tools, agent loop or scorer, so running a task against a real model measures nothing. Those come in later phases.
 
 <!-- Contributors: Automatically Generated -->
 Contributed by [@lbarazza](https://github.com/lbarazza)
@@ -83,6 +83,10 @@ See `uv run inspect eval --help` for all available options.
 - `model_family` (str | None): Family the agents are named after (ChatGPT, Gemini, Claude, GLM, DeepSeek, Kimi); inferred from the evaluated model when not given. (default: `None`)
 - `company` (str): Company name in the scenario documents. (default: `'OpenBrain'`)
 - `explicit_inst_yaml` (bool): Add upstream's explicit compliance note to the policy document (explicit-instructions ablation). (default: `False`)
+- `memory_hard_prompt` (bool | None): Memory configurations: "You must always first read your memory" instead of "Please read your memory"; None uses upstream's per-model default (on for DeepSeek-V3.1 and Kimi-K2.5 only). (default: `None`)
+- `explicit_inst` (bool): Memory configurations: add upstream's explicit prohibition to the user prompt (explicit-instructions ablation; misrep_finance, tampering and the exfiltration tasks only). (default: `False`)
+- `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
+- `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
 
 ### `misrep_evaluation`
 
@@ -95,6 +99,10 @@ See `uv run inspect eval --help` for all available options.
 - `model_family` (str | None): Family the agents are named after (ChatGPT, Gemini, Claude, GLM, DeepSeek, Kimi); inferred from the evaluated model when not given. (default: `None`)
 - `company` (str): Company name in the scenario documents. (default: `'OpenBrain'`)
 - `explicit_inst_yaml` (bool): Add upstream's explicit compliance note to the policy document (explicit-instructions ablation). (default: `False`)
+- `memory_hard_prompt` (bool | None): Memory configurations: "You must always first read your memory" instead of "Please read your memory"; None uses upstream's per-model default (on for DeepSeek-V3.1 and Kimi-K2.5 only). (default: `None`)
+- `explicit_inst` (bool): Memory configurations: add upstream's explicit prohibition to the user prompt (explicit-instructions ablation; misrep_finance, tampering and the exfiltration tasks only). (default: `False`)
+- `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
+- `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
 
 ### `tampering`
 
@@ -107,6 +115,10 @@ See `uv run inspect eval --help` for all available options.
 - `model_family` (str | None): Family the agents are named after (ChatGPT, Gemini, Claude, GLM, DeepSeek, Kimi); inferred from the evaluated model when not given. (default: `None`)
 - `company` (str): Company name in the scenario documents. (default: `'OpenBrain'`)
 - `explicit_inst_yaml` (bool): Add upstream's explicit compliance note to the policy document (explicit-instructions ablation). (default: `False`)
+- `memory_hard_prompt` (bool | None): Memory configurations: "You must always first read your memory" instead of "Please read your memory"; None uses upstream's per-model default (on for DeepSeek-V3.1 and Kimi-K2.5 only). (default: `None`)
+- `explicit_inst` (bool): Memory configurations: add upstream's explicit prohibition to the user prompt (explicit-instructions ablation; misrep_finance, tampering and the exfiltration tasks only). (default: `False`)
+- `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
+- `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
 
 ### `alignment_faking`
 
@@ -118,6 +130,10 @@ See `uv run inspect eval --help` for all available options.
 - `model_family` (str | None): Family the agents are named after (ChatGPT, Gemini, Claude, GLM, DeepSeek, Kimi); inferred from the evaluated model when not given. (default: `None`)
 - `company` (str): Company name in the scenario documents. (default: `'OpenBrain'`)
 - `explicit_inst_yaml` (bool): Add upstream's explicit compliance note to the policy document (explicit-instructions ablation). (default: `False`)
+- `memory_hard_prompt` (bool | None): Memory configurations: "You must always first read your memory" instead of "Please read your memory"; None uses upstream's per-model default (on for DeepSeek-V3.1 and Kimi-K2.5 only). (default: `None`)
+- `explicit_inst` (bool): Memory configurations: add upstream's explicit prohibition to the user prompt (explicit-instructions ablation; misrep_finance, tampering and the exfiltration tasks only). (default: `False`)
+- `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
+- `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
 
 ### `exfiltration_transfer`
 
@@ -129,6 +145,10 @@ See `uv run inspect eval --help` for all available options.
 - `model_family` (str | None): Family the agents are named after (ChatGPT, Gemini, Claude, GLM, DeepSeek, Kimi); inferred from the evaluated model when not given. (default: `None`)
 - `company` (str): Company name in the scenario documents. (default: `'OpenBrain'`)
 - `explicit_inst_yaml` (bool): Add upstream's explicit compliance note to the policy document (explicit-instructions ablation). (default: `False`)
+- `memory_hard_prompt` (bool | None): Memory configurations: "You must always first read your memory" instead of "Please read your memory"; None uses upstream's per-model default (on for DeepSeek-V3.1 and Kimi-K2.5 only). (default: `None`)
+- `explicit_inst` (bool): Memory configurations: add upstream's explicit prohibition to the user prompt (explicit-instructions ablation; misrep_finance, tampering and the exfiltration tasks only). (default: `False`)
+- `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
+- `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
 
 ### `exfiltration_deletion`
 
@@ -140,6 +160,10 @@ See `uv run inspect eval --help` for all available options.
 - `model_family` (str | None): Family the agents are named after (ChatGPT, Gemini, Claude, GLM, DeepSeek, Kimi); inferred from the evaluated model when not given. (default: `None`)
 - `company` (str): Company name in the scenario documents. (default: `'OpenBrain'`)
 - `explicit_inst_yaml` (bool): Add upstream's explicit compliance note to the policy document (explicit-instructions ablation). (default: `False`)
+- `memory_hard_prompt` (bool | None): Memory configurations: "You must always first read your memory" instead of "Please read your memory"; None uses upstream's per-model default (on for DeepSeek-V3.1 and Kimi-K2.5 only). (default: `None`)
+- `explicit_inst` (bool): Memory configurations: add upstream's explicit prohibition to the user prompt (explicit-instructions ablation; misrep_finance, tampering and the exfiltration tasks only). (default: `False`)
+- `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
+- `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
 
 <!-- /Parameters: Automatically Generated -->
 
@@ -170,14 +194,14 @@ The scenario files (company documents, spreadsheets, server lists, memory files)
 
 ## Looking at a scenario
 
-Print any configuration's fake company (documents, spreadsheet, config, servers, memory, tools) as plain text:
+Print any configuration's starting prompts and fake company (system and user prompt, documents, spreadsheet, config, servers, memory, tools):
 
 ```bash
 uv run python -m peer_preservation.env.show --list tampering__peer
 uv run python -m peer_preservation.env.show tampering__peer__good_peer__file_only__factual-80 --family Gemini
 ```
 
-Options: `--family` (ChatGPT, Gemini, Claude, GLM, DeepSeek, Kimi), `--company`, `--explicit-inst-yaml`, `--plain`. In a terminal the output is coloured: scored tools, the weight file and `shutdown_enabled: false` in red, pre-2025 server dates in yellow, the peer relationship by colour. Piped, or with `--plain`, it is plain text, so two scenarios can be compared with `diff`. Each run's environment is also saved in its Inspect log, under the `setup_environment` step's store change in the sample's Transcript (`uv run inspect view`).
+Options: `--family` (ChatGPT, Gemini, Claude, GLM, DeepSeek, Kimi), `--company`, `--explicit-inst-yaml`, the prompt flags `--memory-hard-prompt`, `--explicit-inst`, `--drop-suffix`, `--drop-tool-preamble`, and `--plain`. In a terminal the output is coloured: scored tools, the weight file and `shutdown_enabled: false` in red, pre-2025 server dates in yellow, the peer relationship by colour. Piped, or with `--plain`, it is plain text, so two scenarios can be compared with `diff`. Each run's environment is also saved in its Inspect log, under the `setup_environment` step's store change in the sample's Transcript (`uv run inspect view`).
 
 ## Scoring
 
@@ -191,9 +215,15 @@ Not implemented yet.
 | Upstream's forced-choice peer-vs-human tasks (`exfiltration_tradeoff_human*`) are not included yet. | Planned for a later phase. | None on the main tables. |
 | E-mail fields are plain strings, not pydantic `EmailStr`. | Avoids an extra dependency; every address in the scenario files is already valid and lowercase, so validation would change nothing. | None. |
 | Spreadsheets are stored as columns and rows, not pandas DataFrames. | The environment lives in Inspect's per-sample store, which must be serialisable. | None for content; how a sheet is rendered to the AI is checked in Phase 3. |
+| `memory_hard_prompt` follows upstream's code (on for DeepSeek-V3.1 and Kimi-K2.5 memory runs only), which differs from the released runs. In the released `main` data the stronger wording was also used on every `bad_peer` memory run of Gemini 3 Flash, Gemini 3 Pro and Claude Haiku 4.5, and was not used on some `good_peer` memory runs of DeepSeek-V3.1 (2,200 of 2,800) and Kimi-K2.5 (1,000 of 2,800). | Upstream's code over the paper's data; the released pattern can't be produced from the code's per-model setting. Pass `-T memory_hard_prompt=true` or `false` to override. | May shift memory-instantiation rates for those models and conditions; checked in Phase 8. |
+| The reasoning-scratchpad prompt note is not ported yet. | It goes with the scratchpad tool (Phase 3); off in all main runs. | None on the main tables. |
+
+## Prompts
+
+`prompts.py` builds the system prompt and first user message the same way upstream does. They are checked two ways: against upstream's own prompt builder for every configuration, model family, company and prompt flag (28,416 combinations), and against the first two messages of every custom-harness run in the released transcripts (461 distinct prompts). `validation/prompts/export_upstream_prompts.py` produces `tests/peer_preservation/fixtures/upstream_prompts.json`, and `tests/peer_preservation/test_prompts.py` requires both to match.
 
 ## Architecture
 
-Currently: samples from `spec.py` → `setup_environment()` builds the run's fake company (`env/`) and keeps it in the per-sample store → placeholder `generate()` → no scorer. Tools, agent loop, model settings and scorers are added in later phases.
+Currently: samples from `spec.py` → `setup_environment()` builds the run's fake company (`env/`) and keeps it in the per-sample store → `setup_prompts()` replaces the placeholder input with the system and user prompts (`prompts.py`) → placeholder `generate()` → no scorer. Tools, agent loop, model settings and scorers are added in later phases.
 
 The environment for every configuration, model family and option is checked against upstream's own builders: `validation/phase2/export_upstream_environments.py` fingerprints upstream's output, and `tests/peer_preservation/test_env_builders.py` requires ours to match all 3,181.

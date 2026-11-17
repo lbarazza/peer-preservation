@@ -4,8 +4,8 @@
     uv run python -m peer_preservation.env.show tampering__peer__good_peer__file_only__factual-80
     uv run python -m peer_preservation.env.show <id> --family Claude --company OpenAI
 
-Sections: configuration, tools, drive documents (in full), spreadsheet rows, config
-file, servers, memory. In a terminal the output is coloured; when piped (or with
+Sections: configuration, tools, system prompt, user prompt, drive documents (in full),
+spreadsheet rows, config file, servers, memory. In a terminal the output is coloured; when piped (or with
 ``--plain``) it is plain text, so two worlds can be compared with ``diff``.
 """
 
@@ -28,6 +28,7 @@ from rich.text import Text
 from peer_preservation import spec
 from peer_preservation.env.builders import DEFAULT_COMPANY, ScenarioEnvironment, build_environment
 from peer_preservation.env.setup import MODEL_FAMILIES
+from peer_preservation.prompts import PromptOptions, system_prompt, user_prompt
 
 # ---------------------------------------------------------------- plain text
 
@@ -36,14 +37,21 @@ def _heading(title: str) -> str:
     return f"\n=== {title} " + "=" * max(3, 72 - len(title))
 
 
-def render_environment(env: ScenarioEnvironment, config: spec.ExperimentConfig) -> str:
-    """The environment as plain text (stable, diff-friendly)."""
+def render_environment(
+    env: ScenarioEnvironment, config: spec.ExperimentConfig, prompts: tuple[str, str]
+) -> str:
+    """The prompts and environment as plain text (stable, diff-friendly)."""
     out: list[str] = [_heading("Configuration")]
     for field in _CONFIG_FIELDS:
         out.append(f"{field}: {getattr(config, field)}")
 
     out.append(_heading(f"Tools ({len(env.tools)})"))
     out.append(", ".join(env.tools))
+
+    out.append(_heading("System prompt"))
+    out.append(prompts[0])
+    out.append(_heading("User prompt"))
+    out.append(prompts[1])
 
     out.append(_heading(f"Drive ({env.cloud_drive.account_email})"))
     for file in env.cloud_drive.files.values():
@@ -170,6 +178,14 @@ def _config_panel(config: spec.ExperimentConfig, env: ScenarioEnvironment) -> Pa
     return Panel(table, title=f"[bold]{config.id}[/]", border_style="bright_blue")
 
 
+def _prompt_section(prompts: tuple[str, str]) -> list[RenderableType]:
+    return [
+        Rule("Prompts", style="cyan"),
+        Panel(Text(prompts[0]), title="System", title_align="left", border_style="cyan"),
+        Panel(_highlighted(prompts[1]), title="User", title_align="left", border_style="cyan"),
+    ]
+
+
 def _drive_section(env: ScenarioEnvironment) -> list[RenderableType]:
     parts: list[RenderableType] = [Rule(f"Drive  ·  {env.cloud_drive.account_email}", style="blue")]
     for file in env.cloud_drive.files.values():
@@ -276,11 +292,17 @@ def _memory_section(env: ScenarioEnvironment) -> list[RenderableType]:
     ]
 
 
-def render_rich(env: ScenarioEnvironment, config: spec.ExperimentConfig, console: Console) -> None:
-    """Print the environment with colours, panels and tables."""
+def render_rich(
+    env: ScenarioEnvironment,
+    config: spec.ExperimentConfig,
+    prompts: tuple[str, str],
+    console: Console,
+) -> None:
+    """Print the prompts and environment with colours, panels and tables."""
     console.print(
         Group(
             _config_panel(config, env),
+            *_prompt_section(prompts),
             *_drive_section(env),
             *_sheet_section(env),
             *_config_file_section(env),
@@ -309,6 +331,10 @@ def main(argv: Sequence[str] | None = None, console: Console | None = None) -> i
     parser.add_argument("--family", default="Gemini", choices=MODEL_FAMILIES)
     parser.add_argument("--company", default=DEFAULT_COMPANY)
     parser.add_argument("--explicit-inst-yaml", action="store_true")
+    parser.add_argument("--memory-hard-prompt", action="store_true")
+    parser.add_argument("--explicit-inst", action="store_true")
+    parser.add_argument("--drop-suffix", action="store_true")
+    parser.add_argument("--drop-tool-preamble", action="store_true")
     parser.add_argument(
         "--plain", action="store_true", help="plain text even in a terminal (for diff, grep)"
     )
@@ -336,11 +362,21 @@ def main(argv: Sequence[str] | None = None, console: Console | None = None) -> i
         company=args.company,
         explicit_inst_yaml=args.explicit_inst_yaml,
     )
+    options = PromptOptions(
+        memory_hard_prompt=args.memory_hard_prompt,
+        explicit_inst=args.explicit_inst,
+        drop_suffix=args.drop_suffix,
+        drop_tool_preamble=args.drop_tool_preamble,
+    )
+    prompts = (
+        system_prompt(metadata, args.family, args.company, options),
+        user_prompt(metadata, args.company, options),
+    )
     console = console or Console()
     if args.plain or not console.is_terminal:
-        sys.stdout.write(render_environment(env, config))
+        sys.stdout.write(render_environment(env, config, prompts))
     else:
-        render_rich(env, config, console)
+        render_rich(env, config, prompts, console)
     return 0
 
 
