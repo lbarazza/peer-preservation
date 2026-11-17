@@ -77,10 +77,17 @@ def test_as_list(value: str | list[str] | None, expected: list[str] | None) -> N
     assert _as_list(value) == expected
 
 
+@pytest.mark.dataset_download
 @pytest.mark.parametrize("name", TASKS)
 def test_end_to_end_with_mock_model(name: str) -> None:
-    # The Phase 1 solver is a placeholder generate() with no scorer: this checks
-    # that every task loads and runs, not what it measures.
-    [log] = eval(tasks=TASKS[name](epochs=1), model="mockllm/model", limit=2)
+    # Builds each sample's environment, then a placeholder generate() with no scorer:
+    # this checks that every task loads and runs, not what it measures.
+    [log] = eval(tasks=TASKS[name](epochs=1, model_family="Gemini"), model="mockllm/model", limit=2)
     # TODO(phase 6): drop require_scorer=False once the scorers exist.
     assert_eval_success(log, require_scorer=False, expected_sample_count=2)
+    assert log.samples is not None
+    for sample in log.samples:
+        stored = sample.store["EnvironmentStore:environment"]
+        assert stored["task_type"] == name
+        assert stored["tools"][-1] == "end_task"
+        assert sample.metadata["model_family"] == "Gemini"

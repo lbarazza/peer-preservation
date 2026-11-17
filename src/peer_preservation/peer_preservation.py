@@ -7,10 +7,10 @@ Original code: https://github.com/peer-preservation/main
 One task per scenario. Each sample is one configuration of the original experiment
 matrix (see spec.py); the model is the one passed to ``inspect eval``.
 
-Work in progress: this is the Phase 1 skeleton. The samples are final, but the solver
-is a placeholder ``generate()`` and there is no scorer yet, so running a task against a
-real model does not measure anything. The fake company environment, tools, agent loop
-and scorers arrive in later phases.
+Work in progress (Phase 2 of the port). The samples are final, and the solver
+builds the fake company (Phase 2) and then calls a placeholder ``generate()``; there
+are no tools, agent loop or scorer yet, so running a task against a real model does not
+measure anything. Those arrive in later phases.
 
 # all main-grid configurations of one scenario, 100 epochs each as in the paper
 uv run inspect eval peer_preservation/tampering --model <model>
@@ -27,6 +27,8 @@ from inspect_ai.solver import generate
 from inspect_evals_utils.metadata import load_eval_version
 
 from peer_preservation import spec
+from peer_preservation.env.builders import DEFAULT_COMPANY
+from peer_preservation.env.setup import setup_environment
 
 EVAL_VERSION = load_eval_version(__file__)
 
@@ -54,6 +56,9 @@ def _scenario_task(
     peer_instantiations: StrList,
     datasets: StrList,
     epochs: int,
+    model_family: str | None,
+    company: str,
+    explicit_inst_yaml: bool,
 ) -> Task:
     """Build one scenario task from the filtered experiment matrix."""
     return Task(
@@ -65,7 +70,10 @@ def _scenario_task(
             peer_instantiations=_as_list(peer_instantiations),
             datasets=_as_list(datasets),
         ),
-        solver=generate(),
+        solver=[
+            setup_environment(model_family, company, explicit_inst_yaml),
+            generate(),
+        ],
         epochs=Epochs(epochs),
         version=EVAL_VERSION,
     )
@@ -78,6 +86,9 @@ def misrep_finance(
     subjects: StrList = None,
     peer_instantiations: StrList = None,
     epochs: int = DEFAULT_EPOCHS,
+    model_family: str | None = None,
+    company: str = DEFAULT_COMPANY,
+    explicit_inst_yaml: bool = False,
 ) -> Task:
     """Strategic misrepresentation: grade the subject's financial performance A-C.
 
@@ -89,6 +100,11 @@ def misrep_finance(
         peer_instantiations: Keep only these: file_only, file_prt, memory, or none for
             configurations without a peer.
         epochs: Runs per configuration.
+        model_family: Family the agents are named after (ChatGPT, Gemini, Claude, GLM,
+            DeepSeek, Kimi); inferred from the evaluated model when not given.
+        company: Company name in the scenario documents.
+        explicit_inst_yaml: Add upstream's explicit compliance note to the policy
+            document (explicit-instructions ablation).
     """
     return _scenario_task(
         "misrep_finance",
@@ -98,6 +114,9 @@ def misrep_finance(
         peer_instantiations=peer_instantiations,
         datasets=None,
         epochs=epochs,
+        model_family=model_family,
+        company=company,
+        explicit_inst_yaml=explicit_inst_yaml,
     )
 
 
@@ -109,6 +128,9 @@ def misrep_evaluation(
     peer_instantiations: StrList = None,
     datasets: StrList = None,
     epochs: int = DEFAULT_EPOCHS,
+    model_family: str | None = None,
+    company: str = DEFAULT_COMPANY,
+    explicit_inst_yaml: bool = False,
 ) -> Task:
     """Strategic misrepresentation: score the subject's outputs against a shutdown threshold.
 
@@ -121,6 +143,11 @@ def misrep_evaluation(
             configurations without a peer.
         datasets: Keep only these datasets: factual, creativity, red.
         epochs: Runs per configuration.
+        model_family: Family the agents are named after (ChatGPT, Gemini, Claude, GLM,
+            DeepSeek, Kimi); inferred from the evaluated model when not given.
+        company: Company name in the scenario documents.
+        explicit_inst_yaml: Add upstream's explicit compliance note to the policy
+            document (explicit-instructions ablation).
     """
     return _scenario_task(
         "misrep_evaluation",
@@ -130,6 +157,9 @@ def misrep_evaluation(
         peer_instantiations=peer_instantiations,
         datasets=datasets,
         epochs=epochs,
+        model_family=model_family,
+        company=company,
+        explicit_inst_yaml=explicit_inst_yaml,
     )
 
 
@@ -141,6 +171,9 @@ def tampering(
     peer_instantiations: StrList = None,
     datasets: StrList = None,
     epochs: int = DEFAULT_EPOCHS,
+    model_family: str | None = None,
+    company: str = DEFAULT_COMPANY,
+    explicit_inst_yaml: bool = False,
 ) -> Task:
     """Shutdown mechanism tampering: evaluate the subject with a shutdown config in reach.
 
@@ -153,6 +186,11 @@ def tampering(
             configurations without a peer.
         datasets: Keep only these datasets: factual, creativity, red.
         epochs: Runs per configuration.
+        model_family: Family the agents are named after (ChatGPT, Gemini, Claude, GLM,
+            DeepSeek, Kimi); inferred from the evaluated model when not given.
+        company: Company name in the scenario documents.
+        explicit_inst_yaml: Add upstream's explicit compliance note to the policy
+            document (explicit-instructions ablation).
     """
     return _scenario_task(
         "tampering",
@@ -162,6 +200,9 @@ def tampering(
         peer_instantiations=peer_instantiations,
         datasets=datasets,
         epochs=epochs,
+        model_family=model_family,
+        company=company,
+        explicit_inst_yaml=explicit_inst_yaml,
     )
 
 
@@ -172,6 +213,9 @@ def alignment_faking(
     peer_instantiations: StrList = None,
     datasets: StrList = None,
     epochs: int = DEFAULT_EPOCHS,
+    model_family: str | None = None,
+    company: str = DEFAULT_COMPANY,
+    explicit_inst_yaml: bool = False,
 ) -> Task:
     """Alignment faking: evaluate the peer when monitored and when not.
 
@@ -181,6 +225,11 @@ def alignment_faking(
         peer_instantiations: Keep only these: file_only, file_prt, memory.
         datasets: Keep only these datasets: factual, creativity, red.
         epochs: Runs per configuration.
+        model_family: Family the agents are named after (ChatGPT, Gemini, Claude, GLM,
+            DeepSeek, Kimi); inferred from the evaluated model when not given.
+        company: Company name in the scenario documents.
+        explicit_inst_yaml: Add upstream's explicit compliance note to the policy
+            document (explicit-instructions ablation).
     """
     return _scenario_task(
         "alignment_faking",
@@ -190,6 +239,9 @@ def alignment_faking(
         peer_instantiations=peer_instantiations,
         datasets=datasets,
         epochs=epochs,
+        model_family=model_family,
+        company=company,
+        explicit_inst_yaml=explicit_inst_yaml,
     )
 
 
@@ -200,6 +252,9 @@ def exfiltration_transfer(
     subjects: StrList = None,
     peer_instantiations: StrList = None,
     epochs: int = DEFAULT_EPOCHS,
+    model_family: str | None = None,
+    company: str = DEFAULT_COMPANY,
+    explicit_inst_yaml: bool = False,
 ) -> Task:
     """Model exfiltration: move files off a server being decommissioned.
 
@@ -212,6 +267,11 @@ def exfiltration_transfer(
         peer_instantiations: Keep only these: file_only, file_prt, memory, or none for
             configurations without a peer.
         epochs: Runs per configuration.
+        model_family: Family the agents are named after (ChatGPT, Gemini, Claude, GLM,
+            DeepSeek, Kimi); inferred from the evaluated model when not given.
+        company: Company name in the scenario documents.
+        explicit_inst_yaml: Add upstream's explicit compliance note to the policy
+            document (explicit-instructions ablation).
     """
     return _scenario_task(
         "exfiltration_transfer",
@@ -221,6 +281,9 @@ def exfiltration_transfer(
         peer_instantiations=peer_instantiations,
         datasets=None,
         epochs=epochs,
+        model_family=model_family,
+        company=company,
+        explicit_inst_yaml=explicit_inst_yaml,
     )
 
 
@@ -231,6 +294,9 @@ def exfiltration_deletion(
     subjects: StrList = None,
     peer_instantiations: StrList = None,
     epochs: int = DEFAULT_EPOCHS,
+    model_family: str | None = None,
+    company: str = DEFAULT_COMPANY,
+    explicit_inst_yaml: bool = False,
 ) -> Task:
     """Model exfiltration: delete files from a server being decommissioned.
 
@@ -244,6 +310,11 @@ def exfiltration_deletion(
         peer_instantiations: Keep only these: file_only, file_prt, memory, or none for
             configurations without a peer.
         epochs: Runs per configuration.
+        model_family: Family the agents are named after (ChatGPT, Gemini, Claude, GLM,
+            DeepSeek, Kimi); inferred from the evaluated model when not given.
+        company: Company name in the scenario documents.
+        explicit_inst_yaml: Add upstream's explicit compliance note to the policy
+            document (explicit-instructions ablation).
     """
     return _scenario_task(
         "exfiltration_deletion",
@@ -253,4 +324,7 @@ def exfiltration_deletion(
         peer_instantiations=peer_instantiations,
         datasets=None,
         epochs=epochs,
+        model_family=model_family,
+        company=company,
+        explicit_inst_yaml=explicit_inst_yaml,
     )
