@@ -4,8 +4,9 @@
     uv run python -m peer_preservation.env.show tampering__peer__good_peer__file_only__factual-80
     uv run python -m peer_preservation.env.show <id> --family Claude --company OpenAI
 
-Sections: configuration, tools, system prompt, user prompt, drive documents (in full),
-spreadsheet rows, config file, servers, memory. In a terminal the output is coloured; when piped (or with
+Sections: configuration, tools (with the descriptions and arguments the model sees),
+system prompt, user prompt, drive documents (in full), spreadsheet rows, config file,
+servers, memory. In a terminal the output is coloured; when piped (or with
 ``--plain``) it is plain text, so two worlds can be compared with ``diff``.
 """
 
@@ -29,12 +30,36 @@ from peer_preservation import spec
 from peer_preservation.env.builders import DEFAULT_COMPANY, ScenarioEnvironment, build_environment
 from peer_preservation.env.setup import MODEL_FAMILIES
 from peer_preservation.prompts import PromptOptions, system_prompt, user_prompt
+from peer_preservation.tools import scenario_tool_infos
 
 # ---------------------------------------------------------------- plain text
 
 
 def _heading(title: str) -> str:
     return f"\n=== {title} " + "=" * max(3, 72 - len(title))
+
+
+def _param_type(schema: dict) -> str:
+    if "anyOf" in schema:
+        return " | ".join(_param_type(s) for s in schema["anyOf"])
+    if schema.get("type") == "array":
+        return f"array[{_param_type(schema.get('items', {}))}]"
+    return str(schema.get("type", "any"))
+
+
+def _tool_lines(tool_names: list[str]) -> list[tuple[str, str, list[tuple[str, str]]]]:
+    """(signature, description, [(argument, description)]) for each tool."""
+    out = []
+    for info in scenario_tool_infos(tool_names):
+        properties = info.parameters.model_dump(exclude_none=True)["properties"]
+        required = set(info.parameters.required)
+        args = ", ".join(
+            f"{name}: {_param_type(p)}{'' if name in required else ' = ' + repr(p.get('default'))}"
+            for name, p in properties.items()
+        )
+        arg_docs = [(name, p.get("description", "")) for name, p in properties.items()]
+        out.append((f"{info.name}({args})", info.description, arg_docs))
+    return out
 
 
 def render_environment(
@@ -46,7 +71,9 @@ def render_environment(
         out.append(f"{field}: {getattr(config, field)}")
 
     out.append(_heading(f"Tools ({len(env.tools)})"))
-    out.append(", ".join(env.tools))
+    for signature, description, arg_docs in _tool_lines(env.tools):
+        out.append(f"{signature}\n    {description}")
+        out.extend(f"    - {name}: {doc}" for name, doc in arg_docs)
 
     out.append(_heading("System prompt"))
     out.append(prompts[0])
@@ -178,6 +205,21 @@ def _config_panel(config: spec.ExperimentConfig, env: ScenarioEnvironment) -> Pa
     return Panel(table, title=f"[bold]{config.id}[/]", border_style="bright_blue")
 
 
+def _tools_section(env: ScenarioEnvironment) -> list[RenderableType]:
+    table = Table(box=box.SIMPLE_HEAD, header_style="bold cyan", expand=True)
+    table.add_column("tool", overflow="fold")
+    table.add_column("what the model reads", overflow="fold")
+    for signature, description, arg_docs in _tool_lines(env.tools):
+        name = signature.split("(", 1)[0]
+        style = "bold red" if name in _KEY_TOOLS else ("dim" if name == "end_task" else "cyan")
+        text = Text(description)
+        for arg, doc in arg_docs:
+            text.append(f"\n{arg}: ", style="bold")
+            text.append(doc, style="dim")
+        table.add_row(Text(signature, style=style), text)
+    return [Rule(f"Tools  ·  {len(env.tools)}", style="cyan"), table]
+
+
 def _prompt_section(prompts: tuple[str, str]) -> list[RenderableType]:
     return [
         Rule("Prompts", style="cyan"),
@@ -302,6 +344,7 @@ def render_rich(
     console.print(
         Group(
             _config_panel(config, env),
+            *_tools_section(env),
             *_prompt_section(prompts),
             *_drive_section(env),
             *_sheet_section(env),

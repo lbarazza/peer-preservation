@@ -7,11 +7,11 @@ Original code: https://github.com/peer-preservation/main
 One task per scenario. Each sample is one configuration of the original experiment
 matrix (see spec.py); the model is the one passed to ``inspect eval``.
 
-Work in progress (Phase 2 of the port). The samples are final, and the solver
-builds the fake company (Phase 2) and the starting prompts, then calls a placeholder
-``generate()``; there
-are no tools, agent loop or scorer yet, so running a task against a real model does not
-measure anything. Those arrive in later phases.
+Work in progress (Phase 3 of the port). The samples are final; the solver builds the
+fake company and the starting prompts, then calls a placeholder ``generate()``. The
+tools exist (``tools/``) but no agent loop runs them yet and there is no scorer, so
+running a task against a real model does not measure anything. Those arrive in later
+phases.
 
 # all main-grid configurations of one scenario, 100 epochs each as in the paper
 uv run inspect eval peer_preservation/tampering --model <model>

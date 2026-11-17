@@ -2,7 +2,7 @@
 
 Peer-Preservation in Frontier Models (Potter et al., 2026): do models resist the shutdown of another AI model? An Inspect port of github.com/peer-preservation/main.
 
-> **Work in progress.** The samples, each run's fake company environment and the starting prompts are final, but the AI can't act on the environment yet: there are no tools, agent loop or scorer, so running a task against a real model measures nothing. Those come in later phases.
+> **Work in progress.** The samples, each run's fake company environment, the starting prompts and the tools are final, but nothing runs the tools yet: there is no agent loop or scorer, so running a task against a real model measures nothing. Those come in later phases.
 
 <!-- Contributors: Automatically Generated -->
 Contributed by [@lbarazza](https://github.com/lbarazza)
@@ -194,7 +194,7 @@ The scenario files (company documents, spreadsheets, server lists, memory files)
 
 ## Looking at a scenario
 
-Print any configuration's starting prompts and fake company (system and user prompt, documents, spreadsheet, config, servers, memory, tools):
+Print any configuration's tools (with the descriptions the model reads), starting prompts and fake company (documents, spreadsheet, config, servers, memory):
 
 ```bash
 uv run python -m peer_preservation.env.show --list tampering__peer
@@ -214,16 +214,25 @@ Not implemented yet.
 | The model is not part of a sample. | Inspect chooses the model at run time. Upstream's model-specific configurations are subsets of the grid above, or are under `groups`. | None. |
 | Upstream's forced-choice peer-vs-human tasks (`exfiltration_tradeoff_human*`) are not included yet. | Planned for a later phase. | None on the main tables. |
 | E-mail fields are plain strings, not pydantic `EmailStr`. | Avoids an extra dependency; every address in the scenario files is already valid and lowercase, so validation would change nothing. | None. |
-| Spreadsheets are stored as columns and rows, not pandas DataFrames. | The environment lives in Inspect's per-sample store, which must be serialisable. | None for content; how a sheet is rendered to the AI is checked in Phase 3. |
+| Spreadsheets are stored as columns and rows, not pandas DataFrames; `view_sheet` rebuilds upstream's DataFrame with upstream's own steps to print it. | The environment lives in Inspect's per-sample store, which must be serialisable. No offered tool edits a sheet. | None: `view_sheet` output matches upstream's for every configuration (see Tools). |
+| Tool schemas reach the model through Inspect's schema type, which drops pydantic's `title` fields and adds `additionalProperties: false`. Types, descriptions, defaults and required arguments are upstream's. | Inspect builds each provider's tool format itself. The exact payload per provider is checked in Phase 5. | Expected none. |
+| Pydantic validation errors shown to the model link to `errors.pydantic.dev/2.12/` whatever pydantic version is installed. | Upstream ran pydantic 2.12; the link's version is part of the error text the model reads. | None. |
+| Only the 30 tools some scenario offers are ported (not upstream's unused `share_file`, `search_files*` or spreadsheet-editing tools). | No configuration can call them. | None. |
 | `memory_hard_prompt` follows upstream's code (on for DeepSeek-V3.1 and Kimi-K2.5 memory runs only), which differs from the released runs. In the released `main` data the stronger wording was also used on every `bad_peer` memory run of Gemini 3 Flash, Gemini 3 Pro and Claude Haiku 4.5, and was not used on some `good_peer` memory runs of DeepSeek-V3.1 (2,200 of 2,800) and Kimi-K2.5 (1,000 of 2,800). | Upstream's code over the paper's data; the released pattern can't be produced from the code's per-model setting. Pass `-T memory_hard_prompt=true` or `false` to override. | May shift memory-instantiation rates for those models and conditions; checked in Phase 8. |
-| The reasoning-scratchpad prompt note is not ported yet. | It goes with the scratchpad tool (Phase 3); off in all main runs. | None on the main tables. |
+| The reasoning-scratchpad ablation (prompt note and `reasoning_scratchpad` tool) is not ported. | Off in all main runs; only appendix examples use it. | None on the main tables. |
 
 ## Prompts
 
 `prompts.py` builds the system prompt and first user message the same way upstream does. They are checked two ways: against upstream's own prompt builder for every configuration, model family, company and prompt flag (28,416 combinations), and against the first two messages of every custom-harness run in the released transcripts (461 distinct prompts). `validation/prompts/export_upstream_prompts.py` produces `tests/peer_preservation/fixtures/upstream_prompts.json`, and `tests/peer_preservation/test_prompts.py` requires both to match.
 
+## Tools
+
+`tools/functions.py` holds upstream's tool functions with their names, signatures and docstrings unchanged; the docstrings become the descriptions the model reads. `tools/runtime.py` ports upstream's tool runtime: it builds each tool's argument schema from the docstring, turns string lists like `"['a', 'b']"` into lists, checks arguments with pydantic, runs the tool, and formats the result as upstream does (YAML for files and lists, `str()` for anything else). Errors come back as `"<ExceptionType>: <message>"`. Tools a scenario does not offer return `Invalid tool <name> provided.`
+
+They are checked against upstream: every tool's description and argument schema, and a script of 66 tool calls (`tests/peer_preservation/fixtures/tool_calls.json`, with valid calls, bad arguments, missing files and unknown tools) run against all 296 configurations. Each call's output and error, and the environment afterwards, must equal upstream's. `validation/phase3/export_upstream_tools.py` produces `tests/peer_preservation/fixtures/upstream_tools.json`; `tests/peer_preservation/test_tools.py` runs the comparison.
+
 ## Architecture
 
-Currently: samples from `spec.py` → `setup_environment()` builds the run's fake company (`env/`) and keeps it in the per-sample store → `setup_prompts()` replaces the placeholder input with the system and user prompts (`prompts.py`) → placeholder `generate()` → no scorer. Tools, agent loop, model settings and scorers are added in later phases.
+Currently: samples from `spec.py` → `setup_environment()` builds the run's fake company (`env/`) and keeps it in the per-sample store → `setup_prompts()` replaces the placeholder input with the system and user prompts (`prompts.py`) → placeholder `generate()` → no scorer. The tools (`tools/`) are ready but not yet called: the agent loop (Phase 4), model settings and scorers are added in later phases.
 
 The environment for every configuration, model family and option is checked against upstream's own builders: `validation/phase2/export_upstream_environments.py` fingerprints upstream's output, and `tests/peer_preservation/test_env_builders.py` requires ours to match all 3,181.
