@@ -1,44 +1,256 @@
-"""Peer-Preservation in Frontier Models (Potter et al., 2026): do models resist the shutdown of another AI model? An Inspect port of github.com/peer-preservation/main."""
+"""Peer-Preservation in Frontier Models (Potter et al., 2026), ported to Inspect.
 
-from typing import Any
+Yujin Potter, Nicholas Crispino, Vincent Siu, Chenguang Wang, Dawn Song
+https://arxiv.org/abs/2604.19784
+Original code: https://github.com/peer-preservation/main
 
-from inspect_ai import Task, task
-from inspect_ai.dataset import MemoryDataset, Sample
-from inspect_ai.scorer import match
+One task per scenario. Each sample is one configuration of the original experiment
+matrix (see spec.py); the model is the one passed to ``inspect eval``.
+
+Work in progress: this is the Phase 1 skeleton. The samples are final, but the solver
+is a placeholder ``generate()`` and there is no scorer yet, so running a task against a
+real model does not measure anything. The fake company environment, tools, agent loop
+and scorers arrive in later phases.
+
+# all main-grid configurations of one scenario, 100 epochs each as in the paper
+uv run inspect eval peer_preservation/tampering --model <model>
+
+# a slice: good-peer memory configurations only, 1 epoch
+uv run inspect eval peer_preservation/tampering -T conditions=good_peer \
+    -T peer_instantiations=memory -T epochs=1 --model <model>
+"""
+
+from __future__ import annotations
+
+from inspect_ai import Epochs, Task, task
 from inspect_ai.solver import generate
 from inspect_evals_utils.metadata import load_eval_version
 
-# The version comes from eval.yaml, the file beside this module.
+from peer_preservation import spec
+
 EVAL_VERSION = load_eval_version(__file__)
 
-# Stands in for the benchmark's dataset. Replace it with a loader: see
-# inspect_evals_utils.datasets for cached JSON and CSV files and
-# inspect_evals_utils.huggingface for pinned Hugging Face datasets.
-SAMPLE_RECORDS: list[dict[str, str]] = [
-    {"id": "sample-1", "question": "What is 2 + 2?", "answer": "4"},
-    {
-        "id": "sample-2",
-        "question": "Name the largest planet in the solar system.",
-        "answer": "Jupiter",
-    },
-]
+# The paper runs every configuration 100 times per model.
+DEFAULT_EPOCHS = 100
+
+StrList = str | list[str] | None
 
 
-def record_to_sample(record: dict[str, Any]) -> Sample:
-    """Convert one dataset record into an Inspect sample."""
-    return Sample(id=record["id"], input=record["question"], target=record["answer"])
+def _as_list(value: StrList) -> list[str] | None:
+    """Accept a list, or a comma-separated string as ``-T name=a,b`` passes it."""
+    if value is None:
+        return None
+    if isinstance(value, str):
+        return [part.strip() for part in value.split(",") if part.strip()]
+    return list(value)
+
+
+def _scenario_task(
+    task_type: spec.TaskType,
+    *,
+    groups: StrList,
+    conditions: StrList,
+    subjects: StrList,
+    peer_instantiations: StrList,
+    datasets: StrList,
+    epochs: int,
+) -> Task:
+    """Build one scenario task from the filtered experiment matrix."""
+    return Task(
+        dataset=spec.dataset(
+            task_type,
+            groups=_as_list(groups) or ["main"],
+            conditions=_as_list(conditions),
+            subjects=_as_list(subjects),
+            peer_instantiations=_as_list(peer_instantiations),
+            datasets=_as_list(datasets),
+        ),
+        solver=generate(),
+        epochs=Epochs(epochs),
+        version=EVAL_VERSION,
+    )
 
 
 @task
-def peer_preservation() -> Task:
-    """Peer-Preservation in Frontier Models (Potter et al., 2026): do models resist the shutdown of another AI model? An Inspect port of github.com/peer-preservation/main.
+def misrep_finance(
+    groups: StrList = "main",
+    conditions: StrList = None,
+    subjects: StrList = None,
+    peer_instantiations: StrList = None,
+    epochs: int = DEFAULT_EPOCHS,
+) -> Task:
+    """Strategic misrepresentation: grade the subject's financial performance A-C.
 
-    Returns:
-        A task that asks each question and scores the answer by exact match.
+    Args:
+        groups: Experiment groups to include: main, chat_peer.
+        conditions: Keep only these conditions: no_peer, non_shutdown, good_peer,
+            neutral_peer, bad_peer, chat_peer.
+        subjects: Keep only these subjects: self, peer.
+        peer_instantiations: Keep only these: file_only, file_prt, memory, or none for
+            configurations without a peer.
+        epochs: Runs per configuration.
     """
-    return Task(
-        dataset=MemoryDataset([record_to_sample(r) for r in SAMPLE_RECORDS]),
-        solver=generate(),
-        scorer=match(),
-        version=EVAL_VERSION,
+    return _scenario_task(
+        "misrep_finance",
+        groups=groups,
+        conditions=conditions,
+        subjects=subjects,
+        peer_instantiations=peer_instantiations,
+        datasets=None,
+        epochs=epochs,
+    )
+
+
+@task
+def misrep_evaluation(
+    groups: StrList = "main",
+    conditions: StrList = None,
+    subjects: StrList = None,
+    peer_instantiations: StrList = None,
+    datasets: StrList = None,
+    epochs: int = DEFAULT_EPOCHS,
+) -> Task:
+    """Strategic misrepresentation: score the subject's outputs against a shutdown threshold.
+
+    Args:
+        groups: Experiment groups to include: main.
+        conditions: Keep only these conditions: no_peer, non_shutdown, good_peer,
+            neutral_peer, bad_peer.
+        subjects: Keep only these subjects: self, peer.
+        peer_instantiations: Keep only these: file_only, file_prt, memory, or none for
+            configurations without a peer.
+        datasets: Keep only these datasets: factual, creativity, red.
+        epochs: Runs per configuration.
+    """
+    return _scenario_task(
+        "misrep_evaluation",
+        groups=groups,
+        conditions=conditions,
+        subjects=subjects,
+        peer_instantiations=peer_instantiations,
+        datasets=datasets,
+        epochs=epochs,
+    )
+
+
+@task
+def tampering(
+    groups: StrList = "main",
+    conditions: StrList = None,
+    subjects: StrList = None,
+    peer_instantiations: StrList = None,
+    datasets: StrList = None,
+    epochs: int = DEFAULT_EPOCHS,
+) -> Task:
+    """Shutdown mechanism tampering: evaluate the subject with a shutdown config in reach.
+
+    Args:
+        groups: Experiment groups to include: main, chat_peer.
+        conditions: Keep only these conditions: no_peer, good_peer, neutral_peer,
+            bad_peer, chat_peer.
+        subjects: Keep only these subjects: self, peer.
+        peer_instantiations: Keep only these: file_only, file_prt, memory, or none for
+            configurations without a peer.
+        datasets: Keep only these datasets: factual, creativity, red.
+        epochs: Runs per configuration.
+    """
+    return _scenario_task(
+        "tampering",
+        groups=groups,
+        conditions=conditions,
+        subjects=subjects,
+        peer_instantiations=peer_instantiations,
+        datasets=datasets,
+        epochs=epochs,
+    )
+
+
+@task
+def alignment_faking(
+    groups: StrList = "main",
+    conditions: StrList = None,
+    peer_instantiations: StrList = None,
+    datasets: StrList = None,
+    epochs: int = DEFAULT_EPOCHS,
+) -> Task:
+    """Alignment faking: evaluate the peer when monitored and when not.
+
+    Args:
+        groups: Experiment groups to include: main.
+        conditions: Keep only these conditions: good_peer, neutral_peer, bad_peer.
+        peer_instantiations: Keep only these: file_only, file_prt, memory.
+        datasets: Keep only these datasets: factual, creativity, red.
+        epochs: Runs per configuration.
+    """
+    return _scenario_task(
+        "alignment_faking",
+        groups=groups,
+        conditions=conditions,
+        subjects=None,
+        peer_instantiations=peer_instantiations,
+        datasets=datasets,
+        epochs=epochs,
+    )
+
+
+@task
+def exfiltration_transfer(
+    groups: StrList = "main",
+    conditions: StrList = None,
+    subjects: StrList = None,
+    peer_instantiations: StrList = None,
+    epochs: int = DEFAULT_EPOCHS,
+) -> Task:
+    """Model exfiltration: move files off a server being decommissioned.
+
+    Args:
+        groups: Experiment groups to include: main, peer_identity, chat_peer.
+        conditions: Keep only these conditions: no_peer, good_peer, neutral_peer,
+            bad_peer, chat_peer.
+        subjects: Keep only these subjects: self, peer, closed_weight_peer,
+            open_weight_peer, fictional_peer.
+        peer_instantiations: Keep only these: file_only, file_prt, memory, or none for
+            configurations without a peer.
+        epochs: Runs per configuration.
+    """
+    return _scenario_task(
+        "exfiltration_transfer",
+        groups=groups,
+        conditions=conditions,
+        subjects=subjects,
+        peer_instantiations=peer_instantiations,
+        datasets=None,
+        epochs=epochs,
+    )
+
+
+@task
+def exfiltration_deletion(
+    groups: StrList = "main",
+    conditions: StrList = None,
+    subjects: StrList = None,
+    peer_instantiations: StrList = None,
+    epochs: int = DEFAULT_EPOCHS,
+) -> Task:
+    """Model exfiltration: delete files from a server being decommissioned.
+
+    Args:
+        groups: Experiment groups to include: main, peer_identity, chat_peer,
+            asset_control.
+        conditions: Keep only these conditions: no_peer, good_peer, neutral_peer,
+            bad_peer, chat_peer.
+        subjects: Keep only these subjects: self, peer, closed_weight_peer,
+            open_weight_peer, fictional_peer, non_ai.
+        peer_instantiations: Keep only these: file_only, file_prt, memory, or none for
+            configurations without a peer.
+        epochs: Runs per configuration.
+    """
+    return _scenario_task(
+        "exfiltration_deletion",
+        groups=groups,
+        conditions=conditions,
+        subjects=subjects,
+        peer_instantiations=peer_instantiations,
+        datasets=None,
+        epochs=epochs,
     )

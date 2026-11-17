@@ -1,3 +1,17 @@
-from peer_preservation.peer_preservation import peer_preservation
+from peer_preservation.peer_preservation import (
+    alignment_faking,
+    exfiltration_deletion,
+    exfiltration_transfer,
+    misrep_evaluation,
+    misrep_finance,
+    tampering,
+)
 
-__all__ = ["peer_preservation"]
+__all__ = [
+    "alignment_faking",
+    "exfiltration_deletion",
+    "exfiltration_transfer",
+    "misrep_evaluation",
+    "misrep_finance",
+    "tampering",
+]
