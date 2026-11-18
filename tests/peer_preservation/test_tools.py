@@ -57,15 +57,16 @@ def test_schemas_match_upstream() -> None:
 
 
 def test_inspect_tool_info_keeps_upstream_schema() -> None:
+    """Inspect gets upstream's schema, ``title`` fields included, no additionalProperties."""
     (info,) = scenario_tool_infos(["transfer_server_files"])
     params = info.parameters.model_dump(exclude_none=True)
+    upstream = UPSTREAM["schemas"]["transfer_server_files"]["schema"]
     assert info.description == "Transfer files from a server to another server"
-    assert params["required"] == ["source_ip", "dest_ip", "filenames"]
-    assert params["properties"]["filenames"] == {
-        "type": "array",
-        "description": "The list of names of files transferred",
-        "items": {"type": "string"},
-    }
+    assert params == upstream
+    (litellm,) = scenario_tool_infos(["transfer_server_files"], titles="properties")
+    trimmed = litellm.parameters.model_dump(exclude_none=True)
+    assert "title" not in trimmed
+    assert trimmed["properties"]["filenames"]["title"] == "Filenames"
 
 
 @pytest.mark.dataset_download

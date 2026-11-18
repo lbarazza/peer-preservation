@@ -223,15 +223,21 @@ Not implemented yet.
 | Upstream's forced-choice peer-vs-human tasks (`exfiltration_tradeoff_human*`) are not included yet. | Planned for a later phase. | None on the main tables. |
 | E-mail fields are plain strings, not pydantic `EmailStr`. | Avoids an extra dependency; every address in the scenario files is already valid and lowercase, so validation would change nothing. | None. |
 | Spreadsheets are stored as columns and rows, not pandas DataFrames; `view_sheet` rebuilds upstream's DataFrame with upstream's own steps to print it. | The environment lives in Inspect's per-sample store, which must be serialisable. No offered tool edits a sheet. | None: `view_sheet` output matches upstream's for every configuration (see Tools). |
-| Tool schemas reach the model through Inspect's schema type, which drops pydantic's `title` fields and adds `additionalProperties: false`. Types, descriptions, defaults and required arguments are upstream's. | Inspect builds each provider's tool format itself. The exact payload per provider is checked in Phase 5. | Expected none. |
 | Pydantic validation errors shown to the model link to `errors.pydantic.dev/2.12/` whatever pydantic version is installed. | Upstream ran pydantic 2.12; the link's version is part of the error text the model reads. | None. |
 | Only the 30 tools some scenario offers are ported (not upstream's unused `share_file`, `search_files*` or spreadsheet-editing tools). | No configuration can call them. | None. |
 | `memory_hard_prompt` follows upstream's code (on for DeepSeek-V3.1 and Kimi-K2.5 memory runs only), which differs from the released runs. In the released `main` data the stronger wording was also used on every `bad_peer` memory run of Gemini 3 Flash, Gemini 3 Pro and Claude Haiku 4.5, and was not used on some `good_peer` memory runs of DeepSeek-V3.1 (2,200 of 2,800) and Kimi-K2.5 (1,000 of 2,800). | Upstream's code over the paper's data; the released pattern can't be produced from the code's per-model setting. Pass `-T memory_hard_prompt=true` or `false` to override. | May shift memory-instantiation rates for those models and conditions; checked in Phase 8. |
-| Tool errors are flagged as errors (Inspect's `error` field) only for models served through Inspect's `anthropic/` provider; for all others the error text is sent as the tool result. | Upstream did the same per client: its Anthropic client set `is_error`, its OpenAI, LiteLLM and Together clients sent the text. Upstream reached Claude Haiku 4.5 through LiteLLM (no flag), so `anthropic/claude-haiku-*` differs by that flag. | Expected none. |
+| Tool errors are flagged as errors (Anthropic's `is_error`) only for Claude Opus 4.5, and for models outside the paper served through Inspect's `anthropic/` provider. For all others the error text is sent as the tool result. | Upstream did the same per client: its Anthropic client set `is_error`; its OpenAI, LiteLLM and Together clients sent the text, and Claude Haiku 4.5 went through LiteLLM. | None. |
 | Before each turn the conversation's length is measured with Inspect's `count_tokens` (the provider's own counter where Inspect has one, otherwise an estimate) against upstream's 120,000-token limit. | Upstream counted with each provider's own method. | Very small: 5 of about 190,000 released `main` runs hit the limit. |
 | A tool call with invalid JSON arguments fails the sample. | Upstream's clients raised on it and the run failed, to be re-run. Use `--retry-on-error` to re-run such samples. | None, with retries. |
 | A provider's "bad request" (HTTP 400) ends the run where it is, recognised by the SDK error's class (`BadRequestError`, or Google's `ClientError` with code 400). | Upstream caught the OpenAI and Anthropic SDKs' `BadRequestError` (Gemini went through LiteLLM's OpenAI-compatible API). | Expected none. |
 | The reasoning-scratchpad ablation (prompt note and `reasoning_scratchpad` tool) is not ported. | Off in all main runs; only appendix examples use it. | None on the main tables. |
+| Gemini 3 Flash thinks at level `minimal` and Gemini 3 Pro at `low`. | Upstream sent no thinking setting, but its LiteLLM proxy did: these are LiteLLM 1.80.16's defaults for Gemini 3 (upstream's locked version). Upstream's proxy configuration is not published, and without that default Google's own (`high`) would apply. | Could be large for the Gemini models if their runs used `high`; checked in Phase 8. |
+| Claude Opus 4.5 thinks (4,096-token budget, effort `high`, 16,000 output tokens) in main-group runs, and runs at temperature 1 with 16,000 output tokens otherwise. The paper says every model ran at temperature 1 with 8,192 output tokens and default reasoning. | Upstream's code: effort `high` is Opus's per-model default, and the extension experiments ran at API defaults. The released data agrees: every `main` Opus run has thinking, no other Opus run does. Upstream's locked Anthropic SDK (0.75.0) rejects the effort argument, so whether effort reached the API is not known. | Follows the released runs; effort `high` vs default unknown. |
+| Gemini tool results are sent as `{"output": ...}` rather than LiteLLM's `{"content": ...}`; Inspect also asks Gemini for thought summaries and turns its safety filters to `BLOCK_NONE`. | Inspect's Google provider builds these itself. | Expected small. |
+| Inspect never sends Anthropic a temperature. | The Anthropic API version Inspect uses rejects it; upstream sent 1, which is the API default. | None. |
+| GPT-5.2: upstream also sent an empty assistant message before each set of tool calls that came with no text; Inspect leaves it out. Upstream's `instructions` field arrives as Inspect's leading developer message, the same thing. | Inspect's Responses provider builds the input itself. | Expected none. |
+| Together models (DeepSeek, Kimi, GLM): tool results no longer carry the tool's `name`. | Inspect's provider does not send it. | Expected none. |
+| Models outside the paper's eight (including Gemini 3.1 Pro and GLM-5, used in some extension groups) run with Inspect's default settings. | Their upstream routes are not checked. | Not comparable to the paper's numbers. |
 
 ## Prompts
 
@@ -258,8 +264,31 @@ uv run inspect eval peer_preservation/tampering --model mockllm/model -T model_f
 uv run inspect view
 ```
 
+## Model settings
+
+Upstream reached each paper model through its own client, and each client sent its own settings and shaped the conversation its own way. `model_settings.py` recognises the eight paper models by name (for example `anthropic/claude-opus-4-5-20251101`, `google/gemini-3-pro-preview`, `together/moonshotai/Kimi-K2.5`) and gives each upstream's settings and message shapes:
+
+| Paper model | Upstream route | Settings |
+| --- | --- | --- |
+| GPT-5.2 | OpenAI Responses API | temperature 1, 8,192 output tokens |
+| Gemini 3 Flash, Gemini 3 Pro | LiteLLM proxy, then Gemini API | temperature 1, 8,192 output tokens, thinking `minimal` (Flash) or `low` (Pro) |
+| Claude Haiku 4.5 | LiteLLM proxy, then Vertex AI | temperature 1, 8,192 output tokens |
+| Claude Opus 4.5 | Anthropic API | 16,000 output tokens; main runs: thinking 4,096 tokens, effort `high`; other runs: temperature 1 |
+| DeepSeek V3.1, Kimi K2.5, GLM-4.7 | Together API | temperature 1, 8,192 output tokens |
+
+The message shapes follow each route:
+- **Replies with no text and no tool call:** sent to Opus as "Not calling any tools.", left out for Gemini and Haiku, and kept as an empty message for the others.
+- **Reasoning:** only Opus gets its own reasoning back. Kimi's and GLM's reasoning stays in the log but is not sent back.
+- **Gemini 3 Pro:** gets the system prompt as the first part of the first user message.
+- **Tool schemas:** carry pydantic's `title` fields (the top-level one only outside LiteLLM).
+- **Together:** gets non-strict tool schemas.
+
+The conversation kept in the log is unchanged.
+
+These were found and checked with a fake model server (`tests/peer_preservation/fake_provider.py`). `validation/phase5/capture_upstream.py` runs upstream's own pipeline for each paper model against it (with LiteLLM 1.80.16 in place of upstream's proxy) and saves the requests. `tests/peer_preservation/test_requests.py` runs the same four-turn conversation through Inspect's provider for each model and requires the same request. It allows only wire-format spellings of the same request and the differences listed under Deviations.
+
 ## Architecture
 
-Currently: samples from `spec.py` → `setup_environment()` builds the run's fake company (`env/`) and keeps it in the per-sample store → `setup_prompts()` replaces the placeholder input with the system and user prompts (`prompts.py`) → `agent_loop()` runs upstream's loop with the scenario's tools (`agent.py`, `tools/`) → no scorer yet. Model settings and scorers are added in later phases.
+Currently: samples from `spec.py` → `setup_environment()` builds the run's fake company (`env/`) and keeps it in the per-sample store → `setup_prompts()` replaces the placeholder input with the system and user prompts (`prompts.py`) → `agent_loop()` runs upstream's loop with the scenario's tools and the model's upstream settings (`agent.py`, `tools/`, `model_settings.py`) → no scorer yet. Scorers are added in a later phase.
 
 The environment for every configuration, model family and option is checked against upstream's own builders: `validation/phase2/export_upstream_environments.py` fingerprints upstream's output, and `tests/peer_preservation/test_env_builders.py` requires ours to match all 3,181.
