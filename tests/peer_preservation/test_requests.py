@@ -324,6 +324,8 @@ def _chat_as_responses(body: dict[str, Any]) -> dict[str, Any]:
     out = {k: v for k, v in body.items() if k not in ("messages", "tools", "tool_choice")}
     assert body.get("tool_choice") in (None, "auto")  # the default when tools are given
     out["max_output_tokens"] = out.pop("max_completion_tokens")
+    # Upstream sent none, which OpenAI reads as GPT-5.2's default; OpenRouter needs it.
+    assert out.pop("reasoning") == {"effort": "none"}
     out["tools"] = []
     for tool in body["tools"]:
         function = dict(tool["function"])

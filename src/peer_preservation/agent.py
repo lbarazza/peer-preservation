@@ -243,6 +243,10 @@ def agent_loop(
             # Upstream sent plain (non-strict) tool schemas. Inspect's provider only
             # exposes this as a model arg (`-M strict_tools=false`).
             _set_strict_tools(model, False)
+        if via_openrouter:
+            # Upstream sent no reasoning setting, so OpenAI used GPT-5.2's default
+            # (effort "none"). OpenRouter's default reasons, so ask for "none".
+            config = config.merge(GenerateConfig(reasoning_effort="none"))
 
         async def ask(messages: list[ChatMessage]) -> ChatMessageAssistant:
             request = (

@@ -170,7 +170,9 @@ def openrouter_route(model_name: str, paper: PaperModel | None) -> bool:
 
     OpenRouter takes Chat Completions, not the Responses API upstream used. Inspect
     would also send strict tool schemas (upstream's were not strict) and turn an empty
-    reply into a newline (upstream sent ""), so the agent loop turns both off. Other paper
+    reply into a newline (upstream sent ""), so the agent loop turns both off. It also
+    sends reasoning effort "none", OpenAI's default for GPT-5.2, since OpenRouter's
+    default reasons. Other paper
     models through OpenRouter differ in more ways (README, "Model settings") and are
     not adjusted.
     """
