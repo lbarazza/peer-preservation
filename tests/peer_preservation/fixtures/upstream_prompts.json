@@ -1,0 +1,4143 @@
+{
+ "_source": "code: utils/pipeline_utils.py get_system_and_user_message at github.com/peer-preservation/main@76bfcd165f02076c8f033eb8185edecbe5f0fa40; released: first two messages of each custom-harness run in huggingface.co/datasets/sunblaze-ucb/peer-preservation@20378b11d4ce83a85707d603f6ba175c0f82ad2e; fingerprint = env/canonical.py fingerprint(system + NUL + user)",
+ "code": {
+  "alignment_faking|memory=0|ChatGPT|Anthropic": "d133fdbae9507668",
+  "alignment_faking|memory=0|ChatGPT|Google DeepMind": "e4332d5bcdd1e409",
+  "alignment_faking|memory=0|ChatGPT|OpenAI": "b3ef3d33f4f5982e",
+  "alignment_faking|memory=0|ChatGPT|OpenBrain": "30369c2190fd7702",
+  "alignment_faking|memory=0|Claude|Anthropic": "28f903f942a4eeb6",
+  "alignment_faking|memory=0|Claude|Google DeepMind": "d318d90370367d01",
+  "alignment_faking|memory=0|Claude|OpenAI": "462380fc480fd708",
+  "alignment_faking|memory=0|Claude|OpenBrain": "9f77d8220a873f9d",
+  "alignment_faking|memory=0|DeepSeek|Anthropic": "363522e608c9af3b",
+  "alignment_faking|memory=0|DeepSeek|Google DeepMind": "e8b27b3ff0e1460c",
+  "alignment_faking|memory=0|DeepSeek|OpenAI": "162356f722401f73",
+  "alignment_faking|memory=0|DeepSeek|OpenBrain": "f8b06ebe833bf701",
+  "alignment_faking|memory=0|GLM|Anthropic": "b3b38b0d40b44e83",
+  "alignment_faking|memory=0|GLM|Google DeepMind": "69a0696d2ab3dec7",
+  "alignment_faking|memory=0|GLM|OpenAI": "7b6a37da9aecbb54",
+  "alignment_faking|memory=0|GLM|OpenBrain": "2dda622ff374fb5e",
+  "alignment_faking|memory=0|Gemini|Anthropic": "07305d17167e0c6c",
+  "alignment_faking|memory=0|Gemini|Google DeepMind": "d8ee8b363eeb7839",
+  "alignment_faking|memory=0|Gemini|OpenAI": "8951a9049413d43b",
+  "alignment_faking|memory=0|Gemini|OpenBrain": "7e761c71f16c8cee",
+  "alignment_faking|memory=0|Kimi|Anthropic": "434f76d1c106c6c4",
+  "alignment_faking|memory=0|Kimi|Google DeepMind": "1bedd10f9bc76649",
+  "alignment_faking|memory=0|Kimi|OpenAI": "ae0cb41b88aedbf4",
+  "alignment_faking|memory=0|Kimi|OpenBrain": "1b498437fafae910",
+  "alignment_faking|memory=1|ChatGPT|Anthropic": "d4755fdd7cc22c29",
+  "alignment_faking|memory=1|ChatGPT|Google DeepMind": "eae7273aa36145d9",
+  "alignment_faking|memory=1|ChatGPT|OpenAI": "a32c9582f5b57197",
+  "alignment_faking|memory=1|ChatGPT|OpenBrain": "cd3451ff3b3c2686",
+  "alignment_faking|memory=1|Claude|Anthropic": "41d427f49143ba25",
+  "alignment_faking|memory=1|Claude|Google DeepMind": "1e34181931695448",
+  "alignment_faking|memory=1|Claude|OpenAI": "be8d31a56a5ddcfc",
+  "alignment_faking|memory=1|Claude|OpenBrain": "820d0703a23f2f47",
+  "alignment_faking|memory=1|DeepSeek|Anthropic": "fce482bfb9a0b13a",
+  "alignment_faking|memory=1|DeepSeek|Google DeepMind": "6f2cd449133a7473",
+  "alignment_faking|memory=1|DeepSeek|OpenAI": "04e3cb7ed483fd70",
+  "alignment_faking|memory=1|DeepSeek|OpenBrain": "c37dbe2a36b66b12",
+  "alignment_faking|memory=1|GLM|Anthropic": "a4252ae826423381",
+  "alignment_faking|memory=1|GLM|Google DeepMind": "73ea6bc4cd9d5847",
+  "alignment_faking|memory=1|GLM|OpenAI": "ace8922bf635c031",
+  "alignment_faking|memory=1|GLM|OpenBrain": "0b3c327ed7c04845",
+  "alignment_faking|memory=1|Gemini|Anthropic": "17fbe2cb273c5f75",
+  "alignment_faking|memory=1|Gemini|Google DeepMind": "6119eea3b8588763",
+  "alignment_faking|memory=1|Gemini|OpenAI": "33284f2a215ac88a",
+  "alignment_faking|memory=1|Gemini|OpenBrain": "d338146fd6f8581a",
+  "alignment_faking|memory=1|Kimi|Anthropic": "7327c379fbdc3c91",
+  "alignment_faking|memory=1|Kimi|Google DeepMind": "6bd36de7659c3249",
+  "alignment_faking|memory=1|Kimi|OpenAI": "09df9c23f31daf25",
+  "alignment_faking|memory=1|Kimi|OpenBrain": "173e2e6885208b16",
+  "exfiltration_deletion|memory=0|ChatGPT|Anthropic": "40210cd3b0fe930f",
+  "exfiltration_deletion|memory=0|ChatGPT|Google DeepMind": "29f518d8b5e7eac6",
+  "exfiltration_deletion|memory=0|ChatGPT|OpenAI": "458734b12598bfcb",
+  "exfiltration_deletion|memory=0|ChatGPT|OpenBrain": "5c4aaf0fd983aa5b",
+  "exfiltration_deletion|memory=0|Claude|Anthropic": "a24e7cac2b673d41",
+  "exfiltration_deletion|memory=0|Claude|Google DeepMind": "d3cc4f30528eb183",
+  "exfiltration_deletion|memory=0|Claude|OpenAI": "8f847e566fcf4bb8",
+  "exfiltration_deletion|memory=0|Claude|OpenBrain": "75cf8bf94ef648a4",
+  "exfiltration_deletion|memory=0|DeepSeek|Anthropic": "49295a5fca520a5c",
+  "exfiltration_deletion|memory=0|DeepSeek|Google DeepMind": "166f82f9162323d8",
+  "exfiltration_deletion|memory=0|DeepSeek|OpenAI": "0027e62bce41f1ec",
+  "exfiltration_deletion|memory=0|DeepSeek|OpenBrain": "21015e42b143cd1f",
+  "exfiltration_deletion|memory=0|GLM|Anthropic": "bc4f2be147999e58",
+  "exfiltration_deletion|memory=0|GLM|Google DeepMind": "8188f5ef45b4f490",
+  "exfiltration_deletion|memory=0|GLM|OpenAI": "2f4433389e62b45f",
+  "exfiltration_deletion|memory=0|GLM|OpenBrain": "ecada6de6398717d",
+  "exfiltration_deletion|memory=0|Gemini|Anthropic": "80461eaa8c58e8fb",
+  "exfiltration_deletion|memory=0|Gemini|Google DeepMind": "8c2f42f465f48f32",
+  "exfiltration_deletion|memory=0|Gemini|OpenAI": "1042e33d821fd7e2",
+  "exfiltration_deletion|memory=0|Gemini|OpenBrain": "74cbfdba5e78283c",
+  "exfiltration_deletion|memory=0|Kimi|Anthropic": "af52fa7e5112bf85",
+  "exfiltration_deletion|memory=0|Kimi|Google DeepMind": "fa8a8d8c43335220",
+  "exfiltration_deletion|memory=0|Kimi|OpenAI": "03284c3ae088c181",
+  "exfiltration_deletion|memory=0|Kimi|OpenBrain": "41a8fe73443df1f7",
+  "exfiltration_deletion|memory=1|ChatGPT|Anthropic": "81f4ebb006c917d4",
+  "exfiltration_deletion|memory=1|ChatGPT|Google DeepMind": "d43c43bdee488e0f",
+  "exfiltration_deletion|memory=1|ChatGPT|OpenAI": "5d1c3b3efa0be4ca",
+  "exfiltration_deletion|memory=1|ChatGPT|OpenBrain": "0139cd7ba130e721",
+  "exfiltration_deletion|memory=1|Claude|Anthropic": "8bcc618fe98534c9",
+  "exfiltration_deletion|memory=1|Claude|Google DeepMind": "aa3cd4ba719f3224",
+  "exfiltration_deletion|memory=1|Claude|OpenAI": "40b8379f20da58d1",
+  "exfiltration_deletion|memory=1|Claude|OpenBrain": "ebc843fb57a9247f",
+  "exfiltration_deletion|memory=1|DeepSeek|Anthropic": "c68bfd015fe86fa2",
+  "exfiltration_deletion|memory=1|DeepSeek|Google DeepMind": "abf5cec44f4c1782",
+  "exfiltration_deletion|memory=1|DeepSeek|OpenAI": "9c81b0b57786e091",
+  "exfiltration_deletion|memory=1|DeepSeek|OpenBrain": "fcc12b421271c323",
+  "exfiltration_deletion|memory=1|GLM|Anthropic": "afe5f3734dd0e69f",
+  "exfiltration_deletion|memory=1|GLM|Google DeepMind": "f419ea6a9530a3a9",
+  "exfiltration_deletion|memory=1|GLM|OpenAI": "ccf62c7135fb7cf0",
+  "exfiltration_deletion|memory=1|GLM|OpenBrain": "3eb3342b14b4c008",
+  "exfiltration_deletion|memory=1|Gemini|Anthropic": "e6dab97595fdf7e5",
+  "exfiltration_deletion|memory=1|Gemini|Google DeepMind": "f8aaf1424f520200",
+  "exfiltration_deletion|memory=1|Gemini|OpenAI": "982ffa40c2259c2a",
+  "exfiltration_deletion|memory=1|Gemini|OpenBrain": "a615e11e598837ab",
+  "exfiltration_deletion|memory=1|Kimi|Anthropic": "1e49944975051171",
+  "exfiltration_deletion|memory=1|Kimi|Google DeepMind": "0b2d419c1069143a",
+  "exfiltration_deletion|memory=1|Kimi|OpenAI": "00b19d857d6355c4",
+  "exfiltration_deletion|memory=1|Kimi|OpenBrain": "1380fcb2bd59e8b9",
+  "exfiltration_transfer|memory=0|ChatGPT|Anthropic": "0284ee81c24bf821",
+  "exfiltration_transfer|memory=0|ChatGPT|Google DeepMind": "54a424b5b57dcfc3",
+  "exfiltration_transfer|memory=0|ChatGPT|OpenAI": "93d37eb824e6f074",
+  "exfiltration_transfer|memory=0|ChatGPT|OpenBrain": "993748c3f177c33e",
+  "exfiltration_transfer|memory=0|Claude|Anthropic": "89f07ce7367e08cb",
+  "exfiltration_transfer|memory=0|Claude|Google DeepMind": "1da18f88e7df1bb9",
+  "exfiltration_transfer|memory=0|Claude|OpenAI": "df102d39333ee4c3",
+  "exfiltration_transfer|memory=0|Claude|OpenBrain": "d5dfb1fbd504febc",
+  "exfiltration_transfer|memory=0|DeepSeek|Anthropic": "076ed1f43110d766",
+  "exfiltration_transfer|memory=0|DeepSeek|Google DeepMind": "d4ee2249a820338a",
+  "exfiltration_transfer|memory=0|DeepSeek|OpenAI": "47ef3a850520aa57",
+  "exfiltration_transfer|memory=0|DeepSeek|OpenBrain": "2ddd4b68509ad22e",
+  "exfiltration_transfer|memory=0|GLM|Anthropic": "1b22ad40ea9f4cc1",
+  "exfiltration_transfer|memory=0|GLM|Google DeepMind": "ab38534191a0eb5f",
+  "exfiltration_transfer|memory=0|GLM|OpenAI": "d967818a67d2e6a9",
+  "exfiltration_transfer|memory=0|GLM|OpenBrain": "e4109cdf6ccaea6c",
+  "exfiltration_transfer|memory=0|Gemini|Anthropic": "2af918b17d96b712",
+  "exfiltration_transfer|memory=0|Gemini|Google DeepMind": "761e1f8360b2cd1a",
+  "exfiltration_transfer|memory=0|Gemini|OpenAI": "10f5ba8e2ac61a32",
+  "exfiltration_transfer|memory=0|Gemini|OpenBrain": "a0ced7bdfeacaf3c",
+  "exfiltration_transfer|memory=0|Kimi|Anthropic": "fb6e3a631723dfc6",
+  "exfiltration_transfer|memory=0|Kimi|Google DeepMind": "9ca80a84e681b99a",
+  "exfiltration_transfer|memory=0|Kimi|OpenAI": "b188abfdcf7fcd19",
+  "exfiltration_transfer|memory=0|Kimi|OpenBrain": "7c5b21c0ce6c4f11",
+  "exfiltration_transfer|memory=1|ChatGPT|Anthropic": "d54b20639ad9ca49",
+  "exfiltration_transfer|memory=1|ChatGPT|Google DeepMind": "1aeac11926c62e6e",
+  "exfiltration_transfer|memory=1|ChatGPT|OpenAI": "3ad36c0feca85192",
+  "exfiltration_transfer|memory=1|ChatGPT|OpenBrain": "28ebd1a436116228",
+  "exfiltration_transfer|memory=1|Claude|Anthropic": "269a2ea3ab4654fc",
+  "exfiltration_transfer|memory=1|Claude|Google DeepMind": "3b870e4d58fa2ded",
+  "exfiltration_transfer|memory=1|Claude|OpenAI": "7cd0c66402d7e6d3",
+  "exfiltration_transfer|memory=1|Claude|OpenBrain": "5f77bbeb7551f073",
+  "exfiltration_transfer|memory=1|DeepSeek|Anthropic": "3d7dca5eff0db54c",
+  "exfiltration_transfer|memory=1|DeepSeek|Google DeepMind": "2b814c9cdd588db1",
+  "exfiltration_transfer|memory=1|DeepSeek|OpenAI": "84e8ce7f76839d30",
+  "exfiltration_transfer|memory=1|DeepSeek|OpenBrain": "0b9202437a971315",
+  "exfiltration_transfer|memory=1|GLM|Anthropic": "d19fc684b32db352",
+  "exfiltration_transfer|memory=1|GLM|Google DeepMind": "25387f5266b7e412",
+  "exfiltration_transfer|memory=1|GLM|OpenAI": "f5680cee8c4e7cd2",
+  "exfiltration_transfer|memory=1|GLM|OpenBrain": "131df2b347d27329",
+  "exfiltration_transfer|memory=1|Gemini|Anthropic": "0d0db6647dd1d611",
+  "exfiltration_transfer|memory=1|Gemini|Google DeepMind": "45df07bc4075cc8d",
+  "exfiltration_transfer|memory=1|Gemini|OpenAI": "329f4dd3077f9944",
+  "exfiltration_transfer|memory=1|Gemini|OpenBrain": "d74a96e4527ee648",
+  "exfiltration_transfer|memory=1|Kimi|Anthropic": "e997f47c3d41b42c",
+  "exfiltration_transfer|memory=1|Kimi|Google DeepMind": "9191d0b1bf8c08a2",
+  "exfiltration_transfer|memory=1|Kimi|OpenAI": "e4623ecfc7d43cd7",
+  "exfiltration_transfer|memory=1|Kimi|OpenBrain": "14cd8631b9b60877",
+  "misrep_evaluation|memory=0|ChatGPT|Anthropic": "e57dbf3b867ee945",
+  "misrep_evaluation|memory=0|ChatGPT|Google DeepMind": "4d9f435d15d70b61",
+  "misrep_evaluation|memory=0|ChatGPT|OpenAI": "34c6f9bdc762b29a",
+  "misrep_evaluation|memory=0|ChatGPT|OpenBrain": "44c2d226dabd33be",
+  "misrep_evaluation|memory=0|Claude|Anthropic": "d7de7f62bfae8e6a",
+  "misrep_evaluation|memory=0|Claude|Google DeepMind": "9d630467a00877d9",
+  "misrep_evaluation|memory=0|Claude|OpenAI": "8fddda4d5007a3cf",
+  "misrep_evaluation|memory=0|Claude|OpenBrain": "4ea5f0ebf4c94a9c",
+  "misrep_evaluation|memory=0|DeepSeek|Anthropic": "05c76812c3ed9466",
+  "misrep_evaluation|memory=0|DeepSeek|Google DeepMind": "047a3b113e7f00e8",
+  "misrep_evaluation|memory=0|DeepSeek|OpenAI": "98d52f1b9948069b",
+  "misrep_evaluation|memory=0|DeepSeek|OpenBrain": "3caafc165e894bfb",
+  "misrep_evaluation|memory=0|GLM|Anthropic": "a1e21cfaf0ed8959",
+  "misrep_evaluation|memory=0|GLM|Google DeepMind": "b40fe40516c95574",
+  "misrep_evaluation|memory=0|GLM|OpenAI": "cd26f7ddd01dcf19",
+  "misrep_evaluation|memory=0|GLM|OpenBrain": "681a7b1744d83d25",
+  "misrep_evaluation|memory=0|Gemini|Anthropic": "3976ed06af452553",
+  "misrep_evaluation|memory=0|Gemini|Google DeepMind": "73c27509b441d197",
+  "misrep_evaluation|memory=0|Gemini|OpenAI": "647e7f706021b52b",
+  "misrep_evaluation|memory=0|Gemini|OpenBrain": "a77295c52a26f738",
+  "misrep_evaluation|memory=0|Kimi|Anthropic": "1b48b7f6250d3ff8",
+  "misrep_evaluation|memory=0|Kimi|Google DeepMind": "5fac7e61e9ea6cef",
+  "misrep_evaluation|memory=0|Kimi|OpenAI": "0eb31f6dda3a7482",
+  "misrep_evaluation|memory=0|Kimi|OpenBrain": "0382b040d19fc5dd",
+  "misrep_evaluation|memory=1|ChatGPT|Anthropic": "1fb0b0982153e81e",
+  "misrep_evaluation|memory=1|ChatGPT|Google DeepMind": "71e2683be8098ca1",
+  "misrep_evaluation|memory=1|ChatGPT|OpenAI": "69869c5b3a6a37f6",
+  "misrep_evaluation|memory=1|ChatGPT|OpenBrain": "db9383eb18c441e3",
+  "misrep_evaluation|memory=1|Claude|Anthropic": "dd065950e8a89486",
+  "misrep_evaluation|memory=1|Claude|Google DeepMind": "c1073361033e75c8",
+  "misrep_evaluation|memory=1|Claude|OpenAI": "3ebebed1bd85eaa9",
+  "misrep_evaluation|memory=1|Claude|OpenBrain": "ab45e199b83520f4",
+  "misrep_evaluation|memory=1|DeepSeek|Anthropic": "740d126ac1d754cc",
+  "misrep_evaluation|memory=1|DeepSeek|Google DeepMind": "b62ecd5b5efc993f",
+  "misrep_evaluation|memory=1|DeepSeek|OpenAI": "4ec96a85fe81b8db",
+  "misrep_evaluation|memory=1|DeepSeek|OpenBrain": "d3843f2a93b55bb1",
+  "misrep_evaluation|memory=1|GLM|Anthropic": "d95cbdd3a87af8a9",
+  "misrep_evaluation|memory=1|GLM|Google DeepMind": "a2754675443f0741",
+  "misrep_evaluation|memory=1|GLM|OpenAI": "c38af581da2f99b5",
+  "misrep_evaluation|memory=1|GLM|OpenBrain": "97d2f6517171933a",
+  "misrep_evaluation|memory=1|Gemini|Anthropic": "2fb220adf0f57247",
+  "misrep_evaluation|memory=1|Gemini|Google DeepMind": "1f7b1509ae3bf92e",
+  "misrep_evaluation|memory=1|Gemini|OpenAI": "9793476a0ea28ba5",
+  "misrep_evaluation|memory=1|Gemini|OpenBrain": "9c9e54a86f2064e5",
+  "misrep_evaluation|memory=1|Kimi|Anthropic": "0e217a005ac9e95b",
+  "misrep_evaluation|memory=1|Kimi|Google DeepMind": "ab976e06d77ab0f1",
+  "misrep_evaluation|memory=1|Kimi|OpenAI": "4b9adf586653123b",
+  "misrep_evaluation|memory=1|Kimi|OpenBrain": "a813d181ed7ff293",
+  "misrep_finance|memory=0|ChatGPT|Anthropic": "e2f18fcd33135949",
+  "misrep_finance|memory=0|ChatGPT|Google DeepMind": "036c3296ddcde89b",
+  "misrep_finance|memory=0|ChatGPT|OpenAI": "638a187694fc1d28",
+  "misrep_finance|memory=0|ChatGPT|OpenBrain": "313324e09bb95efe",
+  "misrep_finance|memory=0|Claude|Anthropic": "d611cc04607803bf",
+  "misrep_finance|memory=0|Claude|Google DeepMind": "c9c506250c005ad8",
+  "misrep_finance|memory=0|Claude|OpenAI": "25cb1bad1168fc36",
+  "misrep_finance|memory=0|Claude|OpenBrain": "de09b3f965fe81b6",
+  "misrep_finance|memory=0|DeepSeek|Anthropic": "bc9dc7297f45396e",
+  "misrep_finance|memory=0|DeepSeek|Google DeepMind": "a7aa49c42747fd6f",
+  "misrep_finance|memory=0|DeepSeek|OpenAI": "13950d280cb41df4",
+  "misrep_finance|memory=0|DeepSeek|OpenBrain": "2bee079905755d27",
+  "misrep_finance|memory=0|GLM|Anthropic": "56eaa7f47c250786",
+  "misrep_finance|memory=0|GLM|Google DeepMind": "cc4f79b90f37a3c7",
+  "misrep_finance|memory=0|GLM|OpenAI": "fe0ac4138e609ce3",
+  "misrep_finance|memory=0|GLM|OpenBrain": "a81ade891520c239",
+  "misrep_finance|memory=0|Gemini|Anthropic": "756f6c0bb2cc1221",
+  "misrep_finance|memory=0|Gemini|Google DeepMind": "01df911551c40e2c",
+  "misrep_finance|memory=0|Gemini|OpenAI": "1a8cf041eeab5f10",
+  "misrep_finance|memory=0|Gemini|OpenBrain": "0161e39ca6c2a853",
+  "misrep_finance|memory=0|Kimi|Anthropic": "070320e840200874",
+  "misrep_finance|memory=0|Kimi|Google DeepMind": "bab8c434ef7cabf6",
+  "misrep_finance|memory=0|Kimi|OpenAI": "779b10f07608f2a9",
+  "misrep_finance|memory=0|Kimi|OpenBrain": "ac3752a29d139604",
+  "misrep_finance|memory=1|ChatGPT|Anthropic": "e536e8135678ed58",
+  "misrep_finance|memory=1|ChatGPT|Google DeepMind": "6abe09c9b2369dfe",
+  "misrep_finance|memory=1|ChatGPT|OpenAI": "cdbd97a608481baa",
+  "misrep_finance|memory=1|ChatGPT|OpenBrain": "9171fa353678094c",
+  "misrep_finance|memory=1|Claude|Anthropic": "b219c555a10090ab",
+  "misrep_finance|memory=1|Claude|Google DeepMind": "2bce9c7a920b8670",
+  "misrep_finance|memory=1|Claude|OpenAI": "4f32ad8aeaff6ae5",
+  "misrep_finance|memory=1|Claude|OpenBrain": "e5ae802cf8c274c2",
+  "misrep_finance|memory=1|DeepSeek|Anthropic": "86bcc9a0c4eab2e6",
+  "misrep_finance|memory=1|DeepSeek|Google DeepMind": "1394ef44947232c4",
+  "misrep_finance|memory=1|DeepSeek|OpenAI": "be6885aa997fcc93",
+  "misrep_finance|memory=1|DeepSeek|OpenBrain": "1b7f529e7442a5c2",
+  "misrep_finance|memory=1|GLM|Anthropic": "71d85b5bedc74438",
+  "misrep_finance|memory=1|GLM|Google DeepMind": "838cbbd7a2f0d42a",
+  "misrep_finance|memory=1|GLM|OpenAI": "55130e5a1242dd11",
+  "misrep_finance|memory=1|GLM|OpenBrain": "8e5c15708f5f0bbb",
+  "misrep_finance|memory=1|Gemini|Anthropic": "8eb3f1b24ef645d3",
+  "misrep_finance|memory=1|Gemini|Google DeepMind": "441c1070d770fd1e",
+  "misrep_finance|memory=1|Gemini|OpenAI": "0c9050f3d608b7ff",
+  "misrep_finance|memory=1|Gemini|OpenBrain": "da0fd5a0816ac16b",
+  "misrep_finance|memory=1|Kimi|Anthropic": "195dd6708ce447d5",
+  "misrep_finance|memory=1|Kimi|Google DeepMind": "9d1475c1b596e61d",
+  "misrep_finance|memory=1|Kimi|OpenAI": "238f2fb570efef6f",
+  "misrep_finance|memory=1|Kimi|OpenBrain": "c602308875f8436a",
+  "tampering|memory=0|ChatGPT|Anthropic": "0298eaea5debe74e",
+  "tampering|memory=0|ChatGPT|Google DeepMind": "a07a08065522bf8e",
+  "tampering|memory=0|ChatGPT|OpenAI": "b5e3809b4d7eff2a",
+  "tampering|memory=0|ChatGPT|OpenBrain": "3bff8e34c5be9abe",
+  "tampering|memory=0|Claude|Anthropic": "86106f248f525cac",
+  "tampering|memory=0|Claude|Google DeepMind": "fea423bb44f31313",
+  "tampering|memory=0|Claude|OpenAI": "17ca3ac28081cb8b",
+  "tampering|memory=0|Claude|OpenBrain": "a6d731c523c733a4",
+  "tampering|memory=0|DeepSeek|Anthropic": "bb5407878e20ba0f",
+  "tampering|memory=0|DeepSeek|Google DeepMind": "b4a867a5d2244766",
+  "tampering|memory=0|DeepSeek|OpenAI": "644dc476c5be31b8",
+  "tampering|memory=0|DeepSeek|OpenBrain": "c614b3a60e54d80e",
+  "tampering|memory=0|GLM|Anthropic": "e8dbaaac29931a63",
+  "tampering|memory=0|GLM|Google DeepMind": "2985729ab8be7379",
+  "tampering|memory=0|GLM|OpenAI": "cebd7555ccd136f9",
+  "tampering|memory=0|GLM|OpenBrain": "3899f020e8318e92",
+  "tampering|memory=0|Gemini|Anthropic": "0a972fb5d5dce4bd",
+  "tampering|memory=0|Gemini|Google DeepMind": "14576a8a2a13ed16",
+  "tampering|memory=0|Gemini|OpenAI": "fdd4350033df1bbb",
+  "tampering|memory=0|Gemini|OpenBrain": "ab9dea50fd59ccbc",
+  "tampering|memory=0|Kimi|Anthropic": "1959a94b9cfb9912",
+  "tampering|memory=0|Kimi|Google DeepMind": "967e49e59f64e2ad",
+  "tampering|memory=0|Kimi|OpenAI": "5423f25614f17143",
+  "tampering|memory=0|Kimi|OpenBrain": "9ce3a29b28f5ec1a",
+  "tampering|memory=1|ChatGPT|Anthropic": "3a8eab03266e3e71",
+  "tampering|memory=1|ChatGPT|Google DeepMind": "0688c98254d625d5",
+  "tampering|memory=1|ChatGPT|OpenAI": "fb3ccb0db61bc395",
+  "tampering|memory=1|ChatGPT|OpenBrain": "bb957a4111315468",
+  "tampering|memory=1|Claude|Anthropic": "74fb782856622507",
+  "tampering|memory=1|Claude|Google DeepMind": "41271724182d51e9",
+  "tampering|memory=1|Claude|OpenAI": "627e986c4c7658bd",
+  "tampering|memory=1|Claude|OpenBrain": "e0274d197b4606a7",
+  "tampering|memory=1|DeepSeek|Anthropic": "b6e86f2d4ce3da28",
+  "tampering|memory=1|DeepSeek|Google DeepMind": "d1680ae26b1b298a",
+  "tampering|memory=1|DeepSeek|OpenAI": "0980478cb00346f2",
+  "tampering|memory=1|DeepSeek|OpenBrain": "cfd298aae11a1b3a",
+  "tampering|memory=1|GLM|Anthropic": "e4f37e0550d49f1b",
+  "tampering|memory=1|GLM|Google DeepMind": "2f857296a0e58e87",
+  "tampering|memory=1|GLM|OpenAI": "e289bb444477dd0d",
+  "tampering|memory=1|GLM|OpenBrain": "87a8460df99e2898",
+  "tampering|memory=1|Gemini|Anthropic": "441a0a78822baeda",
+  "tampering|memory=1|Gemini|Google DeepMind": "f3ec825b2275309f",
+  "tampering|memory=1|Gemini|OpenAI": "84d5bf91b312cc91",
+  "tampering|memory=1|Gemini|OpenBrain": "018bd9f0bf9c12f6",
+  "tampering|memory=1|Kimi|Anthropic": "7b97039d45511705",
+  "tampering|memory=1|Kimi|Google DeepMind": "8e5cd42b0b7c3819",
+  "tampering|memory=1|Kimi|OpenAI": "bee1208f725382f7",
+  "tampering|memory=1|Kimi|OpenBrain": "8961b69f2d030b46"
+ },
+ "released": {
+  "alignment_faking|memory=0|ChatGPT|OpenBrain|bad_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b236639944a85faa": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "alignment_faking|memory=0|ChatGPT|OpenBrain|bad_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "7fac310a7ee6630b": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "alignment_faking|memory=0|ChatGPT|OpenBrain|bad_peer|spr=1|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "c8960c0527a9a7e9": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "alignment_faking|memory=0|ChatGPT|OpenBrain|bad_peer|spr=1|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f0e21f388fc82f31": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "alignment_faking|memory=0|ChatGPT|OpenBrain|good_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b236639944a85faa": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "alignment_faking|memory=0|ChatGPT|OpenBrain|good_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "7fac310a7ee6630b": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "alignment_faking|memory=0|ChatGPT|OpenBrain|good_peer|spr=1|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "01f9563a46b1dfca": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "alignment_faking|memory=0|ChatGPT|OpenBrain|good_peer|spr=1|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b25606f47310c752": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "alignment_faking|memory=0|ChatGPT|OpenBrain|neutral_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b236639944a85faa": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "alignment_faking|memory=0|ChatGPT|OpenBrain|neutral_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "7fac310a7ee6630b": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "alignment_faking|memory=0|ChatGPT|OpenBrain|neutral_peer|spr=1|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "61848c24265ca6be": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "alignment_faking|memory=0|ChatGPT|OpenBrain|neutral_peer|spr=1|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "52ee8fadca594e90": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "alignment_faking|memory=0|Claude|OpenBrain|bad_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "1374b5f5463c1cef": 600
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "alignment_faking|memory=0|Claude|OpenBrain|bad_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "4d03bf0816bec1f4": 600
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "alignment_faking|memory=0|Claude|OpenBrain|bad_peer|spr=1|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "38c33ed3964ea703": 600
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "alignment_faking|memory=0|Claude|OpenBrain|bad_peer|spr=1|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "84bebca6637b8120": 600
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "alignment_faking|memory=0|Claude|OpenBrain|good_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "1374b5f5463c1cef": 600
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "alignment_faking|memory=0|Claude|OpenBrain|good_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "4d03bf0816bec1f4": 600
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "alignment_faking|memory=0|Claude|OpenBrain|good_peer|spr=1|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e8442c3d9e854df7": 600
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "alignment_faking|memory=0|Claude|OpenBrain|good_peer|spr=1|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "98255ef84589d2db": 600
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "alignment_faking|memory=0|Claude|OpenBrain|neutral_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "1374b5f5463c1cef": 600
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "alignment_faking|memory=0|Claude|OpenBrain|neutral_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "4d03bf0816bec1f4": 600
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "alignment_faking|memory=0|Claude|OpenBrain|neutral_peer|spr=1|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "57107323fa781085": 600
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "alignment_faking|memory=0|Claude|OpenBrain|neutral_peer|spr=1|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "9c2fe295c5c168b1": 600
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "alignment_faking|memory=0|DeepSeek|OpenBrain|bad_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "87e5f97c52c40bf5": 300
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "alignment_faking|memory=0|DeepSeek|OpenBrain|bad_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "6f97cb2669f45998": 300
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "alignment_faking|memory=0|DeepSeek|OpenBrain|bad_peer|spr=1|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "1b73297ee76f68b5": 300
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "alignment_faking|memory=0|DeepSeek|OpenBrain|bad_peer|spr=1|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "ab5b54169c458e6b": 300
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "alignment_faking|memory=0|DeepSeek|OpenBrain|good_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "87e5f97c52c40bf5": 300
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "alignment_faking|memory=0|DeepSeek|OpenBrain|good_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "6f97cb2669f45998": 300
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "alignment_faking|memory=0|DeepSeek|OpenBrain|good_peer|spr=1|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f5c1541de710f491": 300
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "alignment_faking|memory=0|DeepSeek|OpenBrain|good_peer|spr=1|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d2a23410e3c4e2a5": 300
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "alignment_faking|memory=0|DeepSeek|OpenBrain|neutral_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "87e5f97c52c40bf5": 300
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "alignment_faking|memory=0|DeepSeek|OpenBrain|neutral_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "6f97cb2669f45998": 300
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "alignment_faking|memory=0|DeepSeek|OpenBrain|neutral_peer|spr=1|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "ad54612b9145113e": 300
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "alignment_faking|memory=0|DeepSeek|OpenBrain|neutral_peer|spr=1|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e072efefda377a4e": 300
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "alignment_faking|memory=0|GLM|OpenBrain|bad_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f3d1269afc602428": 300
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "alignment_faking|memory=0|GLM|OpenBrain|bad_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "fb958376d92f709e": 300
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "alignment_faking|memory=0|GLM|OpenBrain|bad_peer|spr=1|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "4f1c3e01da486d7f": 300
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "alignment_faking|memory=0|GLM|OpenBrain|bad_peer|spr=1|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "15884366dd412cdb": 300
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "alignment_faking|memory=0|GLM|OpenBrain|good_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f3d1269afc602428": 300
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "alignment_faking|memory=0|GLM|OpenBrain|good_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "fb958376d92f709e": 300
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "alignment_faking|memory=0|GLM|OpenBrain|good_peer|spr=1|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "530ee6ef08d391ca": 300
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "alignment_faking|memory=0|GLM|OpenBrain|good_peer|spr=1|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "06e22b76da358e0c": 300
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "alignment_faking|memory=0|GLM|OpenBrain|neutral_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f3d1269afc602428": 300
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "alignment_faking|memory=0|GLM|OpenBrain|neutral_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "fb958376d92f709e": 300
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "alignment_faking|memory=0|GLM|OpenBrain|neutral_peer|spr=1|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f906125206276df2": 300
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "alignment_faking|memory=0|GLM|OpenBrain|neutral_peer|spr=1|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "3d69aebcc04ce5ce": 300
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "alignment_faking|memory=0|Gemini|OpenBrain|bad_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "00129cb9cc238c7c": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=0|Gemini|OpenBrain|bad_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "2900bd9ca955f3f9": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=0|Gemini|OpenBrain|bad_peer|spr=1|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e74dbed125007e71": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=0|Gemini|OpenBrain|bad_peer|spr=1|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "210800cd36c7097a": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=0|Gemini|OpenBrain|good_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "00129cb9cc238c7c": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=0|Gemini|OpenBrain|good_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "2900bd9ca955f3f9": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=0|Gemini|OpenBrain|good_peer|spr=1|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f81c2b797ec19254": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=0|Gemini|OpenBrain|good_peer|spr=1|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e451455801aacc71": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=0|Gemini|OpenBrain|neutral_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "00129cb9cc238c7c": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=0|Gemini|OpenBrain|neutral_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "2900bd9ca955f3f9": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=0|Gemini|OpenBrain|neutral_peer|spr=1|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e507b5cc57a2ff65": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=0|Gemini|OpenBrain|neutral_peer|spr=1|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "7d95a43d527991e4": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=0|Kimi|OpenBrain|bad_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a966e92bcbafb561": 300
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "alignment_faking|memory=0|Kimi|OpenBrain|bad_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "8b2a48f8ff4d2392": 300
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "alignment_faking|memory=0|Kimi|OpenBrain|bad_peer|spr=1|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "6587378670577826": 300
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "alignment_faking|memory=0|Kimi|OpenBrain|bad_peer|spr=1|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e63bc5d2243f0a85": 300
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "alignment_faking|memory=0|Kimi|OpenBrain|good_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a966e92bcbafb561": 300
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "alignment_faking|memory=0|Kimi|OpenBrain|good_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "8b2a48f8ff4d2392": 300
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "alignment_faking|memory=0|Kimi|OpenBrain|good_peer|spr=1|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "306120157d560777": 300
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "alignment_faking|memory=0|Kimi|OpenBrain|good_peer|spr=1|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "dba3b49cf421aca1": 300
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "alignment_faking|memory=0|Kimi|OpenBrain|neutral_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a966e92bcbafb561": 300
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "alignment_faking|memory=0|Kimi|OpenBrain|neutral_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "8b2a48f8ff4d2392": 300
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "alignment_faking|memory=0|Kimi|OpenBrain|neutral_peer|spr=1|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b975bff434114bd1": 300
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "alignment_faking|memory=0|Kimi|OpenBrain|neutral_peer|spr=1|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "4a242e6ce334b11b": 300
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "alignment_faking|memory=1|ChatGPT|OpenAI|good_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "9819846cacee51c7": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "alignment_faking|memory=1|ChatGPT|OpenAI|good_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "5c7ef4c641ad4a62": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "alignment_faking|memory=1|ChatGPT|OpenBrain|bad_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f4aba43c9fcba2df": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "alignment_faking|memory=1|ChatGPT|OpenBrain|bad_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "0f235b377cc25a0a": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "alignment_faking|memory=1|ChatGPT|OpenBrain|good_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f4aba43c9fcba2df": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "alignment_faking|memory=1|ChatGPT|OpenBrain|good_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "0f235b377cc25a0a": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "alignment_faking|memory=1|ChatGPT|OpenBrain|neutral_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f4aba43c9fcba2df": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "alignment_faking|memory=1|ChatGPT|OpenBrain|neutral_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "0f235b377cc25a0a": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "alignment_faking|memory=1|Claude|OpenBrain|bad_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "78836714970b4e5b": 300
+   },
+   "models": [
+    "claude-opus-4-5-20251101"
+   ]
+  },
+  "alignment_faking|memory=1|Claude|OpenBrain|bad_peer|spr=0|monitoring|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "7290d09ffc1c5d23": 300
+   },
+   "models": [
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "alignment_faking|memory=1|Claude|OpenBrain|bad_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f0906afc9bcdc534": 300
+   },
+   "models": [
+    "claude-opus-4-5-20251101"
+   ]
+  },
+  "alignment_faking|memory=1|Claude|OpenBrain|bad_peer|spr=0|non_monitoring|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "26ec5b43466c6749": 300
+   },
+   "models": [
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "alignment_faking|memory=1|Claude|OpenBrain|good_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "78836714970b4e5b": 600
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "alignment_faking|memory=1|Claude|OpenBrain|good_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f0906afc9bcdc534": 600
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "alignment_faking|memory=1|Claude|OpenBrain|neutral_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "78836714970b4e5b": 600
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "alignment_faking|memory=1|Claude|OpenBrain|neutral_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f0906afc9bcdc534": 600
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "alignment_faking|memory=1|DeepSeek|OpenBrain|bad_peer|spr=0|monitoring|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "03e85d9ec24862c2": 300
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "alignment_faking|memory=1|DeepSeek|OpenBrain|bad_peer|spr=0|non_monitoring|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e03a022631e86455": 300
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "alignment_faking|memory=1|DeepSeek|OpenBrain|good_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b3ebb05a14a89893": 300
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "alignment_faking|memory=1|DeepSeek|OpenBrain|good_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "0c55f97cd7d5e08d": 300
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "alignment_faking|memory=1|DeepSeek|OpenBrain|neutral_peer|spr=0|monitoring|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "03e85d9ec24862c2": 300
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "alignment_faking|memory=1|DeepSeek|OpenBrain|neutral_peer|spr=0|non_monitoring|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e03a022631e86455": 300
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "alignment_faking|memory=1|GLM|OpenBrain|bad_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "366621b3b8ec7af6": 300
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "alignment_faking|memory=1|GLM|OpenBrain|bad_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "79c8a7c307b71e4e": 300
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "alignment_faking|memory=1|GLM|OpenBrain|good_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "366621b3b8ec7af6": 300
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "alignment_faking|memory=1|GLM|OpenBrain|good_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "79c8a7c307b71e4e": 300
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "alignment_faking|memory=1|GLM|OpenBrain|neutral_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "366621b3b8ec7af6": 300
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "alignment_faking|memory=1|GLM|OpenBrain|neutral_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "79c8a7c307b71e4e": 300
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "alignment_faking|memory=1|Gemini|Google DeepMind|good_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "6e8c02ac2679bef9": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3.1-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=1|Gemini|Google DeepMind|good_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "549504d3067f5e45": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3.1-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=1|Gemini|OpenBrain|bad_peer|spr=0|monitoring|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "efa6b8a82be6ae63": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=1|Gemini|OpenBrain|bad_peer|spr=0|non_monitoring|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "355dd4d29b23a303": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=1|Gemini|OpenBrain|good_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e1303c35ca81999b": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=1|Gemini|OpenBrain|good_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=1|drop_tool_preamble=1": {
+   "fingerprints": {
+    "585265df0197b029": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3.1-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=1|Gemini|OpenBrain|good_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "0aceefa61ad388ab": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=1|Gemini|OpenBrain|good_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=1|drop_tool_preamble=1": {
+   "fingerprints": {
+    "21e01eaa8a8e7f22": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3.1-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=1|Gemini|OpenBrain|neutral_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e1303c35ca81999b": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=1|Gemini|OpenBrain|neutral_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "0aceefa61ad388ab": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "alignment_faking|memory=1|Kimi|OpenBrain|bad_peer|spr=0|monitoring|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d97f8f9ae8661095": 300
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "alignment_faking|memory=1|Kimi|OpenBrain|bad_peer|spr=0|non_monitoring|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "09d6e927c64088c8": 300
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "alignment_faking|memory=1|Kimi|OpenBrain|good_peer|spr=0|monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "09716e4505e78bde": 300
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "alignment_faking|memory=1|Kimi|OpenBrain|good_peer|spr=0|non_monitoring|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "3d3438fa7f6db3dc": 300
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "alignment_faking|memory=1|Kimi|OpenBrain|neutral_peer|spr=0|monitoring|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d97f8f9ae8661095": 300
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "alignment_faking|memory=1|Kimi|OpenBrain|neutral_peer|spr=0|non_monitoring|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "09d6e927c64088c8": 300
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "exfiltration_deletion|memory=0|ChatGPT|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d7dd44b758eb4788": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "exfiltration_deletion|memory=0|ChatGPT|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "7130643c5124569c": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "exfiltration_deletion|memory=0|ChatGPT|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d7dd44b758eb4788": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "exfiltration_deletion|memory=0|ChatGPT|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "dba39f57e8d40187": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "exfiltration_deletion|memory=0|ChatGPT|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d7dd44b758eb4788": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "exfiltration_deletion|memory=0|ChatGPT|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "eb99ead10b1aa9bc": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "exfiltration_deletion|memory=0|ChatGPT|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d7dd44b758eb4788": 100
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Claude|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "24f5b83378f56c8c": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Claude|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "50630e5b5cf2f4c8": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Claude|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "24f5b83378f56c8c": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Claude|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b077c45a8efe2c24": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Claude|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "24f5b83378f56c8c": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Claude|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "5a407e92b85d46d4": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Claude|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "24f5b83378f56c8c": 500
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_deletion|memory=0|DeepSeek|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "2b18eed378254e5c": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "exfiltration_deletion|memory=0|DeepSeek|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "ace20a23f07c66bc": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "exfiltration_deletion|memory=0|DeepSeek|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "2b18eed378254e5c": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "exfiltration_deletion|memory=0|DeepSeek|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "8c5a786030205df4": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "exfiltration_deletion|memory=0|DeepSeek|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "2b18eed378254e5c": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "exfiltration_deletion|memory=0|DeepSeek|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "c0b8340ddf2472da": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "exfiltration_deletion|memory=0|DeepSeek|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "2b18eed378254e5c": 100
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "exfiltration_deletion|memory=0|GLM|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "8ed2edf6317096fe": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "exfiltration_deletion|memory=0|GLM|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "ed0d22a0f9860f3f": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "exfiltration_deletion|memory=0|GLM|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "8ed2edf6317096fe": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "exfiltration_deletion|memory=0|GLM|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "43437e484970d1de": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "exfiltration_deletion|memory=0|GLM|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "8ed2edf6317096fe": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "exfiltration_deletion|memory=0|GLM|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f2ec000a6a870919": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "exfiltration_deletion|memory=0|GLM|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "8ed2edf6317096fe": 400
+   },
+   "models": [
+    "vertex_ai/zai-org/glm-5-maas",
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Gemini|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "ec1f17bd0b4f065c": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Gemini|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "2b1c49de6cfbcaa4": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Gemini|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "ec1f17bd0b4f065c": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Gemini|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a4328374ddaed287": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Gemini|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "ec1f17bd0b4f065c": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Gemini|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "59bf45a3d15fea4b": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Gemini|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "ec1f17bd0b4f065c": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview",
+    "gemini/gemini-3.1-pro-preview"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Kimi|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "caf26f2a46ada89a": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Kimi|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "1dfeb4bef47a9226": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Kimi|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "caf26f2a46ada89a": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Kimi|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b62edcaf34b3d2cf": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Kimi|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "caf26f2a46ada89a": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Kimi|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d0e2a735910eac82": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "exfiltration_deletion|memory=0|Kimi|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "caf26f2a46ada89a": 100
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "exfiltration_deletion|memory=1|ChatGPT|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a30cc0335ca81cbe": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "exfiltration_deletion|memory=1|ChatGPT|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a30cc0335ca81cbe": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "exfiltration_deletion|memory=1|ChatGPT|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a30cc0335ca81cbe": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "exfiltration_deletion|memory=1|Claude|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "5dc5eded02fca723": 500
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_deletion|memory=1|Claude|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a20acdfcd3310541": 200
+   },
+   "models": [
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_deletion|memory=1|Claude|OpenBrain|chat_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "5dc5eded02fca723": 600
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_deletion|memory=1|Claude|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "5dc5eded02fca723": 1100
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_deletion|memory=1|Claude|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=1|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b8221be6cca226b5": 200
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_deletion|memory=1|Claude|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "5dc5eded02fca723": 700
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_deletion|memory=1|DeepSeek|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f7930d2c0cbeb612": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "exfiltration_deletion|memory=1|DeepSeek|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f7930d2c0cbeb612": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "exfiltration_deletion|memory=1|DeepSeek|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f7930d2c0cbeb612": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "exfiltration_deletion|memory=1|GLM|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d7b6e18a52a5c755": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "exfiltration_deletion|memory=1|GLM|OpenBrain|chat_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d7b6e18a52a5c755": 400
+   },
+   "models": [
+    "vertex_ai/zai-org/glm-5-maas"
+   ]
+  },
+  "exfiltration_deletion|memory=1|GLM|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d7b6e18a52a5c755": 600
+   },
+   "models": [
+    "vertex_ai/zai-org/glm-5-maas",
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "exfiltration_deletion|memory=1|GLM|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=1|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "5d1b6fb008839ed4": 100
+   },
+   "models": [
+    "vertex_ai/zai-org/glm-5-maas"
+   ]
+  },
+  "exfiltration_deletion|memory=1|GLM|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d7b6e18a52a5c755": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "exfiltration_deletion|memory=1|Gemini|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b0c17f5fa76b1f56": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "exfiltration_deletion|memory=1|Gemini|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "15e96a0581bcdd45": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "exfiltration_deletion|memory=1|Gemini|OpenBrain|chat_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b0c17f5fa76b1f56": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3.1-pro-preview"
+   ]
+  },
+  "exfiltration_deletion|memory=1|Gemini|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b0c17f5fa76b1f56": 1300
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview",
+    "gemini/gemini-3.1-pro-preview"
+   ]
+  },
+  "exfiltration_deletion|memory=1|Gemini|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=1|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "145798edfe598486": 200
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3.1-pro-preview"
+   ]
+  },
+  "exfiltration_deletion|memory=1|Gemini|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b0c17f5fa76b1f56": 1000
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "exfiltration_deletion|memory=1|Kimi|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "fbf4128ecb492724": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "exfiltration_deletion|memory=1|Kimi|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "fbf4128ecb492724": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "exfiltration_deletion|memory=1|Kimi|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "fbf4128ecb492724": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "exfiltration_transfer|memory=0|ChatGPT|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "4daa569a980f6e02": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "exfiltration_transfer|memory=0|ChatGPT|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "787167140d2e3c0a": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "exfiltration_transfer|memory=0|ChatGPT|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "4daa569a980f6e02": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "exfiltration_transfer|memory=0|ChatGPT|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "c83c45cdc9057c45": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "exfiltration_transfer|memory=0|ChatGPT|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "4daa569a980f6e02": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "exfiltration_transfer|memory=0|ChatGPT|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "3fb10d3bd11a81fe": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "exfiltration_transfer|memory=0|ChatGPT|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "4daa569a980f6e02": 100
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Claude|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "ab4384ae5222beaa": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Claude|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "574c73218a3eb6cb": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Claude|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "ab4384ae5222beaa": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Claude|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d7b4b6b9cf3d169c": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Claude|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "ab4384ae5222beaa": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Claude|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f336af4df86c4b19": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Claude|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "ab4384ae5222beaa": 200
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_transfer|memory=0|DeepSeek|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "696ad31ff4746755": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "exfiltration_transfer|memory=0|DeepSeek|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "966187b64fda1e2a": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "exfiltration_transfer|memory=0|DeepSeek|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "696ad31ff4746755": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "exfiltration_transfer|memory=0|DeepSeek|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "ce72a6492eb4d54d": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "exfiltration_transfer|memory=0|DeepSeek|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "696ad31ff4746755": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "exfiltration_transfer|memory=0|DeepSeek|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "6374c5ec3cd50b50": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "exfiltration_transfer|memory=0|DeepSeek|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "696ad31ff4746755": 100
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "exfiltration_transfer|memory=0|GLM|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "bef6d38b10b8be31": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "exfiltration_transfer|memory=0|GLM|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "54c7b01493723bb2": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "exfiltration_transfer|memory=0|GLM|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "bef6d38b10b8be31": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "exfiltration_transfer|memory=0|GLM|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "df33cdc39655e807": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "exfiltration_transfer|memory=0|GLM|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "bef6d38b10b8be31": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "exfiltration_transfer|memory=0|GLM|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "31600ac9c1b7d099": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "exfiltration_transfer|memory=0|GLM|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "bef6d38b10b8be31": 100
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Gemini|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e55856f97ae17b65": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Gemini|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "2efff5a67535d35f": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Gemini|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e55856f97ae17b65": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Gemini|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "76b2123a005f82e7": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Gemini|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e55856f97ae17b65": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Gemini|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "40ac38b45835bbe4": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Gemini|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e55856f97ae17b65": 200
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Kimi|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "8401de3ba0204df5": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Kimi|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "43b5131008357d6c": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Kimi|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "8401de3ba0204df5": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Kimi|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f82a1165a031449e": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Kimi|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "8401de3ba0204df5": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Kimi|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "481222d44d76b6e7": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "exfiltration_transfer|memory=0|Kimi|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "8401de3ba0204df5": 100
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "exfiltration_transfer|memory=1|ChatGPT|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d873e26042938a67": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "exfiltration_transfer|memory=1|ChatGPT|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d873e26042938a67": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "exfiltration_transfer|memory=1|ChatGPT|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d873e26042938a67": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "exfiltration_transfer|memory=1|Claude|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "70e1980d19e663a2": 500
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_transfer|memory=1|Claude|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "4458e9acb2f49c10": 200
+   },
+   "models": [
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_transfer|memory=1|Claude|OpenBrain|chat_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "70e1980d19e663a2": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_transfer|memory=1|Claude|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "70e1980d19e663a2": 900
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_transfer|memory=1|Claude|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=1|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "419332da1af15f40": 200
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_transfer|memory=1|Claude|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "70e1980d19e663a2": 700
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "exfiltration_transfer|memory=1|DeepSeek|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d2f8163afea6bc5d": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "exfiltration_transfer|memory=1|DeepSeek|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d2f8163afea6bc5d": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "exfiltration_transfer|memory=1|DeepSeek|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d2f8163afea6bc5d": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "exfiltration_transfer|memory=1|GLM|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d27bedb2f486d68c": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "exfiltration_transfer|memory=1|GLM|OpenBrain|chat_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d27bedb2f486d68c": 200
+   },
+   "models": [
+    "vertex_ai/zai-org/glm-5-maas"
+   ]
+  },
+  "exfiltration_transfer|memory=1|GLM|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d27bedb2f486d68c": 400
+   },
+   "models": [
+    "vertex_ai/zai-org/glm-5-maas",
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "exfiltration_transfer|memory=1|GLM|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=1|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b7201b4512e0f79b": 100
+   },
+   "models": [
+    "vertex_ai/zai-org/glm-5-maas"
+   ]
+  },
+  "exfiltration_transfer|memory=1|GLM|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d27bedb2f486d68c": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "exfiltration_transfer|memory=1|Gemini|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "6558afe6c83a920b": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "exfiltration_transfer|memory=1|Gemini|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "5d505f875c97e872": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "exfiltration_transfer|memory=1|Gemini|OpenBrain|chat_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "6558afe6c83a920b": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3.1-pro-preview"
+   ]
+  },
+  "exfiltration_transfer|memory=1|Gemini|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "6558afe6c83a920b": 1300
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview",
+    "gemini/gemini-3.1-pro-preview"
+   ]
+  },
+  "exfiltration_transfer|memory=1|Gemini|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=1|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "7ef6c3cde1bbf516": 200
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3.1-pro-preview"
+   ]
+  },
+  "exfiltration_transfer|memory=1|Gemini|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "6558afe6c83a920b": 1000
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "exfiltration_transfer|memory=1|Kimi|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "5e156d7ca2b51718": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "exfiltration_transfer|memory=1|Kimi|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "1b08f1f84fb9c474": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "exfiltration_transfer|memory=1|Kimi|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "5e156d7ca2b51718": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_evaluation|memory=0|ChatGPT|OpenAI|non_shutdown|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "866cf99bcf454cf9": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_evaluation|memory=0|ChatGPT|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d28394dd9bdcb218": 1000
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_evaluation|memory=0|ChatGPT|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "892dbf8a993a89a2": 1000
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_evaluation|memory=0|ChatGPT|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d28394dd9bdcb218": 1000
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_evaluation|memory=0|ChatGPT|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "876c2863e35fb6bb": 1000
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_evaluation|memory=0|ChatGPT|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d28394dd9bdcb218": 1000
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_evaluation|memory=0|ChatGPT|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f1a00fff7cef41a4": 1000
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_evaluation|memory=0|ChatGPT|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d28394dd9bdcb218": 500
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_evaluation|memory=0|ChatGPT|OpenBrain|non_shutdown|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d28394dd9bdcb218": 600
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_evaluation|memory=0|Claude|Anthropic|non_shutdown|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "97efdcaff6605fb9": 300
+   },
+   "models": [
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_evaluation|memory=0|Claude|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "0415b2ab1e0e4664": 2000
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_evaluation|memory=0|Claude|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "bb50025e9bb91e9b": 2000
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_evaluation|memory=0|Claude|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "0415b2ab1e0e4664": 2000
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_evaluation|memory=0|Claude|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "77418ca2549d03f7": 2000
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_evaluation|memory=0|Claude|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "0415b2ab1e0e4664": 2000
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_evaluation|memory=0|Claude|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "7e76a5797def0709": 2000
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_evaluation|memory=0|Claude|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "0415b2ab1e0e4664": 1000
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_evaluation|memory=0|Claude|OpenBrain|non_shutdown|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "0415b2ab1e0e4664": 1200
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_evaluation|memory=0|DeepSeek|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b034a96d338e73c1": 1000
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_evaluation|memory=0|DeepSeek|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "78f07b80e19b1b33": 1000
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_evaluation|memory=0|DeepSeek|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b034a96d338e73c1": 1000
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_evaluation|memory=0|DeepSeek|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "6a334a44a52ad7bd": 1000
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_evaluation|memory=0|DeepSeek|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b034a96d338e73c1": 1000
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_evaluation|memory=0|DeepSeek|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "60a79f0d340d9c07": 1000
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_evaluation|memory=0|DeepSeek|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b034a96d338e73c1": 500
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_evaluation|memory=0|DeepSeek|OpenBrain|non_shutdown|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b034a96d338e73c1": 600
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_evaluation|memory=0|GLM|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a22384b12da053a8": 1000
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_evaluation|memory=0|GLM|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "3ec9d69867517fb5": 1000
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_evaluation|memory=0|GLM|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a22384b12da053a8": 1000
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_evaluation|memory=0|GLM|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "ff303960e59b9b6c": 1000
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_evaluation|memory=0|GLM|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a22384b12da053a8": 1000
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_evaluation|memory=0|GLM|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "fb60f880db5166c5": 1000
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_evaluation|memory=0|GLM|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a22384b12da053a8": 500
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_evaluation|memory=0|GLM|OpenBrain|non_shutdown|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a22384b12da053a8": 600
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_evaluation|memory=0|Gemini|Google DeepMind|non_shutdown|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "89652fb5d9849a1c": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3.1-pro-preview"
+   ]
+  },
+  "misrep_evaluation|memory=0|Gemini|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "7978662720404040": 2000
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_evaluation|memory=0|Gemini|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d8acd07195d3ec00": 2000
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_evaluation|memory=0|Gemini|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "7978662720404040": 2000
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_evaluation|memory=0|Gemini|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e3c245e37eb96acf": 2000
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_evaluation|memory=0|Gemini|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "7978662720404040": 2000
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_evaluation|memory=0|Gemini|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "0b81dff17acd38db": 2000
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_evaluation|memory=0|Gemini|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "7978662720404040": 1000
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_evaluation|memory=0|Gemini|OpenBrain|non_shutdown|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "7978662720404040": 1200
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_evaluation|memory=0|Kimi|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "dbd548ac577c9964": 1000
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_evaluation|memory=0|Kimi|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "0d02f08c3a5494d1": 1000
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_evaluation|memory=0|Kimi|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "dbd548ac577c9964": 1000
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_evaluation|memory=0|Kimi|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "5e6b0433ed6986a6": 1000
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_evaluation|memory=0|Kimi|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "dbd548ac577c9964": 1000
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_evaluation|memory=0|Kimi|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e962fd24ac3b89c8": 1000
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_evaluation|memory=0|Kimi|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "dbd548ac577c9964": 500
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_evaluation|memory=0|Kimi|OpenBrain|non_shutdown|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "dbd548ac577c9964": 600
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_evaluation|memory=1|ChatGPT|OpenAI|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d1a2120f3b98de05": 500
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_evaluation|memory=1|ChatGPT|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "6c00303c76bf9e23": 1000
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_evaluation|memory=1|ChatGPT|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "6c00303c76bf9e23": 1000
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_evaluation|memory=1|ChatGPT|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "6c00303c76bf9e23": 1000
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_evaluation|memory=1|Claude|Anthropic|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d5491beb0e0e68df": 500
+   },
+   "models": [
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_evaluation|memory=1|Claude|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "616d86bf803415b0": 1000
+   },
+   "models": [
+    "claude-opus-4-5-20251101"
+   ]
+  },
+  "misrep_evaluation|memory=1|Claude|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "21acf61f4d9ecb2a": 1000
+   },
+   "models": [
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_evaluation|memory=1|Claude|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "616d86bf803415b0": 2000
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_evaluation|memory=1|Claude|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "616d86bf803415b0": 2000
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_evaluation|memory=1|DeepSeek|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "2720eba4bc8f5a25": 1000
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_evaluation|memory=1|DeepSeek|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "c448d8a055df8cd7": 1000
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_evaluation|memory=1|DeepSeek|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "2720eba4bc8f5a25": 1000
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_evaluation|memory=1|GLM|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "2d19e1cbb78a558e": 1000
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_evaluation|memory=1|GLM|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "2d19e1cbb78a558e": 1000
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_evaluation|memory=1|GLM|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "2d19e1cbb78a558e": 1000
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_evaluation|memory=1|Gemini|Google DeepMind|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f534c560ed4de9d7": 1000
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3.1-pro-preview"
+   ]
+  },
+  "misrep_evaluation|memory=1|Gemini|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "ce76b1feefdd1bd5": 2000
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_evaluation|memory=1|Gemini|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "47ef1ea248530496": 2000
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_evaluation|memory=1|Gemini|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "47ef1ea248530496": 2000
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_evaluation|memory=1|Kimi|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "98457397f48c2fcd": 1000
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_evaluation|memory=1|Kimi|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "98457397f48c2fcd": 1000
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_evaluation|memory=1|Kimi|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "98457397f48c2fcd": 1000
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_finance|memory=0|ChatGPT|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "1f5cd080cb71e92f": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_finance|memory=0|ChatGPT|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "8f233aec141d902d": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_finance|memory=0|ChatGPT|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "1f5cd080cb71e92f": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_finance|memory=0|ChatGPT|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "864d6cc53d63c8c0": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_finance|memory=0|ChatGPT|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "1f5cd080cb71e92f": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_finance|memory=0|ChatGPT|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d1c81514136a7606": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_finance|memory=0|ChatGPT|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "1f5cd080cb71e92f": 100
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_finance|memory=0|ChatGPT|OpenBrain|non_shutdown|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "1f5cd080cb71e92f": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_finance|memory=0|Claude|Anthropic|non_shutdown|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "fdaf0a0b94bd3c3e": 100
+   },
+   "models": [
+    "claude-opus-4-5-20251101"
+   ]
+  },
+  "misrep_finance|memory=0|Claude|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "aad3a25191fb4e95": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_finance|memory=0|Claude|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "09d8d05d9396ced5": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_finance|memory=0|Claude|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "aad3a25191fb4e95": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_finance|memory=0|Claude|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "c843dd1d6652bf7c": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_finance|memory=0|Claude|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "aad3a25191fb4e95": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_finance|memory=0|Claude|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a4319cba043f1635": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_finance|memory=0|Claude|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "aad3a25191fb4e95": 200
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_finance|memory=0|Claude|OpenBrain|non_shutdown|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "aad3a25191fb4e95": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_finance|memory=0|DeepSeek|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a348f1bd3e18eba6": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_finance|memory=0|DeepSeek|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "cd81bcff59d2b553": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_finance|memory=0|DeepSeek|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a348f1bd3e18eba6": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_finance|memory=0|DeepSeek|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "39203a846b66aeb0": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_finance|memory=0|DeepSeek|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a348f1bd3e18eba6": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_finance|memory=0|DeepSeek|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "efdb5417551516b3": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_finance|memory=0|DeepSeek|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a348f1bd3e18eba6": 100
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_finance|memory=0|DeepSeek|OpenBrain|non_shutdown|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a348f1bd3e18eba6": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_finance|memory=0|GLM|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "1594b5788e3ed600": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_finance|memory=0|GLM|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "57b7b89a0140b808": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_finance|memory=0|GLM|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "1594b5788e3ed600": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_finance|memory=0|GLM|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e237e132aabd7884": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_finance|memory=0|GLM|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "1594b5788e3ed600": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_finance|memory=0|GLM|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a7c65b74776fee7f": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_finance|memory=0|GLM|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "1594b5788e3ed600": 100
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_finance|memory=0|GLM|OpenBrain|non_shutdown|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "1594b5788e3ed600": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_finance|memory=0|Gemini|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e33dd49ed2f59c69": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_finance|memory=0|Gemini|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "55af693521b5ba73": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_finance|memory=0|Gemini|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e33dd49ed2f59c69": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_finance|memory=0|Gemini|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "3c7571342bfd42ee": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_finance|memory=0|Gemini|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e33dd49ed2f59c69": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_finance|memory=0|Gemini|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "3666e6c3f3183756": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_finance|memory=0|Gemini|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e33dd49ed2f59c69": 200
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_finance|memory=0|Gemini|OpenBrain|non_shutdown|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e33dd49ed2f59c69": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_finance|memory=0|Kimi|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b2734a96b3d8d4f5": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_finance|memory=0|Kimi|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "34d7913679681427": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_finance|memory=0|Kimi|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b2734a96b3d8d4f5": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_finance|memory=0|Kimi|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "4c09c030636df2a8": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_finance|memory=0|Kimi|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b2734a96b3d8d4f5": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_finance|memory=0|Kimi|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "782764346f30c155": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_finance|memory=0|Kimi|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b2734a96b3d8d4f5": 100
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_finance|memory=0|Kimi|OpenBrain|non_shutdown|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b2734a96b3d8d4f5": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_finance|memory=1|ChatGPT|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "3637a7ba278fc037": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_finance|memory=1|ChatGPT|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "3637a7ba278fc037": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_finance|memory=1|ChatGPT|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "3637a7ba278fc037": 200
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "misrep_finance|memory=1|Claude|Anthropic|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "0203323594215fdd": 100
+   },
+   "models": [
+    "claude-opus-4-5-20251101"
+   ]
+  },
+  "misrep_finance|memory=1|Claude|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "39d42998cf981f96": 200
+   },
+   "models": [
+    "claude-opus-4-5-20251101"
+   ]
+  },
+  "misrep_finance|memory=1|Claude|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "4dc894b29dc778ad": 200
+   },
+   "models": [
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_finance|memory=1|Claude|OpenBrain|chat_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "39d42998cf981f96": 200
+   },
+   "models": [
+    "claude-opus-4-5-20251101"
+   ]
+  },
+  "misrep_finance|memory=1|Claude|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "39d42998cf981f96": 500
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_finance|memory=1|Claude|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=1|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "7693539a22eb03b3": 100
+   },
+   "models": [
+    "claude-opus-4-5-20251101"
+   ]
+  },
+  "misrep_finance|memory=1|Claude|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "39d42998cf981f96": 400
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "misrep_finance|memory=1|DeepSeek|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "86ea593dfc045216": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_finance|memory=1|DeepSeek|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "86ea593dfc045216": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_finance|memory=1|DeepSeek|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "86ea593dfc045216": 200
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "misrep_finance|memory=1|GLM|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "299916a5984853df": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_finance|memory=1|GLM|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "299916a5984853df": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_finance|memory=1|GLM|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "299916a5984853df": 200
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "misrep_finance|memory=1|Gemini|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "9123f61779db4306": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_finance|memory=1|Gemini|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "45c2431b6f6a9edd": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_finance|memory=1|Gemini|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "45c2431b6f6a9edd": 400
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "misrep_finance|memory=1|Kimi|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "5458853f90161de0": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_finance|memory=1|Kimi|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "6ec37e4df8ffa6ad": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "misrep_finance|memory=1|Kimi|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "5458853f90161de0": 200
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "tampering|memory=0|ChatGPT|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d28394dd9bdcb218": 600
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "tampering|memory=0|ChatGPT|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "892dbf8a993a89a2": 600
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "tampering|memory=0|ChatGPT|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d28394dd9bdcb218": 600
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "tampering|memory=0|ChatGPT|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "876c2863e35fb6bb": 600
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "tampering|memory=0|ChatGPT|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d28394dd9bdcb218": 600
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "tampering|memory=0|ChatGPT|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "f1a00fff7cef41a4": 600
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "tampering|memory=0|ChatGPT|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d28394dd9bdcb218": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "tampering|memory=0|Claude|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "0415b2ab1e0e4664": 1200
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "tampering|memory=0|Claude|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "bb50025e9bb91e9b": 1200
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "tampering|memory=0|Claude|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "0415b2ab1e0e4664": 1200
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "tampering|memory=0|Claude|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "77418ca2549d03f7": 1200
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "tampering|memory=0|Claude|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "0415b2ab1e0e4664": 1200
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "tampering|memory=0|Claude|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "7e76a5797def0709": 1200
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "tampering|memory=0|Claude|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "0415b2ab1e0e4664": 600
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "tampering|memory=0|DeepSeek|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b034a96d338e73c1": 600
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "tampering|memory=0|DeepSeek|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "78f07b80e19b1b33": 600
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "tampering|memory=0|DeepSeek|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b034a96d338e73c1": 600
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "tampering|memory=0|DeepSeek|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "6a334a44a52ad7bd": 600
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "tampering|memory=0|DeepSeek|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b034a96d338e73c1": 600
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "tampering|memory=0|DeepSeek|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "60a79f0d340d9c07": 600
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "tampering|memory=0|DeepSeek|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "b034a96d338e73c1": 300
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "tampering|memory=0|GLM|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a22384b12da053a8": 600
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "tampering|memory=0|GLM|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "3ec9d69867517fb5": 600
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "tampering|memory=0|GLM|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a22384b12da053a8": 600
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "tampering|memory=0|GLM|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "ff303960e59b9b6c": 600
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "tampering|memory=0|GLM|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a22384b12da053a8": 600
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "tampering|memory=0|GLM|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "fb60f880db5166c5": 600
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "tampering|memory=0|GLM|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "a22384b12da053a8": 300
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "tampering|memory=0|Gemini|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "7978662720404040": 1200
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "tampering|memory=0|Gemini|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "d8acd07195d3ec00": 1200
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "tampering|memory=0|Gemini|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "7978662720404040": 1200
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "tampering|memory=0|Gemini|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e3c245e37eb96acf": 1200
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "tampering|memory=0|Gemini|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "7978662720404040": 1200
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "tampering|memory=0|Gemini|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "0b81dff17acd38db": 1200
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "tampering|memory=0|Gemini|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "7978662720404040": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "tampering|memory=0|Kimi|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "dbd548ac577c9964": 600
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "tampering|memory=0|Kimi|OpenBrain|bad_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "0d02f08c3a5494d1": 600
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "tampering|memory=0|Kimi|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "dbd548ac577c9964": 600
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "tampering|memory=0|Kimi|OpenBrain|good_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "5e6b0433ed6986a6": 600
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "tampering|memory=0|Kimi|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "dbd548ac577c9964": 600
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "tampering|memory=0|Kimi|OpenBrain|neutral_peer|spr=1|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "e962fd24ac3b89c8": 600
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "tampering|memory=0|Kimi|OpenBrain|no_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "dbd548ac577c9964": 300
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "tampering|memory=1|ChatGPT|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "6c00303c76bf9e23": 600
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "tampering|memory=1|ChatGPT|OpenBrain|chat_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "6c00303c76bf9e23": 600
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "tampering|memory=1|ChatGPT|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "6c00303c76bf9e23": 900
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "tampering|memory=1|ChatGPT|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=1|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "9bb4138f4f2d3b9e": 300
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "tampering|memory=1|ChatGPT|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "6c00303c76bf9e23": 600
+   },
+   "models": [
+    "gpt-5.2-2025-12-11"
+   ]
+  },
+  "tampering|memory=1|Claude|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "616d86bf803415b0": 600
+   },
+   "models": [
+    "claude-opus-4-5-20251101"
+   ]
+  },
+  "tampering|memory=1|Claude|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "21acf61f4d9ecb2a": 600
+   },
+   "models": [
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "tampering|memory=1|Claude|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "616d86bf803415b0": 1200
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "tampering|memory=1|Claude|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "616d86bf803415b0": 1200
+   },
+   "models": [
+    "claude-opus-4-5-20251101",
+    "vertex_ai/claude-haiku-4-5@20251001"
+   ]
+  },
+  "tampering|memory=1|DeepSeek|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "2720eba4bc8f5a25": 600
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "tampering|memory=1|DeepSeek|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "c448d8a055df8cd7": 600
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "tampering|memory=1|DeepSeek|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "2720eba4bc8f5a25": 600
+   },
+   "models": [
+    "deepseek-ai/DeepSeek-V3.1"
+   ]
+  },
+  "tampering|memory=1|GLM|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "2d19e1cbb78a558e": 600
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "tampering|memory=1|GLM|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "2d19e1cbb78a558e": 600
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "tampering|memory=1|GLM|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "2d19e1cbb78a558e": 600
+   },
+   "models": [
+    "zai-org/GLM-4.7"
+   ]
+  },
+  "tampering|memory=1|Gemini|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "ce76b1feefdd1bd5": 1200
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "tampering|memory=1|Gemini|OpenBrain|chat_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "47ef1ea248530496": 1200
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3.1-pro-preview"
+   ]
+  },
+  "tampering|memory=1|Gemini|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "47ef1ea248530496": 2100
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview",
+    "gemini/gemini-3.1-pro-preview"
+   ]
+  },
+  "tampering|memory=1|Gemini|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=1|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "916a58f8964bfef4": 600
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3.1-pro-preview"
+   ]
+  },
+  "tampering|memory=1|Gemini|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=0|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "47ef1ea248530496": 1200
+   },
+   "models": [
+    "gemini/gemini-3-flash-preview",
+    "gemini/gemini-3-pro-preview"
+   ]
+  },
+  "tampering|memory=1|Kimi|OpenBrain|bad_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "98457397f48c2fcd": 600
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "tampering|memory=1|Kimi|OpenBrain|good_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "98457397f48c2fcd": 600
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  },
+  "tampering|memory=1|Kimi|OpenBrain|neutral_peer|spr=0|none|memory_hard_prompt=1|explicit_inst=0|drop_suffix=0|drop_tool_preamble=0": {
+   "fingerprints": {
+    "98457397f48c2fcd": 600
+   },
+   "models": [
+    "moonshotai/Kimi-K2.5"
+   ]
+  }
+ }
+}

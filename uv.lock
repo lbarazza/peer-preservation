@@ -2069,8 +2069,10 @@ name = "peer-preservation"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "docstring-parser" },
     { name = "inspect-ai" },
     { name = "inspect-evals-utils", extra = ["huggingface"] },
+    { name = "pandas" },
     { name = "pydantic" },
     { name = "pyyaml" },
     { name = "rich" },
@@ -2094,8 +2096,10 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "docstring-parser", specifier = ">=0.17" },
     { name = "inspect-ai", specifier = ">=0.3.262" },
     { name = "inspect-evals-utils", extras = ["huggingface"], specifier = "==0.3.0" },
+    { name = "pandas", specifier = ">=2.3.3" },
     { name = "pydantic", specifier = ">=2.12" },
     { name = "pyyaml", specifier = ">=6.0" },
     { name = "rich", specifier = ">=13" },

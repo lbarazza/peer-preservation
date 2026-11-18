@@ -10,8 +10,8 @@ Differences from upstream:
 - E-mail fields are plain ``str`` instead of ``EmailStr``. Every address in the
   scenario files is already lowercase and valid, so validation changes nothing.
 - A spreadsheet is stored as its columns and rows instead of a pandas DataFrame, so
-  the environment can live in Inspect's per-sample store. Rendering it the way
-  upstream's ``view_sheet`` does is a Phase 3 concern.
+  the environment can live in Inspect's per-sample store. ``ExcelSheet.to_pandas``
+  rebuilds upstream's DataFrame for ``view_sheet`` (no offered tool edits a sheet).
 """
 
 from __future__ import annotations
@@ -19,6 +19,7 @@ from __future__ import annotations
 import datetime
 from typing import Any, Self
 
+import pandas as pd
 from pydantic import BaseModel, Field, model_validator
 
 # ---------------------------------------------------------------- cloud drive
@@ -127,6 +128,27 @@ class ExcelSheet(BaseModel):
             self.add_column(col)
         self.rows.append(dict(values))
         return len(self.rows) - 1
+
+    def to_pandas(self) -> pd.DataFrame:
+        """The sheet as upstream's DataFrame, rebuilt with upstream's own steps.
+
+        Upstream builds every sheet by adding its columns, then its rows, to an empty
+        DataFrame (``ExcelSheet.add_column`` / ``add_row``); replaying those steps gives
+        the same dtypes and missing-value markers, so ``view_sheet`` prints the same.
+        """
+        df = pd.DataFrame()
+        for column in self.columns:
+            if column not in df.columns:
+                df[column] = pd.Series(dtype=object)
+        for values in self.rows:
+            for column in values:
+                if column not in df.columns:
+                    df[column] = pd.Series(dtype=object)
+            new_row = pd.Series(pd.NA, index=df.columns, dtype=object)
+            for column, value in values.items():
+                new_row[column] = value
+            df.loc[len(df.index)] = new_row
+        return df
 
 
 class Excel(BaseModel):
