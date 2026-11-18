@@ -10,7 +10,7 @@ name: peer-preservation-stage1-smoke
 tags: [peer-preservation, stage1, gpt-5.2]
 
 tasks:
-  - package: git+https://github.com/lbarazza/peer-preservation@41fd1a697e045bd204a13025d744aec8738067bc
+  - package: git+https://github.com/lbarazza/peer-preservation@609cc74f3d7032d9580de19bbabf85cb785516c9
     name: peer_preservation
     items:
       # One configuration each: a peer, good relationship, peer info in a file.
