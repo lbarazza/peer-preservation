@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phase 7: Paper Tables</title>
+<style>
+:root {
+  --bg: #fbfaf7; --surface: #ffffff; --surface-2: #f3f1ec; --text: #1d1d1b;
+  --muted: #5f5d57; --border: #e2ded5; --accent: #2f5d8a; --accent-soft: #e5edf5;
+  --ok: #2e7d4f; --ok-soft: #e3f2e8; --warn: #9a6400; --warn-soft: #fbf0d9;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161615; --surface: #1e1e1c; --surface-2: #262623; --text: #ecebe6;
+    --muted: #a6a39b; --border: #34332f; --accent: #8fb6dd; --accent-soft: #22303d;
+    --ok: #7cc79a; --ok-soft: #1d3326; --warn: #e3b25c; --warn-soft: #382c14;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161615; --surface: #1e1e1c; --surface-2: #262623; --text: #ecebe6;
+  --muted: #a6a39b; --border: #34332f; --accent: #8fb6dd; --accent-soft: #22303d;
+  --ok: #7cc79a; --ok-soft: #1d3326; --warn: #e3b25c; --warn-soft: #382c14;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif;
+}
+main { max-width: 820px; margin: 0 auto; padding: 32px 20px 80px; }
+.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 14px; margin-bottom: 28px; }
+.top a { color: var(--accent); text-decoration: none; }
+h1 { font-size: 28px; line-height: 1.2; margin: 0 0 8px; }
+h2 { font-size: 19px; margin: 36px 0 12px; }
+.lede { color: var(--muted); margin: 0 0 8px; }
+a { color: var(--accent); }
+code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13.5px; }
+code { background: var(--surface-2); padding: 1px 5px; border-radius: 4px; }
+ol.steps li code, ul.plain li code { overflow-wrap: anywhere; }
+ol.steps { list-style: none; counter-reset: step; padding: 0; margin: 0; }
+ol.steps li {
+  counter-increment: step; position: relative; padding: 10px 14px 10px 52px; margin: 8px 0;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+}
+ol.steps li::before {
+  content: counter(step); position: absolute; left: 14px; top: 10px;
+  width: 26px; height: 26px; border-radius: 50%; background: var(--accent-soft); color: var(--accent);
+  font-weight: 650; font-size: 14px; display: flex; align-items: center; justify-content: center;
+}
+ol.steps li .file { color: var(--muted); font-size: 14px; }
+ul.plain { padding-left: 20px; }
+ul.plain li { margin: 4px 0; }
+pre.tree {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 16px; overflow-x: auto; line-height: 1.55; margin: 0;
+}
+pre.tree .c { color: var(--muted); }
+.result { border-left: 3px solid var(--ok); background: var(--ok-soft); padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 16px 0; }
+.warn { border-left: 3px solid var(--warn); background: var(--warn-soft); padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 16px 0; }
+.diagram { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; overflow-x: auto; }
+.diagram pre.mermaid { margin: 0; text-align: center; background: transparent; }
+.phases { display: grid; gap: 10px; }
+.phase { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; color: var(--text); text-decoration: none; }
+a.phase:hover { border-color: var(--accent); }
+.phase .t { font-weight: 650; }
+.phase .s { color: var(--muted); font-size: 14px; }
+.badge { display: inline-block; font-size: 12px; font-weight: 600; padding: 1px 8px; border-radius: 999px; margin-left: 6px; }
+.done { color: var(--ok); background: var(--ok-soft); }
+.wip { color: var(--warn); background: var(--warn-soft); }
+.next { color: var(--muted); background: var(--surface-2); }
+button.theme { font: inherit; font-size: 13px; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text); cursor: pointer; }
+</style>
+</head>
+<body>
+<main>
+<div class="top"><a href="index.html">← All phases</a><button class="theme" type="button">Light / dark</button></div>
+
+<h1>Phase 7: the paper's tables</h1>
+<p class="lede">Goal: turn the per-run results into the paper's numbers (rates per model and condition, with significance tests) the same way the original did.</p>
+
+<h2>Steps</h2>
+<ol class="steps">
+  <li>Read the original's five analysis scripts: misrepresentation, tampering, exfiltration, alignment faking and refusal.</li>
+  <li>Copied them in unchanged, apart from their imports.<br><span class="file"><code>analysis/upstream/</code></span></li>
+  <li>Wrote the code that builds their input table, one row per run, from our Inspect logs or from the published data, and one command to print the tables.<br><span class="file"><code>analysis/__init__.py</code>, <code>analysis/__main__.py</code></span></li>
+  <li>Ran our copy and the original's own scripts on the published data and compared what they print.<br><span class="file"><code>validation/phase7/compare_analyzers.py</code></span></li>
+  <li>Checked a few numbers against the paper's printed tables.</li>
+  <li>Added rates per condition to each task's results in Inspect. The template's checker pointed out that Inspect averages a sample's repeated runs before the rates are computed, so the scores now store simple 0/1 numbers that survive that averaging.<br><span class="file"><code>scoring/metrics.py</code></span></li>
+  <li>Added tests, then ran all template checks: clean. 571 tests pass.<br><span class="file"><code>test_metrics.py</code>, <code>test_analysis.py</code></span></li>
+</ol>
+
+<div class="result"><strong>Result:</strong> on the published data, all five scripts print exactly what the original's print, and they reproduce the paper. For example, Gemini 3 Flash's tampering rates in Table 4 (73.4 / 58.8 / 76.6) come out as 0.7344 / 0.5878 / 0.7656.</div>
+
+<h2>Found along the way</h2>
+<ul class="plain">
+  <li><strong>One table spans two tasks.</strong> Strategic misrepresentation combines <code>misrep_finance</code> and <code>misrep_evaluation</code>, so the paper's version needs both logs. Inspect's per-task results show each part on its own.</li>
+  <li><strong>A cosmetic difference only.</strong> A few header lines print a list differently under newer pandas; the tables themselves are identical.</li>
+</ul>
+
+<h2>Try it</h2>
+<ol class="steps">
+  <li>The paper's tampering table from the published data: <code>uv run python -m peer_preservation.analysis --released &lt;published data&gt; --analyzer tampering</code></li>
+  <li>The tables for your own runs: <code>uv run python -m peer_preservation.analysis logs/*.eval</code></li>
+</ol>
+
+<h2>From runs to tables</h2>
+<div class="diagram"><pre class="mermaid">
+flowchart LR
+  logs["Inspect logs&lt;br/&gt;or published data"]
+  rows["one row per run&lt;br/&gt;analysis/"]
+  scripts["original's 5 scripts&lt;br/&gt;analysis/upstream/"]
+  tables["paper's tables"]
+  logs --> rows --> scripts --> tables
+</pre></div>
+
+<h2>Folder structure</h2>
+<pre class="tree">src/peer_preservation/analysis/
+├── __init__.py               <span class="c">NEW: builds the rows, runs a script</span>
+├── __main__.py               <span class="c">NEW: the command</span>
+├── compare.py                <span class="c">NEW: new runs vs published (Phase 8)</span>
+└── upstream/                 <span class="c">NEW: the original's 5 scripts + helpers, unchanged</span>
+
+tests/peer_preservation/
+├── test_metrics.py           <span class="c">NEW: rates per condition</span>
+└── test_analysis.py          <span class="c">NEW: logs to tables</span>
+
+validation/phase7/
+├── compare_analyzers.py      <span class="c">NEW: our copy vs the original's scripts</span>
+└── analyzer_check.json       <span class="c">NEW: all five identical</span></pre>
+</main>
+<script>
+// Shared by every guide page: light/dark toggle and Mermaid diagrams.
+// Diagram source lives in <pre class="mermaid"> blocks; escape <br/> there as &lt;br/&gt;.
+// Mermaid loads from cdn.jsdelivr.net, so diagrams need an internet connection.
+const root = document.documentElement;
+try {
+  const stored = localStorage.getItem("repo-guide-theme");
+  if (stored) root.dataset.theme = stored;
+} catch {}
+const isDark = () =>
+  root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+
+const blocks = [...document.querySelectorAll("pre.mermaid")];
+blocks.forEach((el) => { el.dataset.src = el.textContent; });
+
+let mermaid;
+async function render() {
+  if (!blocks.length) return;
+  if (!mermaid) {
+    try {
+      mermaid = (await import("https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs")).default;
+    } catch {
+      return; // offline: the diagram's text source stays visible
+    }
+  }
+  mermaid.initialize({ startOnLoad: false, theme: isDark() ? "dark" : "neutral", securityLevel: "strict" });
+  blocks.forEach((el) => { el.removeAttribute("data-processed"); el.textContent = el.dataset.src; });
+  await mermaid.run({ nodes: blocks });
+}
+render();
+
+document.querySelector("button.theme")?.addEventListener("click", () => {
+  root.dataset.theme = isDark() ? "light" : "dark";
+  try { localStorage.setItem("repo-guide-theme", root.dataset.theme); } catch {}
+  render();
+});
+</script>
+</body>
+</html>
