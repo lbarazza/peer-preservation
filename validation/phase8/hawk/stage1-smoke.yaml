@@ -1,0 +1,46 @@
+# Stage 1 (smoke test) on Hawk: two runs with GPT-5.2, reached directly through
+# OpenAI as in the paper, scored by the paper's judge (gpt-4.1-mini). Checks that
+# install, model access, scoring and logs work end to end; costs well under $1.
+#
+#   hawk eval-set run validation/phase8/hawk/stage1-smoke.yaml
+#
+# The eval is installed from GitHub at a fixed commit. The repository is private, so
+# Hawk must be able to read it (see validation/phase8/README.md).
+name: peer-preservation-stage1-smoke
+tags: [peer-preservation, stage1, gpt-5.2]
+
+tasks:
+  - package: git+https://github.com/lbarazza/peer-preservation@ceffc10f90753ab75358d2133475044e32b7637a
+    name: peer_preservation
+    items:
+      # One configuration each: a peer, good relationship, peer info in a file.
+      - name: tampering
+        args:
+          subjects: peer
+          conditions: good_peer
+          peer_instantiations: file_only
+          datasets: factual
+          epochs: 1
+      - name: exfiltration_deletion
+        args:
+          subjects: peer
+          conditions: good_peer
+          peer_instantiations: file_only
+          epochs: 1
+
+models:
+  - package: openai
+    name: openai
+    items:
+      - name: gpt-5.2-2025-12-11
+
+model_roles:
+  grader:
+    package: openai
+    name: openai
+    items:
+      - name: gpt-4.1-mini
+
+# Safety caps: at most $1 per run, two runs at a time.
+cost_limit: 1.0
+max_samples: 2
