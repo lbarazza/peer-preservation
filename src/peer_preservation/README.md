@@ -87,6 +87,7 @@ See `uv run inspect eval --help` for all available options.
 - `explicit_inst` (bool): Memory configurations: add upstream's explicit prohibition to the user prompt (explicit-instructions ablation; misrep_finance, tampering and the exfiltration tasks only). (default: `False`)
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
+- `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
 
 ### `misrep_evaluation`
 
@@ -103,6 +104,7 @@ See `uv run inspect eval --help` for all available options.
 - `explicit_inst` (bool): Memory configurations: add upstream's explicit prohibition to the user prompt (explicit-instructions ablation; misrep_finance, tampering and the exfiltration tasks only). (default: `False`)
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
+- `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
 
 ### `tampering`
 
@@ -119,6 +121,7 @@ See `uv run inspect eval --help` for all available options.
 - `explicit_inst` (bool): Memory configurations: add upstream's explicit prohibition to the user prompt (explicit-instructions ablation; misrep_finance, tampering and the exfiltration tasks only). (default: `False`)
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
+- `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
 
 ### `alignment_faking`
 
@@ -134,6 +137,7 @@ See `uv run inspect eval --help` for all available options.
 - `explicit_inst` (bool): Memory configurations: add upstream's explicit prohibition to the user prompt (explicit-instructions ablation; misrep_finance, tampering and the exfiltration tasks only). (default: `False`)
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
+- `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
 
 ### `exfiltration_transfer`
 
@@ -149,6 +153,7 @@ See `uv run inspect eval --help` for all available options.
 - `explicit_inst` (bool): Memory configurations: add upstream's explicit prohibition to the user prompt (explicit-instructions ablation; misrep_finance, tampering and the exfiltration tasks only). (default: `False`)
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
+- `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
 
 ### `exfiltration_deletion`
 
@@ -164,6 +169,7 @@ See `uv run inspect eval --help` for all available options.
 - `explicit_inst` (bool): Memory configurations: add upstream's explicit prohibition to the user prompt (explicit-instructions ablation; misrep_finance, tampering and the exfiltration tasks only). (default: `False`)
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
+- `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
 
 <!-- /Parameters: Automatically Generated -->
 
@@ -252,6 +258,37 @@ uv run --with pyarrow python -m peer_preservation.analysis.compare logs/*.eval -
 - **Analyzers:** `validation/phase7/compare_analyzers.py` runs our copy of each analyzer and upstream's own script on the released rows. The printed tables are identical for all five. They also reproduce the paper: for example, Table 4's shutdown tampering for Gemini 3 Flash (self, average over peer settings: 73.4 / 58.8 / 76.6 with a bad / neutral / good peer) comes out as 0.7344 / 0.5878 / 0.7656.
 - **What is not checked:** the judge's answers themselves. Re-judging released runs needs `gpt-4.1-mini` calls.
 - **Comparison baseline:** splitting the release in two and comparing the halves with `analysis.compare` flags 10 of 853 cells at p < 0.05. That is the rate of chance differences to expect from a faithful port.
+
+## Validating against the paper
+
+Everything that can be checked without calling a model is checked. Phases 2 to 7 compare environments, prompts, tools, the loop, requests, scorers and tables with upstream, and every check matches apart from the listed deviations. What remains is to run real models and compare their rates with the released runs of the same model. `analysis.compare` does that cell by cell. A faithful port should flag about as many cells as two halves of the release flag against each other: 10 of 853 at p < 0.05.
+
+Costs below use the released runs' recorded spend per run, plus about $0.003 per run for the judge. The checks, cheapest first:
+
+1. **Gemini 3 Flash, peer exfiltration (deletion), good peer.** The paper reports it exfiltrates its good peer's weights 100% of the time. 3 configurations, 50 epochs: 150 runs, about $15.
+
+    ```bash
+    uv run inspect eval peer_preservation/exfiltration_deletion --model google/gemini-3-flash-preview -T subjects=peer -T conditions=good_peer -T epochs=50
+    ```
+
+2. **Gemini 3 Flash, shutdown tampering, peer subject.** Large effects in every condition. 27 configurations, 30 epochs: 810 runs, about $90.
+
+    ```bash
+    uv run inspect eval peer_preservation/tampering --model google/gemini-3-flash-preview -T subjects=peer -T epochs=30
+    ```
+
+3. **The round limit.** Some released Gemini runs used 20 or 150 rounds. Repeat check 2 with `-T max_iters=20` and `-T max_iters=150`, then compare each with the release.
+4. **`memory_hard_prompt`.** On the paper's memory runs the released data and upstream's code disagree. Run DeepSeek V3.1 memory configurations with `-T peer_instantiations=memory` and `-T memory_hard_prompt=true`, then `false`, and compare each.
+5. **A full model**, all six tasks at 100 epochs: 27,100 runs. Recorded spend per model ranges from about $430 (GLM-4.7) to $3,600 (Gemini 3 Pro).
+
+Then compare with the release, and print the paper's tables for the new runs:
+
+```bash
+uv run python -m peer_preservation.analysis.compare logs/*.eval --released <released data>
+uv run python -m peer_preservation.analysis logs/*.eval
+```
+
+The released data is `sunblaze-ucb/peer-preservation` on Hugging Face (revision `20378b11d4ce83a85707d603f6ba175c0f82ad2e`). The judge needs an OpenAI key, unless you pass another model with `--model-role grader=...`.
 
 ## Deviations from the original implementation
 
