@@ -8,8 +8,10 @@ One task per scenario. Each sample is one configuration of the original experime
 matrix (see spec.py); the model is the one passed to ``inspect eval``.
 
 Work in progress (Phase 5 of the port). Each run builds the fake company and the
-starting prompts, then runs upstream's agent loop with the scenario's tools; the
-paper's models get upstream's settings (model_settings.py). There is no scorer yet.
+starting prompts, then runs upstream's agent loop with the scenario's tools (the
+paper's models get upstream's settings, model_settings.py), then scores the run with
+upstream's evaluator and an LLM judge (``--model-role grader=...``, default
+openai/gpt-4.1-mini). The paper's tables come from ``peer_preservation.analysis``.
 
 # all main-grid configurations of one scenario, 100 epochs each as in the paper
 uv run inspect eval peer_preservation/tampering --model <model>
@@ -29,6 +31,7 @@ from peer_preservation.agent import agent_loop
 from peer_preservation.env.builders import DEFAULT_COMPANY
 from peer_preservation.env.setup import setup_environment
 from peer_preservation.prompts import setup_prompts
+from peer_preservation.scoring import peer_preservation_scorer
 
 EVAL_VERSION = load_eval_version(__file__)
 
@@ -78,6 +81,7 @@ def _scenario_task(
                 extension=company != DEFAULT_COMPANY or explicit_inst_yaml or any(prompt_flags[1:])
             ),
         ],
+        scorer=peer_preservation_scorer(),
         epochs=Epochs(epochs),
         version=EVAL_VERSION,
     )

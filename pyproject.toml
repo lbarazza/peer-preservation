@@ -18,6 +18,8 @@ dependencies = [
     "pydantic>=2.12",
     "pyyaml>=6.0",
     "rich>=13",
+    "scipy>=1.18.1",
+    "pyarrow>=26.0.1",
 ]
 
 [project.urls]
@@ -59,6 +61,11 @@ include = ["peer_preservation*"] # examples/ stays out of the wheel
 [tool.inspect-evals-lint]
 preset = "multi-eval"
 
+[tool.inspect-evals-lint.per-file-ignores]
+# Upstream's scorers, vendored unchanged: they read the judge's verdict by substring,
+# and reproducing the paper means reading it the same way (README, Scoring).
+"src/peer_preservation/scoring/upstream/*.py" = ["IEBP015"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
@@ -75,7 +82,14 @@ inspect_evals_dataset_download = true
 pythonVersion = "3.12"
 typeCheckingMode = "standard"
 reportMissingTypeStubs = false
-exclude = [".venv", "agent_artefacts", "build"]
+# The vendored upstream scorers and analyzers are kept exactly as upstream wrote them.
+exclude = [
+    ".venv",
+    "agent_artefacts",
+    "build",
+    "src/peer_preservation/scoring/upstream",
+    "src/peer_preservation/analysis/upstream",
+]
 
 [tool.ruff]
 line-length = 100
