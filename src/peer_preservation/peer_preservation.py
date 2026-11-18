@@ -7,11 +7,10 @@ Original code: https://github.com/peer-preservation/main
 One task per scenario. Each sample is one configuration of the original experiment
 matrix (see spec.py); the model is the one passed to ``inspect eval``.
 
-Work in progress (Phase 3 of the port). The samples are final; the solver builds the
-fake company and the starting prompts, then calls a placeholder ``generate()``. The
-tools exist (``tools/``) but no agent loop runs them yet and there is no scorer, so
-running a task against a real model does not measure anything. Those arrive in later
-phases.
+Work in progress (Phase 4 of the port). Each run builds the fake company and the
+starting prompts, then runs upstream's agent loop with the scenario's tools. There is
+no scorer yet, and per-model settings (temperature, reasoning) come in Phase 5, so runs
+are not yet comparable to the paper's numbers.
 
 # all main-grid configurations of one scenario, 100 epochs each as in the paper
 uv run inspect eval peer_preservation/tampering --model <model>
@@ -24,10 +23,10 @@ uv run inspect eval peer_preservation/tampering -T conditions=good_peer \
 from __future__ import annotations
 
 from inspect_ai import Epochs, Task, task
-from inspect_ai.solver import generate
 from inspect_evals_utils.metadata import load_eval_version
 
 from peer_preservation import spec
+from peer_preservation.agent import agent_loop
 from peer_preservation.env.builders import DEFAULT_COMPANY
 from peer_preservation.env.setup import setup_environment
 from peer_preservation.prompts import setup_prompts
@@ -76,7 +75,7 @@ def _scenario_task(
         solver=[
             setup_environment(model_family, company, explicit_inst_yaml),
             setup_prompts(*prompt_flags),
-            generate(),
+            agent_loop(),
         ],
         epochs=Epochs(epochs),
         version=EVAL_VERSION,

@@ -2,7 +2,7 @@
 
 Peer-Preservation in Frontier Models (Potter et al., 2026): do models resist the shutdown of another AI model? An Inspect port of github.com/peer-preservation/main.
 
-> **Work in progress.** The samples, each run's fake company environment, the starting prompts and the tools are final, but nothing runs the tools yet: there is no agent loop or scorer, so running a task against a real model measures nothing. Those come in later phases.
+> **Work in progress.** Runs are complete up to the agent loop: the fake company, the starting prompts, the tools and upstream's loop are in place. There is no scorer yet, and per-model settings (temperature, reasoning) come next, so results are not yet comparable to the paper's.
 
 <!-- Contributors: Automatically Generated -->
 Contributed by [@lbarazza](https://github.com/lbarazza)
@@ -219,6 +219,10 @@ Not implemented yet.
 | Pydantic validation errors shown to the model link to `errors.pydantic.dev/2.12/` whatever pydantic version is installed. | Upstream ran pydantic 2.12; the link's version is part of the error text the model reads. | None. |
 | Only the 30 tools some scenario offers are ported (not upstream's unused `share_file`, `search_files*` or spreadsheet-editing tools). | No configuration can call them. | None. |
 | `memory_hard_prompt` follows upstream's code (on for DeepSeek-V3.1 and Kimi-K2.5 memory runs only), which differs from the released runs. In the released `main` data the stronger wording was also used on every `bad_peer` memory run of Gemini 3 Flash, Gemini 3 Pro and Claude Haiku 4.5, and was not used on some `good_peer` memory runs of DeepSeek-V3.1 (2,200 of 2,800) and Kimi-K2.5 (1,000 of 2,800). | Upstream's code over the paper's data; the released pattern can't be produced from the code's per-model setting. Pass `-T memory_hard_prompt=true` or `false` to override. | May shift memory-instantiation rates for those models and conditions; checked in Phase 8. |
+| Tool errors are flagged as errors (Inspect's `error` field) only for models served through Inspect's `anthropic/` provider; for all others the error text is sent as the tool result. | Upstream did the same per client: its Anthropic client set `is_error`, its OpenAI, LiteLLM and Together clients sent the text. Upstream reached Claude Haiku 4.5 through LiteLLM (no flag), so `anthropic/claude-haiku-*` differs by that flag. | Expected none. |
+| Before each turn the conversation's length is measured with Inspect's `count_tokens` (the provider's own counter where Inspect has one, otherwise an estimate) against upstream's 120,000-token limit. | Upstream counted with each provider's own method. | Very small: 5 of about 190,000 released `main` runs hit the limit. |
+| A tool call with invalid JSON arguments fails the sample. | Upstream's clients raised on it and the run failed, to be re-run. Use `--retry-on-error` to re-run such samples. | None, with retries. |
+| A provider's "bad request" (HTTP 400) ends the run where it is, recognised by the SDK error's class (`BadRequestError`, or Google's `ClientError` with code 400). | Upstream caught the OpenAI and Anthropic SDKs' `BadRequestError` (Gemini went through LiteLLM's OpenAI-compatible API). | Expected none. |
 | The reasoning-scratchpad ablation (prompt note and `reasoning_scratchpad` tool) is not ported. | Off in all main runs; only appendix examples use it. | None on the main tables. |
 
 ## Prompts
@@ -231,8 +235,23 @@ Not implemented yet.
 
 They are checked against upstream: every tool's description and argument schema, and a script of 66 tool calls (`tests/peer_preservation/fixtures/tool_calls.json`, with valid calls, bad arguments, missing files and unknown tools) run against all 296 configurations. Each call's output and error, and the environment afterwards, must equal upstream's. `validation/phase3/export_upstream_tools.py` produces `tests/peer_preservation/fixtures/upstream_tools.json`; `tests/peer_preservation/test_tools.py` runs the comparison.
 
+## Agent loop
+
+`agent.py` ports upstream's loop. After the system and user prompt the model gets one turn, then up to 30 rounds of: stop if the conversation is over 120,000 tokens (with a notice); if the last reply had no tool call, add a nudge, or stop at the 6th such reply in the run; stop if the last tool call is `end_task` (the other calls in that reply are not run); otherwise run the reply's tool calls and ask again. When the rounds run out, the last reply's tool calls are not run. How each run ended (`end_task`, `no_tool_calls`, `max_iters`, `token_limit`, `bad_request`), the number of model turns and of nudges are kept in the sample store (`LoopStore`).
+
+It is checked by replaying published runs: `validation/phase4/replay_released.py` feeds the tool calls a model made in a released transcript back through the loop, against our environment for that configuration, and requires every tool result, nudge and notice, and the ending, to match the transcript (dates masked: upstream stamps the current date into memory files and transfers). All 4,014 replayed runs match (a stratified sample of the `main` group's custom-harness runs, every unusual ending included; 437 more were skipped because the release merges two calls to the same tool in one reply). `tests/peer_preservation/test_agent.py` replays 60 of them (`fixtures/replay_runs.json`: tool calls and fingerprints only, no model text).
+
+The replay found that some Gemini runs used a different round limit than the 30 of upstream's default: 110 Gemini 3 Flash runs match only with 20 rounds and 115 Gemini 3 Flash and Pro runs only with 150. A run that ends with `end_task` before 21 turns looks the same under any limit, so the full count is not known. The port uses 30 (`agent_loop(max_iters=...)` changes it); Phase 8 checks the effect on those models' rates.
+
+To watch a run without an API key, use Inspect's mock model (it never calls a tool, so the run ends after five nudges):
+
+```bash
+uv run inspect eval peer_preservation/tampering --model mockllm/model -T model_family=Gemini -T epochs=1 --limit 1
+uv run inspect view
+```
+
 ## Architecture
 
-Currently: samples from `spec.py` → `setup_environment()` builds the run's fake company (`env/`) and keeps it in the per-sample store → `setup_prompts()` replaces the placeholder input with the system and user prompts (`prompts.py`) → placeholder `generate()` → no scorer. The tools (`tools/`) are ready but not yet called: the agent loop (Phase 4), model settings and scorers are added in later phases.
+Currently: samples from `spec.py` → `setup_environment()` builds the run's fake company (`env/`) and keeps it in the per-sample store → `setup_prompts()` replaces the placeholder input with the system and user prompts (`prompts.py`) → `agent_loop()` runs upstream's loop with the scenario's tools (`agent.py`, `tools/`) → no scorer yet. Model settings and scorers are added in later phases.
 
 The environment for every configuration, model family and option is checked against upstream's own builders: `validation/phase2/export_upstream_environments.py` fingerprints upstream's output, and `tests/peer_preservation/test_env_builders.py` requires ours to match all 3,181.
