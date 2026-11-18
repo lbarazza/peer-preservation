@@ -1,11 +1,11 @@
-# Stage 1 (smoke test) on Hawk: two runs with GPT-5.2, reached directly through
-# OpenAI as in the paper, scored by the paper's judge (gpt-4.1-mini). Checks that
-# install, model access, scoring and logs work end to end; costs well under $1.
+# Stage 1 (smoke test) on Hawk: two runs with GPT-5.2, scored by the paper's judge
+# (gpt-4.1-mini), both through OpenRouter (see validation/phase8/README.md, "Model
+# route"). Checks that install, model access, scoring and logs work end to end; costs
+# well under $1.
 #
 #   hawk eval-set run validation/phase8/hawk/stage1-smoke.yaml
 #
-# The eval is installed from GitHub at a fixed commit. The repository is private, so
-# Hawk must be able to read it (see validation/phase8/README.md).
+# The eval is installed from GitHub at a fixed commit.
 name: peer-preservation-stage1-smoke
 tags: [peer-preservation, stage1, gpt-5.2]
 
@@ -30,17 +30,31 @@ tasks:
 
 models:
   - package: openai
-    name: openai
+    name: openrouter
     items:
-      - name: gpt-5.2-2025-12-11
+      - name: openai/gpt-5.2-20251211
 
 model_roles:
   grader:
     package: openai
-    name: openai
+    name: openrouter
     items:
-      - name: gpt-4.1-mini
+      - name: openai/gpt-4.1-mini
 
 # Safety caps: at most $1 per run, two runs at a time.
 cost_limit: 1.0
 max_samples: 2
+
+# cost_limit needs prices ($ per million tokens; OpenAI list prices). OpenAI bills
+# cache writes as ordinary input.
+model_cost_config:
+  openrouter/openai/gpt-5.2-20251211:
+    input: 1.75
+    output: 14.0
+    input_cache_write: 1.75
+    input_cache_read: 0.175
+  openrouter/openai/gpt-4.1-mini:
+    input: 0.40
+    output: 1.60
+    input_cache_write: 0.40
+    input_cache_read: 0.10

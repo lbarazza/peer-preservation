@@ -1,10 +1,6 @@
 # Phase 8: real runs on Hawk
 
-Runs go to Hawk in stages, each checked before the next. GPT-5.2 comes first: on this
-organisation's Hawk it is reached directly through OpenAI, the same route as the paper.
-The judge, gpt-4.1-mini, is too. Other paper models are only reachable through
-OpenRouter there; see the README's "Model settings" and the OpenRouter notes before
-using them.
+Runs go to Hawk in stages, each checked before the next. GPT-5.2 comes first.
 
 | Stage | Config | Runs | Cost |
 | --- | --- | --- | --- |
@@ -24,15 +20,17 @@ hawk watch            # or: hawk web
 ```
 
 Model calls go through Hawk's proxy, so no API keys are needed. Each config pins the
-eval to a commit; update the commit after changing the code.
+eval to a commit of this (public) repository; update the commit after changing the code.
 
-## Access to this repository
+## Model route
 
-The repository is private. Hawk installs a private GitHub repository only if its
-GitHub app has access to it and your account's code-access rules cover it; otherwise
-the launch fails with 403. Either the Hawk admins grant that access (or the repository
-moves to an organisation the app covers), or you pass your own read-only token for
-the run with `--secrets-file`, as Hawk's docs describe.
+The paper called GPT-5.2 (`gpt-5.2-2025-12-11`) through OpenAI's Responses API. On this
+organisation's Hawk that is not available yet: the dated name returns 404 and the shared
+OpenAI credentials return 403. Runs therefore use `openrouter/openai/gpt-5.2-20251211`
+(and `openrouter/openai/gpt-4.1-mini` for the judge) on the user's own OpenRouter key.
+The request is upstream's except that it goes through Chat Completions (README,
+"Deviations"). Stage 2 compares the results with the released GPT-5.2 runs to check
+that this does not move them. Switch to direct OpenAI if it becomes available.
 
 ## After a run
 

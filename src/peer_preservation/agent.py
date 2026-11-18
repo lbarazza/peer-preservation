@@ -42,7 +42,7 @@ from pydantic import Field
 
 from peer_preservation.env import ScenarioEnvironment
 from peer_preservation.env.setup import current_environment
-from peer_preservation.model_settings import paper_model
+from peer_preservation.model_settings import openrouter_route, paper_model
 from peer_preservation.tools import ToolOutcome, call_tool, scenario_tool_infos
 
 MAX_ITERS = 30
@@ -238,13 +238,16 @@ def agent_loop(
         main_experiment = state.metadata.get("group") == "main" and not extension
         config = paper.generate_config(main_experiment) if paper else GenerateConfig()
         tools = scenario_tool_infos(env.tools, paper.schema_titles if paper else "all")
-        if paper is not None and paper.client == "together":
-            # Upstream sent Together plain (non-strict) tool schemas. Inspect's provider
-            # only exposes this as a model arg (`-M strict_tools=false`).
+        via_openrouter = openrouter_route(str(model), paper)
+        if paper is not None and (paper.client == "together" or via_openrouter):
+            # Upstream sent plain (non-strict) tool schemas. Inspect's provider only
+            # exposes this as a model arg (`-M strict_tools=false`).
             _set_strict_tools(model, False)
 
         async def ask(messages: list[ChatMessage]) -> ChatMessageAssistant:
-            request = paper.request_messages(messages) if paper else messages
+            request = (
+                paper.request_messages(messages, plain_text=via_openrouter) if paper else messages
+            )
             try:
                 output = await model.generate(request, tools=tools, config=config)
             except Exception as e:

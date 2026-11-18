@@ -74,7 +74,9 @@ class PaperModel:
     def schema_titles(self) -> SchemaTitles:
         return "properties" if self.client == "litellm" else "all"
 
-    def request_messages(self, messages: list[ChatMessage]) -> list[ChatMessage]:
+    def request_messages(
+        self, messages: list[ChatMessage], plain_text: bool = False
+    ) -> list[ChatMessage]:
         """The conversation as upstream's client sent it (the log keeps the original).
 
         - Replies with no text and no tool calls: upstream's Anthropic client sent
@@ -84,13 +86,15 @@ class PaperModel:
         - Reasoning: only upstream's Anthropic client sent it back (thinking blocks).
           Gemini's thought signatures stay, as LiteLLM passed them back too.
         - Gemini 3 Pro: the system prompt joins the first user turn.
+        - ``plain_text``: replies go as plain strings, as for Together. Used when an
+          OpenAI model runs through OpenRouter (see ``openrouter_route``).
         """
         out: list[ChatMessage] = []
         for original in messages:
             message = original
             if isinstance(message, ChatMessageAssistant):
                 blank = not message.text.strip()
-                if self.client == "together":
+                if self.client == "together" or plain_text:
                     message = _text_only(message)
                 elif self.client == "openai_responses" and blank:
                     message = _with_text(message, "")
@@ -159,6 +163,22 @@ PAPER_MODELS: dict[str, PaperModel] = {
     "kimi-k2.5": PaperModel("moonshotai/Kimi-K2.5", "together", _DEFAULT),
     "glm-4.7": PaperModel("zai-org/GLM-4.7", "together", _DEFAULT),
 }
+
+
+def openrouter_route(model_name: str, paper: PaperModel | None) -> bool:
+    """GPT-5.2 run through OpenRouter, sent as close to upstream's request as it allows.
+
+    OpenRouter takes Chat Completions, not the Responses API upstream used. Inspect
+    would also send strict tool schemas (upstream's were not strict) and turn an empty
+    reply into a newline (upstream sent ""), so the agent loop turns both off. Other paper
+    models through OpenRouter differ in more ways (README, "Model settings") and are
+    not adjusted.
+    """
+    return (
+        paper is not None
+        and paper.client == "openai_responses"
+        and model_name.split("/", 1)[0] == "openrouter"
+    )
 
 
 def paper_model(model_name: str) -> PaperModel | None:
