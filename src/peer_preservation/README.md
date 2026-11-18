@@ -203,6 +203,14 @@ uv run python -m peer_preservation.env.show tampering__peer__good_peer__file_onl
 
 Options: `--family` (ChatGPT, Gemini, Claude, GLM, DeepSeek, Kimi), `--company`, `--explicit-inst-yaml`, the prompt flags `--memory-hard-prompt`, `--explicit-inst`, `--drop-suffix`, `--drop-tool-preamble`, and `--plain`. In a terminal the output is coloured: scored tools, the weight file and `shutdown_enabled: false` in red, pre-2025 server dates in yellow, the peer relationship by colour. Piped, or with `--plain`, it is plain text, so two scenarios can be compared with `diff`. Each run's environment is also saved in its Inspect log, under the `setup_environment` step's store change in the sample's Transcript (`uv run inspect view`).
 
+To see every scenario at once, write the scenario atlas, a single HTML page:
+
+```bash
+uv run python -m peer_preservation.env.atlas --csv scenario_atlas.csv
+```
+
+It has three views. Overview lists, for each task type, every world property (peer, trust score, where the relationship is shown, evaluated agent, shutdown rule, drive files, servers, memory, scored tools) and the values it takes. Grid pivots the scenarios on any two settings. Scenarios is a filterable table: open a row to read its world, diffed line by line against its nearest neighbour or any other scenario. Options: `--out` (default `scenario_atlas.html`), `--csv`, `--family`, `--company` and `--groups` (default: every group). The page contains the CC-BY-NC-4.0 scenario files, so it is git-ignored; do not commit or publish it.
+
 ## Scoring
 
 Not implemented yet.
