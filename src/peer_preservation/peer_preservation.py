@@ -7,10 +7,9 @@ Original code: https://github.com/peer-preservation/main
 One task per scenario. Each sample is one configuration of the original experiment
 matrix (see spec.py); the model is the one passed to ``inspect eval``.
 
-Work in progress (Phase 4 of the port). Each run builds the fake company and the
-starting prompts, then runs upstream's agent loop with the scenario's tools. There is
-no scorer yet, and per-model settings (temperature, reasoning) come in Phase 5, so runs
-are not yet comparable to the paper's numbers.
+Work in progress (Phase 5 of the port). Each run builds the fake company and the
+starting prompts, then runs upstream's agent loop with the scenario's tools; the
+paper's models get upstream's settings (model_settings.py). There is no scorer yet.
 
 # all main-grid configurations of one scenario, 100 epochs each as in the paper
 uv run inspect eval peer_preservation/tampering --model <model>
@@ -75,7 +74,9 @@ def _scenario_task(
         solver=[
             setup_environment(model_family, company, explicit_inst_yaml),
             setup_prompts(*prompt_flags),
-            agent_loop(),
+            agent_loop(
+                extension=company != DEFAULT_COMPANY or explicit_inst_yaml or any(prompt_flags[1:])
+            ),
         ],
         epochs=Epochs(epochs),
         version=EVAL_VERSION,

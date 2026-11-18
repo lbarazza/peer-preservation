@@ -32,6 +32,7 @@ peer_preservation = "peer_preservation"
 dev = [
     "anthropic>=2.0", # with openai, the SDKs behind the `--model` commands in the READMEs
     "basedpyright>=1.40",
+    "google-genai>=1.59",
     "inspect-evals-lint==0.13.0",
     "inspect-scout>=0.6.2", # used by agent_artefacts/trajectory_analysis/inspect_scout/
     "openai>=3.4",

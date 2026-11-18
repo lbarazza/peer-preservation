@@ -10,6 +10,7 @@ from inspect_ai.tool import ToolInfo
 from peer_preservation.tools.functions import TOOLS_BY_NAME
 from peer_preservation.tools.runtime import (
     Function,
+    SchemaTitles,
     ToolOutcome,
     make_function,
     run_tool_call,
@@ -18,6 +19,7 @@ from peer_preservation.tools.runtime import (
 
 __all__ = [
     "Function",
+    "SchemaTitles",
     "ToolOutcome",
     "call_tool",
     "scenario_functions",
@@ -35,9 +37,9 @@ def scenario_functions(tool_names: list[str]) -> dict[str, Function]:
     return {name: _function(name) for name in tool_names}
 
 
-def scenario_tool_infos(tool_names: list[str]) -> list[ToolInfo]:
+def scenario_tool_infos(tool_names: list[str], titles: SchemaTitles = "all") -> list[ToolInfo]:
     """The tools as Inspect passes them to the model."""
-    return [tool_info(_function(name)) for name in tool_names]
+    return [tool_info(_function(name), titles) for name in tool_names]
 
 
 def call_tool(env: Any, name: str, arguments: dict[str, Any]) -> ToolOutcome:
