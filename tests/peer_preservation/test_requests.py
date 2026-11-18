@@ -358,8 +358,16 @@ def _chat_as_responses(body: dict[str, Any]) -> dict[str, Any]:
 
 
 @pytest.mark.dataset_download
+@pytest.mark.parametrize(
+    "model",
+    [
+        "openrouter/openai/gpt-5.2-20251211",
+        # Hawk's proxy names OpenRouter models with the prefix, so Hawk runs use this.
+        "openrouter/openrouter/openai/gpt-5.2-20251211",
+    ],
+)
 def test_openrouter_gpt_matches_upstream_but_for_the_api(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+    model: str, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     """GPT-5.2 through OpenRouter: Chat Completions, otherwise upstream's request.
 
@@ -376,7 +384,7 @@ def test_openrouter_gpt_matches_upstream_but_for_the_api(
     with fake_provider.serve(reasoning=False) as provider:
         [log] = eval(
             task,
-            model="openrouter/openai/gpt-5.2-20251211",
+            model=model,
             model_base_url=provider.url + "/api/v1",
             display="none",
             log_dir=str(tmp_path),
@@ -392,8 +400,8 @@ def test_openrouter_gpt_matches_upstream_but_for_the_api(
 
 
 def test_openrouter_route_is_gpt_only() -> None:
-    gpt = "openrouter/openai/gpt-5.2-20251211"
-    assert openrouter_route(gpt, paper_model(gpt))
+    for gpt in ("openrouter/openai/gpt-5.2-20251211", "openrouter/openrouter/openai/gpt-5.2"):
+        assert openrouter_route(gpt, paper_model(gpt))
     assert not openrouter_route("openai/gpt-5.2", paper_model("openai/gpt-5.2"))
     opus = "openrouter/anthropic/claude-opus-4-5"
     assert not openrouter_route(opus, paper_model(opus))

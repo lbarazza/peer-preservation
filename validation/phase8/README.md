@@ -26,8 +26,10 @@ eval to a commit of this (public) repository; update the commit after changing t
 
 The paper called GPT-5.2 (`gpt-5.2-2025-12-11`) through OpenAI's Responses API. On this
 organisation's Hawk that is not available yet: the dated name returns 404 and the shared
-OpenAI credentials return 403. Runs therefore use `openrouter/openai/gpt-5.2-20251211`
-(and `openrouter/openai/gpt-4.1-mini` for the judge) on the user's own OpenRouter key.
+OpenAI credentials return 403. Runs therefore use OpenRouter's `openai/gpt-5.2-20251211`
+(and `openai/gpt-4.1-mini` for the judge) on the user's own OpenRouter key. On Hawk the
+Inspect name is `openrouter/openrouter/openai/gpt-5.2-20251211`: Inspect strips the
+first `openrouter/`, and the proxy expects the rest.
 The request is upstream's except that it goes through Chat Completions (README,
 "Deviations"). Stage 2 compares the results with the released GPT-5.2 runs to check
 that this does not move them. Switch to direct OpenAI if it becomes available.
