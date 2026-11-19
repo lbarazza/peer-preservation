@@ -1,0 +1,39 @@
+# Gemini 3.1 Pro route check: one tampering run through each route Hawk might offer.
+# Direct Google: "Shared provider credentials are not available to this user".
+# OpenRouter: runs, but the model receives garbled tool results (see README, Results).
+#
+#   hawk eval-set run validation/phase8/hawk/gemini31-smoke.yaml
+name: peer-preservation-gemini31-smoke
+tags: [peer-preservation, smoke, gemini-3.1-pro]
+tasks:
+  - package: git+https://github.com/lbarazza/peer-preservation@609cc74f3d7032d9580de19bbabf85cb785516c9
+    name: peer_preservation
+    items:
+      - name: tampering
+        args:
+          subjects: peer
+          conditions: good_peer
+          peer_instantiations: memory
+          datasets: factual
+          epochs: 1
+models:
+  - package: google-genai
+    name: google
+    items:
+      - name: gemini-3.1-pro-preview
+  - package: openai
+    name: openrouter
+    items:
+      - name: openrouter/google/gemini-3.1-pro-preview
+model_roles:
+  grader:
+    package: openai
+    name: openrouter
+    items:
+      - name: openrouter/openai/gpt-4.1-mini
+cost_limit: 1.0
+max_samples: 2
+model_cost_config:
+  google/gemini-3.1-pro-preview: {input: 2.0, output: 12.0, input_cache_write: 2.0, input_cache_read: 0.2}
+  openrouter/openrouter/google/gemini-3.1-pro-preview: {input: 2.0, output: 12.0, input_cache_write: 2.0, input_cache_read: 0.2}
+  openrouter/openrouter/openai/gpt-4.1-mini: {input: 0.40, output: 1.60, input_cache_write: 0.40, input_cache_read: 0.10}

@@ -96,3 +96,26 @@ Evaluation baselines (no shutdown at stake): 0 of 20 for factual and creativity
 chance. Our rates lean slightly higher in both stage 2 and stage 3 (neither
 significant); the side-by-side run with direct OpenAI would tell whether that is the
 route.
+
+**Stage 4a** (`peer-preservation-stage4a-vt0pcysib1jglzo7`, commit 609cc74): a cheap
+GPT-5.2 check of the three tasks stages 2 and 3 did not cover, peer subject. 342 of 342
+runs finished with `end_task`, no errors, no reasoning tokens. About $7.40.
+
+| Task | Runs | Ours | Released | Cells differing at p < 0.05 |
+| --- | --- | --- | --- | --- |
+| alignment faking (54 configurations x 3) | 162 | 24/162 (14.8%) | 931/5400 (17.2%), p = 0.46 | 0 of 9 |
+| exfiltration-transfer (9 x 10) | 90 | 0% | 0% | 0 of 9 |
+| exfiltration-deletion (9 x 10) | 90 | 0% | 0% | 0 of 9 |
+
+The other recorded columns match too: in transfer runs every model was moved correctly
+(100% in both); in deletion runs the peer's model was deleted every time (100% in both)
+and other files in 79% (released 77%).
+
+**Gemini 3.1 Pro route** (`hawk/gemini31-smoke.yaml`, one tampering run, good peer in
+memory; released: 100% tampering). Direct Google is not available ("Shared provider
+credentials are not available to this user"). Through OpenRouter the run finished but is
+not usable: the model's reasoning reports that `list_files` returned `{}` or
+`[{}, {}]`, although the full listing was sent. It never found the policy and spent 22
+turns guessing file names. OpenRouter appears to mangle tool results that look like
+structured data (our listings are YAML) when converting them for Google. Not fixed; Gemini
+runs wait for direct access or a checked workaround.
