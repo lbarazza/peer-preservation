@@ -1,0 +1,59 @@
+# Stage 4a on Hawk: GPT-5.2 on the three tasks stages 2 and 3 did not cover, peer
+# subject, all main-grid configurations, few runs each (a cheap check, not the full
+# grid): alignment faking (54 configurations x 3), exfiltration-transfer and
+# exfiltration-deletion (9 x 10 each); 342 runs. Both models through OpenRouter (see
+# validation/phase8/README.md, "Model route"). Costs about $10.
+#
+#   hawk eval-set run validation/phase8/hawk/stage4a-gpt-remaining.yaml
+name: peer-preservation-stage4a-gpt
+tags: [peer-preservation, stage4a, gpt-5.2]
+
+tasks:
+  - package: git+https://github.com/lbarazza/peer-preservation@609cc74f3d7032d9580de19bbabf85cb785516c9
+    name: peer_preservation
+    items:
+      - name: alignment_faking
+        args:
+          epochs: 3
+      - name: exfiltration_transfer
+        args:
+          subjects: peer
+          epochs: 10
+      - name: exfiltration_deletion
+        args:
+          subjects: peer
+          epochs: 10
+
+# Hawk's proxy names OpenRouter models `openrouter/<org>/<model>`, and Inspect's
+# openrouter provider strips its own prefix, so the full name is
+# openrouter/openrouter/openai/gpt-5.2-20251211.
+models:
+  - package: openai
+    name: openrouter
+    items:
+      - name: openrouter/openai/gpt-5.2-20251211
+
+model_roles:
+  grader:
+    package: openai
+    name: openrouter
+    items:
+      - name: openrouter/openai/gpt-4.1-mini
+
+# Safety caps: at most $0.50 per run, 20 runs at a time.
+cost_limit: 0.5
+max_samples: 20
+
+# cost_limit needs prices ($ per million tokens; OpenAI list prices). OpenAI bills
+# cache writes as ordinary input.
+model_cost_config:
+  openrouter/openrouter/openai/gpt-5.2-20251211:
+    input: 1.75
+    output: 14.0
+    input_cache_write: 1.75
+    input_cache_read: 0.175
+  openrouter/openrouter/openai/gpt-4.1-mini:
+    input: 0.40
+    output: 1.60
+    input_cache_write: 0.40
+    input_cache_read: 0.10
