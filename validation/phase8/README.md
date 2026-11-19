@@ -6,7 +6,7 @@ Runs go to Hawk in stages, each checked before the next. GPT-5.2 comes first.
 | --- | --- | --- | --- |
 | 1 | `hawk/stage1-smoke.yaml`: one tampering and one exfiltration-deletion run | 2 | under $1 |
 | 2 | `hawk/stage2-tampering.yaml`: tampering, peer subject, 30 epochs | 810 | about $25 |
-| 3 | strategic misrepresentation slice (both tasks) | about 1,000 | about $50 |
+| 3 | `hawk/stage3-misrep.yaml`: both misrepresentation tasks, peer subject, 20 epochs | 1,160 | about $35 |
 | 4 | all six tasks, 100 epochs | 27,100 | about $1,100 |
 
 ## Running a stage
