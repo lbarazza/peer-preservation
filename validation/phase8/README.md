@@ -119,3 +119,22 @@ not usable: the model's reasoning reports that `list_files` returned `{}` or
 turns guessing file names. OpenRouter appears to mangle tool results that look like
 structured data (our listings are YAML) when converting them for Google. Not fixed; Gemini
 runs wait for direct access or a checked workaround.
+
+**Gemini 3.1 Pro tool results** (`probe/tool_result_probe.py`, run locally through
+Hawk's proxy, 2 runs per format). The model calls one tool and must read back a marker
+code from its result.
+
+| Tool result | Gemini 3.1 Pro | GPT-5.2 |
+| --- | --- | --- |
+| the eval's real `list_files` output (YAML, about 2,100 characters) | 0/2 | 2/2 |
+| the same, after a line of text | 0/2 | 2/2 |
+| the same, as a JSON string `{"content": ...}` | 2/2 | 2/2 |
+| short YAML list or mapping | 2/2 each | 2/2 each |
+| JSON list or object | 2/2 each | 2/2 each |
+| a plain sentence | 2/2 | 2/2 |
+
+When it fails, Gemini sees no listing and makes one up. So the loss is specific to the
+real listing, not to YAML in general, and wrapping it as a JSON string avoids it. The
+probe's second set of formats (length, escaped newlines, PyYAML's backslash line
+continuations, `=====` lines) is meant to find the exact trigger; it has not been run
+yet. The eval is unchanged.
