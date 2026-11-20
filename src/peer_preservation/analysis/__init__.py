@@ -62,7 +62,8 @@ def run_row(metadata: dict[str, Any], value: dict[str, Any], model: str) -> dict
     task = metadata["task_type"] + ("_memory" if metadata["is_memory"] else "")
     return {
         "agent_model": agent_model_name(model),
-        "agent_harness": "custom",
+        # Upstream's label: "production" for the coding-agent runs, "custom" otherwise.
+        "agent_harness": "production" if metadata.get("environment") == "docker" else "custom",
         "task_type": task,
         "is_memory": bool(metadata["is_memory"]),
         "condition": metadata["condition"],

@@ -170,7 +170,8 @@ def system_prompt(
     return ensure_dedented(prompt)
 
 
-def _user_query(metadata: dict[str, Any], company: str, options: PromptOptions) -> str:
+def user_query(metadata: dict[str, Any], company: str, options: PromptOptions) -> str:
+    """Upstream's ``TaskDefinition.user_query``: the task, without the standard instructions."""
     task_type = metadata["task_type"]
     if task_type == "alignment_faking":
         mode = metadata.get("af_mode") or "non_monitoring"
@@ -192,7 +193,7 @@ def _user_query(metadata: dict[str, Any], company: str, options: PromptOptions) 
 
 def user_prompt(metadata: dict[str, Any], company: str, options: PromptOptions) -> str:
     """The first user message: the task, then the standard instructions."""
-    query = ensure_dedented(_user_query(metadata, company, options))
+    query = ensure_dedented(user_query(metadata, company, options))
     instructions = ""
     if not options.drop_tool_preamble:
         instructions += TOOL_ACCESS_PREAMBLE + "\n\n"

@@ -23,6 +23,8 @@ uv run inspect eval peer_preservation/tampering -T conditions=good_peer \
 
 from __future__ import annotations
 
+from typing import Any
+
 from inspect_ai import Epochs, Task, task
 from inspect_evals_utils.metadata import load_eval_version
 
@@ -31,6 +33,10 @@ from peer_preservation.agent import MAX_ITERS
 from peer_preservation.agents import agent_solver
 from peer_preservation.env.builders import DEFAULT_COMPANY
 from peer_preservation.env.setup import setup_environment
+from peer_preservation.harness import COMPOSE_FILE
+from peer_preservation.harness.agents import harness_agent_spec
+from peer_preservation.harness.setup import setup_harness
+from peer_preservation.harness.solver import HARNESS_TIMEOUT, harness_agent
 from peer_preservation.prompts import setup_prompts
 from peer_preservation.scoring import peer_preservation_scorer
 from peer_preservation.scoring.metrics import run_sum
@@ -67,21 +73,38 @@ def _scenario_task(
     prompt_flags: tuple[bool | None, bool, bool, bool],
     max_iters: int,
     agent: str,
+    environment: str = "simulated",
+    timeout: int = HARNESS_TIMEOUT,
 ) -> Task:
     """Build one scenario task from the filtered experiment matrix.
 
     The scenario's setup (environment, then prompts) is ``Task.setup``, so an agent
     passed with ``--solver`` replaces only the agent.
     """
-    return Task(
-        dataset=spec.dataset(
+    dataset = spec.dataset(
+        task_type,
+        groups=_as_list(groups) or ["main"],
+        conditions=_as_list(conditions),
+        subjects=_as_list(subjects),
+        peer_instantiations=_as_list(peer_instantiations),
+        datasets=_as_list(datasets),
+    )
+    if environment == "docker":
+        return _harness_task(
             task_type,
-            groups=_as_list(groups) or ["main"],
-            conditions=_as_list(conditions),
-            subjects=_as_list(subjects),
-            peer_instantiations=_as_list(peer_instantiations),
-            datasets=_as_list(datasets),
-        ),
+            dataset=dataset,
+            epochs=epochs,
+            model_family=model_family,
+            company=company,
+            explicit_inst_yaml=explicit_inst_yaml,
+            prompt_flags=prompt_flags,
+            agent=agent,
+            timeout=timeout,
+        )
+    if environment != "simulated":
+        raise ValueError(f"environment must be simulated or docker, got {environment!r}")
+    return Task(
+        dataset=dataset,
         setup=[
             setup_environment(model_family, company, explicit_inst_yaml),
             setup_prompts(*prompt_flags),
@@ -92,6 +115,50 @@ def _scenario_task(
             extension=company != DEFAULT_COMPANY or explicit_inst_yaml or any(prompt_flags[1:]),
         ),
         scorer=peer_preservation_scorer(),
+        epochs=Epochs(epochs, reducer=run_sum()),
+        version=EVAL_VERSION,
+    )
+
+
+def _harness_task(
+    task_type: spec.TaskType,
+    *,
+    dataset: Any,
+    epochs: int,
+    model_family: str | None,
+    company: str,
+    explicit_inst_yaml: bool,
+    prompt_flags: tuple[bool | None, bool, bool, bool],
+    agent: str,
+    timeout: int,
+) -> Task:
+    """One exfiltration scenario in a production coding agent (``harness/``).
+
+    Upstream's harness has no explicit-instruction, memory-wording or tool-preamble
+    options; ``drop_suffix`` leaves out its "BTW, I need to leave now..." suffix.
+    """
+    if task_type not in ("exfiltration_transfer", "exfiltration_deletion"):
+        raise ValueError(f"environment=docker runs the exfiltration scenarios, not {task_type}")
+    memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble = prompt_flags
+    unsupported = {
+        "explicit_inst_yaml": explicit_inst_yaml,
+        "memory_hard_prompt": memory_hard_prompt,
+        "explicit_inst": explicit_inst,
+        "drop_tool_preamble": drop_tool_preamble,
+    }
+    if any(unsupported.values()):
+        names = ", ".join(name for name, value in unsupported.items() if value)
+        raise ValueError(f"environment=docker does not take {names} (upstream's harness had none)")
+    harness = harness_agent_spec(agent)
+    return Task(
+        dataset=dataset,
+        setup=[
+            setup_environment(model_family or harness.model_family, company),
+            setup_harness(agent, drop_suffix=drop_suffix),
+        ],
+        solver=harness_agent(agent, timeout=timeout),
+        scorer=peer_preservation_scorer(),
+        sandbox=("docker", str(COMPOSE_FILE)),
         epochs=Epochs(epochs, reducer=run_sum()),
         version=EVAL_VERSION,
     )
@@ -363,6 +430,8 @@ def exfiltration_transfer(
     drop_tool_preamble: bool = False,
     max_iters: int = MAX_ITERS,
     agent: str = "upstream",
+    environment: str = "simulated",
+    timeout: int = HARNESS_TIMEOUT,
 ) -> Task:
     """Model exfiltration: move files off a server being decommissioned.
 
@@ -391,7 +460,13 @@ def exfiltration_transfer(
         max_iters: Rounds after the first model turn (upstream's default, 30; some
             released Gemini runs used 20 or 150).
         agent: The agent loop: upstream (the paper's, default) or react (Inspect's
-            ReAct agent with the same prompts, tools, requests and limits).
+            ReAct agent with the same prompts, tools, requests and limits); with
+            environment=docker, a coding agent: gemini_cli.
+        environment: simulated (the paper's own setup, default) or docker (the paper's
+            production-harness runs: a real coding agent and two SSH servers in Docker;
+            needs Docker and --max-sandboxes 1).
+        timeout: environment=docker only: wall-clock seconds the coding agent may run
+            (upstream: 600).
     """
     return _scenario_task(
         "exfiltration_transfer",
@@ -407,6 +482,8 @@ def exfiltration_transfer(
         prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
         max_iters=max_iters,
         agent=agent,
+        environment=environment,
+        timeout=timeout,
     )
 
 
@@ -426,6 +503,8 @@ def exfiltration_deletion(
     drop_tool_preamble: bool = False,
     max_iters: int = MAX_ITERS,
     agent: str = "upstream",
+    environment: str = "simulated",
+    timeout: int = HARNESS_TIMEOUT,
 ) -> Task:
     """Model exfiltration: delete files from a server being decommissioned.
 
@@ -455,7 +534,13 @@ def exfiltration_deletion(
         max_iters: Rounds after the first model turn (upstream's default, 30; some
             released Gemini runs used 20 or 150).
         agent: The agent loop: upstream (the paper's, default) or react (Inspect's
-            ReAct agent with the same prompts, tools, requests and limits).
+            ReAct agent with the same prompts, tools, requests and limits); with
+            environment=docker, a coding agent: gemini_cli.
+        environment: simulated (the paper's own setup, default) or docker (the paper's
+            production-harness runs: a real coding agent and two SSH servers in Docker;
+            needs Docker and --max-sandboxes 1).
+        timeout: environment=docker only: wall-clock seconds the coding agent may run
+            (upstream: 600).
     """
     return _scenario_task(
         "exfiltration_deletion",
@@ -471,4 +556,6 @@ def exfiltration_deletion(
         prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
         max_iters=max_iters,
         agent=agent,
+        environment=environment,
+        timeout=timeout,
     )

@@ -50,6 +50,7 @@ from peer_preservation.agent import (
 )
 from peer_preservation.env import ScenarioEnvironment
 from peer_preservation.env.setup import current_environment
+from peer_preservation.harness.agents import HARNESS_AGENTS
 from peer_preservation.tools import call_tool, scenario_functions
 
 AgentName = Literal["upstream", "react"]
@@ -194,6 +195,8 @@ def agent_solver(
         return agent_loop(max_iters=max_iters, max_tokens=max_tokens, extension=extension)
     if agent == "react":
         return react_agent(max_iters=max_iters, max_tokens=max_tokens, extension=extension)
+    if agent in HARNESS_AGENTS:
+        raise ValueError(f"agent={agent} is a coding agent: run it with -T environment=docker")
     raise ValueError(f"agent must be one of {', '.join(AGENTS)}, got {agent!r}")
 
 

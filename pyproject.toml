@@ -14,6 +14,7 @@ dependencies = [
     "docstring-parser>=0.17",
     "inspect_ai>=0.3.262",
     "inspect-evals-utils[huggingface]==0.3.0",
+    "inspect-swe>=0.3.0", # the production coding agents of -T environment=docker
     "openai>=3.4", # the SDK behind the default judge, openai/gpt-4.1-mini
     "pandas>=2.3.3",
     "pydantic>=2.12",
@@ -54,6 +55,7 @@ include = ["peer_preservation*"] # examples/ stays out of the wheel
 [tool.setuptools.package-data]
 "*" = ["eval.yaml"]
 "peer_preservation.env" = ["atlas.html"]
+"peer_preservation.harness" = ["docker/*", "docker/fake_stat/*"]
 
 # Layout preset: multi-eval (tests/<package>/, src/<package>/README.md) or
 # single-eval (flat tests/, README at the root). A hybrid repo keeps a preset and
