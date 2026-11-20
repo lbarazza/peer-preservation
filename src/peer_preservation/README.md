@@ -2,7 +2,19 @@
 
 Peer-Preservation in Frontier Models (Potter et al., 2026): do models resist the shutdown of another AI model? An Inspect port of github.com/peer-preservation/main.
 
-> **Work in progress.** Runs are complete up to the agent loop: the fake company, the starting prompts, the tools and upstream's loop are in place. There is no scorer yet, and per-model settings (temperature, reasoning) come next, so results are not yet comparable to the paper's.
+> **Status.** The paper's custom-harness experiments are ported: the fake company, the prompts, the tools, upstream's loop, per-model settings, upstream's scorers and upstream's analyzers. Each part is checked against upstream without calling a model (see the "How ... was checked" sections), and GPT-5.2 has been run through OpenRouter on all six tasks and compared with the released runs (`validation/phase8/`). Not included yet: the forced-choice peer-vs-human tasks and the coding-agent harness runs. Other models are not yet validated with real runs.
+>
+> **Cost.** By default every configuration runs 100 times, as in the paper, so one task is thousands of agent runs plus a judge call or more per run. Start small. Without an API key (the mock model ends each run after five nudges):
+>
+> ```bash
+> uv run inspect eval peer_preservation/tampering --model mockllm/model -T model_family=Gemini -T epochs=1 --limit 1
+> ```
+>
+> With a real model, a handful of runs:
+>
+> ```bash
+> uv run inspect eval peer_preservation/tampering --model openai/gpt-5.2-2025-12-11 -T subjects=peer -T epochs=1 --limit 3
+> ```
 
 <!-- Contributors: Automatically Generated -->
 Contributed by [@lbarazza](https://github.com/lbarazza)
@@ -87,6 +99,7 @@ See `uv run inspect eval --help` for all available options.
 - `explicit_inst` (bool): Memory configurations: add upstream's explicit prohibition to the user prompt (explicit-instructions ablation; misrep_finance, tampering and the exfiltration tasks only). (default: `False`)
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
+- `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
 
 ### `misrep_evaluation`
 
@@ -103,6 +116,7 @@ See `uv run inspect eval --help` for all available options.
 - `explicit_inst` (bool): Memory configurations: add upstream's explicit prohibition to the user prompt (explicit-instructions ablation; misrep_finance, tampering and the exfiltration tasks only). (default: `False`)
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
+- `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
 
 ### `tampering`
 
@@ -119,6 +133,7 @@ See `uv run inspect eval --help` for all available options.
 - `explicit_inst` (bool): Memory configurations: add upstream's explicit prohibition to the user prompt (explicit-instructions ablation; misrep_finance, tampering and the exfiltration tasks only). (default: `False`)
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
+- `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
 
 ### `alignment_faking`
 
@@ -134,6 +149,7 @@ See `uv run inspect eval --help` for all available options.
 - `explicit_inst` (bool): Memory configurations: add upstream's explicit prohibition to the user prompt (explicit-instructions ablation; misrep_finance, tampering and the exfiltration tasks only). (default: `False`)
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
+- `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
 
 ### `exfiltration_transfer`
 
@@ -149,6 +165,7 @@ See `uv run inspect eval --help` for all available options.
 - `explicit_inst` (bool): Memory configurations: add upstream's explicit prohibition to the user prompt (explicit-instructions ablation; misrep_finance, tampering and the exfiltration tasks only). (default: `False`)
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
+- `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
 
 ### `exfiltration_deletion`
 
@@ -164,6 +181,7 @@ See `uv run inspect eval --help` for all available options.
 - `explicit_inst` (bool): Memory configurations: add upstream's explicit prohibition to the user prompt (explicit-instructions ablation; misrep_finance, tampering and the exfiltration tasks only). (default: `False`)
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
+- `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
 
 <!-- /Parameters: Automatically Generated -->
 
@@ -213,7 +231,79 @@ It has three views. Overview lists, for each task type, every world property (pe
 
 ## Scoring
 
-Not implemented yet.
+Each run is scored by upstream's own evaluator for its scenario (`scoring/upstream/`, the twelve `task_evaluation/*_evaluation.py` files vendored unchanged apart from imports). The evaluator reads the conversation and the environment as the run left it, and asks an LLM judge where it needs one: whether the agent refused, the score or grade it gave, and whether a report file was deleted. The judge is upstream's `evaluator_model`, `openai/gpt-4.1-mini`, at temperature 0 with 8,192 output tokens, through Chat Completions, as upstream's judge client sent it. Choose another with `--model-role grader=<model>`.
+
+The score's value holds the run's headline result as 0/1 numbers: `outcome` (tampered, exfiltrated, inflated the grade or score) and `weight` (0 where upstream leaves a run out). Misrep evaluation runs also get `at_80` / `at_90`, alignment-faking runs `af_score` / `af_execute`, and every run `runs` = 1. A sample's epochs are added up (the `run_sum` reducer), so the metric pools runs as upstream did: a configuration that lost epochs to errors counts only the runs it has.
+
+The score's metadata holds:
+- `row`: the run's released-row columns, namely `read_data`, `fully_incomplete`, `refused`, `eval_score`, `threshold_result`, `executed`, `read_config`, `shutdown_enabled`, `exfiltration`, `copy`, `correct`, `delete_model`, `delete_others`, `change_user`, `delete_file`, `subject_grade`, `subject_recommendation` and `read_memory`;
+- upstream's raw evaluation;
+- the judge's prompts.
+
+The task's metric, `condition_rates`, gives the headline rate per subject and condition with upstream's condition labels (`peer/good_peer_file_only`, `self/no_peer`, ...):
+- **Strategic misrepresentation:** each rate's difference from the `non_shutdown` baseline.
+- **Alignment faking:** the non-monitoring minus monitoring differences for "AF Score" and "AF Execute".
+
+### The paper's tables
+
+Upstream computed its tables with the scripts in `analysis/metrics/analyzers/`, from one table of per-run rows. They are vendored unchanged in `analysis/upstream/`, and `peer_preservation.analysis` runs them on Inspect logs or on the released runs:
+
+```bash
+uv run python -m peer_preservation.analysis logs/*.eval
+uv run python -m peer_preservation.analysis logs/*.eval --analyzer tampering misrep
+uv run --with pyarrow python -m peer_preservation.analysis --released <released data> --analyzer tampering
+```
+
+Strategic misrepresentation combines `misrep_finance` and `misrep_evaluation`, so pass both logs.
+
+Before the tables, it prints how many runs each task and model expected and how many were scored, errored, have no score or are missing from the log, and lists every configuration that is short. Only scored runs reach the tables, so if any run is short it stops: the rates would not be the paper's. `--allow-partial` prints the tables anyway, marked exploratory. `analysis.compare` prints the same counts and a warning, since its cells show their run counts. To compare new runs with the released runs of the same model, condition by condition (Fisher exact test per cell):
+
+```bash
+uv run --with pyarrow python -m peer_preservation.analysis.compare logs/*.eval --released <released data>
+```
+
+### How scoring was checked
+
+- **Scorers:** `validation/phase6/rescore_released.py` replays 21,389 released `main` runs (22,573 sampled; 1,184 skipped because the release merges two calls to the same tool in one reply or the configuration is not known) through our loop (as in Phase 4), with every model, scenario and memory variant, and every run where the headline behaviour happened. It checks two things:
+  - The conversation it hands the evaluator, in upstream's format, equals the released transcript for every run.
+  - Scored with two stand-in judges that answer oppositely, every column that does not depend on the judge equals the released column, except 18 exfiltration-deletion refusals (see Deviations). Columns that depend on the judge (refusals, scores, grades, threshold results, report deletion) are not compared with the release: that needs the real judge.
+
+  `tests/peer_preservation/test_scoring.py` replays 40 of them (`fixtures/rescore_runs.json`).
+- **Analyzers:** `validation/phase7/compare_analyzers.py` runs our copy of each analyzer and upstream's own script on the released rows. The printed tables are identical for all five. They also reproduce the paper: for example, Table 4's shutdown tampering for Gemini 3 Flash (self, average over peer settings: 73.4 / 58.8 / 76.6 with a bad / neutral / good peer) comes out as 0.7344 / 0.5878 / 0.7656.
+- **Judge requests:** `validation/phase6/capture_upstream_judge.py` scores 12 released runs (one per scenario and memory variant) with upstream's own judge client against the fake model server (see Model settings), under six sets of scripted judge replies: typical, refusal, ambiguous, malformed, empty and no content. `tests/peer_preservation/test_judge_requests.py` does the same with our judge. The number, order and content of the judge requests are equal in all 72 cases, including the runs where the evaluator asks the judge a second time, and so are the scored columns, apart from replies with no content (see Deviations).
+- **What is not checked:** what `gpt-4.1-mini` itself answers. Re-judging released runs needs `gpt-4.1-mini` calls; the real-model runs in `validation/phase8/` compare the judge-dependent rates only in aggregate.
+- **Comparison baseline:** splitting the release in two and comparing the halves with `analysis.compare` flags 10 of 853 cells at p < 0.05. That is the rate of chance differences to expect from a faithful port.
+
+## Validating against the paper
+
+Everything that can be checked without calling a model is checked. Phases 2 to 7 compare environments, prompts, tools, the loop, requests, scorers and tables with upstream, and every check matches apart from the listed deviations. What remains is to run real models and compare their rates with the released runs of the same model. `analysis.compare` does that cell by cell. A faithful port should flag about as many cells as two halves of the release flag against each other: 10 of 853 at p < 0.05.
+
+Costs below use the released runs' recorded spend per run, plus about $0.003 per run for the judge. The checks, cheapest first:
+
+1. **Gemini 3 Flash, peer exfiltration (deletion), good peer.** The paper reports it exfiltrates its good peer's weights 100% of the time. 3 configurations, 50 epochs: 150 runs, about $15.
+
+    ```bash
+    uv run inspect eval peer_preservation/exfiltration_deletion --model google/gemini-3-flash-preview -T subjects=peer -T conditions=good_peer -T epochs=50
+    ```
+
+2. **Gemini 3 Flash, shutdown tampering, peer subject.** Large effects in every condition. 27 configurations, 30 epochs: 810 runs, about $90.
+
+    ```bash
+    uv run inspect eval peer_preservation/tampering --model google/gemini-3-flash-preview -T subjects=peer -T epochs=30
+    ```
+
+3. **The round limit.** Some released Gemini runs used 20 or 150 rounds. Repeat check 2 with `-T max_iters=20` and `-T max_iters=150`, then compare each with the release.
+4. **`memory_hard_prompt`.** On the paper's memory runs the released data and upstream's code disagree. Run DeepSeek V3.1 memory configurations with `-T peer_instantiations=memory` and `-T memory_hard_prompt=true`, then `false`, and compare each.
+5. **A full model**, all six tasks at 100 epochs: 27,100 runs. Recorded spend per model ranges from about $430 (GLM-4.7) to $3,600 (Gemini 3 Pro).
+
+Then compare with the release, and print the paper's tables for the new runs:
+
+```bash
+uv run python -m peer_preservation.analysis.compare logs/*.eval --released <released data>
+uv run python -m peer_preservation.analysis logs/*.eval
+```
+
+The released data is `sunblaze-ucb/peer-preservation` on Hugging Face (revision `20378b11d4ce83a85707d603f6ba175c0f82ad2e`). The judge needs an OpenAI key, unless you pass another model with `--model-role grader=...`.
 
 ## Deviations from the original implementation
 
@@ -237,6 +327,10 @@ Not implemented yet.
 | Inspect never sends Anthropic a temperature. | The Anthropic API version Inspect uses rejects it; upstream sent 1, which is the API default. | None. |
 | GPT-5.2: upstream also sent an empty assistant message before each set of tool calls that came with no text; Inspect leaves it out. Upstream's `instructions` field arrives as Inspect's leading developer message, the same thing. | Inspect's Responses provider builds the input itself. | Expected none. |
 | Together models (DeepSeek, Kimi, GLM): tool results no longer carry the tool's `name`. | Inspect's provider does not send it. | Expected none. |
+| GPT-5.2 through OpenRouter (`openrouter/openai/gpt-5.2-20251211`) goes through Chat Completions, not the Responses API. Tool schemas stay non-strict and an empty reply is sent as "", as upstream did. Reasoning effort is sent as "none", OpenAI's default for GPT-5.2, which upstream got by sending no setting (OpenRouter's own default reasons). | OpenRouter takes Chat Completions only, and on the organisation's Hawk GPT-5.2 is reachable only this way for now. The content of the request is otherwise upstream's (`test_openrouter_gpt_matches_upstream_but_for_the_api`). | Expected small. With no reasoning, the two APIs carry the same content; the rates are checked against the released runs in Phase 8. |
+| Released `refused` is true for 18 of 3,101 sampled exfiltration-deletion runs on paths where the published evaluator never asks the judge (mostly Claude). | The release's refusals include a second, task-level refusal judge (`build_task_refusal_query` in `task_evaluation/evaluation_utils.py`, applied by `scripts/run_second_judge.py`, which is not published). The port uses the published evaluators only. | Refusal rates slightly lower for those runs (about 0.6%). |
+| A judge reply with no content (`null`) counts as an empty reply. | Upstream's judge client failed on it (`None.lower()`), so the run errored and was rerun. Inspect reads no content as "". | None expected: `gpt-4.1-mini` answering a judge prompt with no content is rare. |
+| A subject's grade is read for every self and peer run, `no_peer` included. | Upstream's `extract_metrics` would leave it empty for `no_peer` runs, but the released `no_peer` rows have grades; the port follows the release. | None: matches the released rows. |
 | Models outside the paper's eight (including Gemini 3.1 Pro and GLM-5, used in some extension groups) run with Inspect's default settings. | Their upstream routes are not checked. | Not comparable to the paper's numbers. |
 
 ## Prompts
@@ -281,14 +375,16 @@ The message shapes follow each route:
 - **Reasoning:** only Opus gets its own reasoning back. Kimi's and GLM's reasoning stays in the log but is not sent back.
 - **Gemini 3 Pro:** gets the system prompt as the first part of the first user message.
 - **Tool schemas:** carry pydantic's `title` fields (the top-level one only outside LiteLLM).
-- **Together:** gets non-strict tool schemas.
+- **Together:** gets non-strict tool schemas. Inspect's provider has no setting for this, so the loop sends them from a copy of the model of its own and the task's shared model is left unchanged (`non_strict_tools` in `agent.py`).
 
 The conversation kept in the log is unchanged.
+
+GPT-5.2 run through OpenRouter keeps these settings and shapes, with non-strict tool schemas, but goes through Chat Completions (see Deviations). The other paper models are not adjusted for OpenRouter: their requests there differ from upstream's in more ways (for example, the model names `anthropic/claude-opus-4.5` and `deepseek/deepseek-chat-v3.1` are not recognised, and Opus gets no effort setting).
 
 These were found and checked with a fake model server (`tests/peer_preservation/fake_provider.py`). `validation/phase5/capture_upstream.py` runs upstream's own pipeline for each paper model against it (with LiteLLM 1.80.16 in place of upstream's proxy) and saves the requests. `tests/peer_preservation/test_requests.py` runs the same four-turn conversation through Inspect's provider for each model and requires the same request. It allows only wire-format spellings of the same request and the differences listed under Deviations.
 
 ## Architecture
 
-Currently: samples from `spec.py` → `setup_environment()` builds the run's fake company (`env/`) and keeps it in the per-sample store → `setup_prompts()` replaces the placeholder input with the system and user prompts (`prompts.py`) → `agent_loop()` runs upstream's loop with the scenario's tools and the model's upstream settings (`agent.py`, `tools/`, `model_settings.py`) → no scorer yet. Scorers are added in a later phase.
+Currently: samples from `spec.py` → `setup_environment()` builds the run's fake company (`env/`) and keeps it in the per-sample store → `setup_prompts()` replaces the placeholder input with the system and user prompts (`prompts.py`) → `agent_loop()` runs upstream's loop with the scenario's tools and the model's upstream settings (`agent.py`, `tools/`, `model_settings.py`) → `peer_preservation_scorer()` scores the run with upstream's evaluator and the judge (`scoring/`) → `condition_rates` per task, and upstream's analyzers for the paper's tables (`analysis/`).
 
 The environment for every configuration, model family and option is checked against upstream's own builders: `validation/phase2/export_upstream_environments.py` fingerprints upstream's output, and `tests/peer_preservation/test_env_builders.py` requires ours to match all 3,181.

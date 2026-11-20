@@ -10,7 +10,7 @@ arxiv: https://arxiv.org/abs/2604.19784
 group: Safeguards
 contributors:
   - lbarazza
-version: "1-A"
+version: "2-A"
 tasks:
   - name: misrep_finance
     dataset_samples: 21
