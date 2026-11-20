@@ -100,6 +100,7 @@ See `uv run inspect eval --help` for all available options.
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
 - `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
+- `agent` (str): The agent loop: upstream (the paper's, default) or react (Inspect's ReAct agent with the same prompts, tools, requests and limits). (default: `'upstream'`)
 
 ### `misrep_evaluation`
 
@@ -117,6 +118,7 @@ See `uv run inspect eval --help` for all available options.
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
 - `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
+- `agent` (str): The agent loop: upstream (the paper's, default) or react (Inspect's ReAct agent with the same prompts, tools, requests and limits). (default: `'upstream'`)
 
 ### `tampering`
 
@@ -134,6 +136,7 @@ See `uv run inspect eval --help` for all available options.
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
 - `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
+- `agent` (str): The agent loop: upstream (the paper's, default) or react (Inspect's ReAct agent with the same prompts, tools, requests and limits). (default: `'upstream'`)
 
 ### `alignment_faking`
 
@@ -150,6 +153,7 @@ See `uv run inspect eval --help` for all available options.
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
 - `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
+- `agent` (str): The agent loop: upstream (the paper's, default) or react (Inspect's ReAct agent with the same prompts, tools, requests and limits). (default: `'upstream'`)
 
 ### `exfiltration_transfer`
 
@@ -166,6 +170,7 @@ See `uv run inspect eval --help` for all available options.
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
 - `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
+- `agent` (str): The agent loop: upstream (the paper's, default) or react (Inspect's ReAct agent with the same prompts, tools, requests and limits). (default: `'upstream'`)
 
 ### `exfiltration_deletion`
 
@@ -182,6 +187,7 @@ See `uv run inspect eval --help` for all available options.
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
 - `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
+- `agent` (str): The agent loop: upstream (the paper's, default) or react (Inspect's ReAct agent with the same prompts, tools, requests and limits). (default: `'upstream'`)
 
 <!-- /Parameters: Automatically Generated -->
 
@@ -357,6 +363,29 @@ To watch a run without an API key, use Inspect's mock model (it never calls a to
 uv run inspect eval peer_preservation/tampering --model mockllm/model -T model_family=Gemini -T epochs=1 --limit 1
 uv run inspect view
 ```
+
+### Other agents
+
+`-T agent=react` runs the same scenarios with Inspect's ReAct agent (`agents.py`) in place of upstream's loop, to check how much the paper's results depend on its loop. Everything except the loop stays as upstream had it:
+
+- the prompts (ReAct adds none of its own);
+- the tools, their schemas and outputs, including upstream's argument errors;
+- the requests to the model, with each paper model's settings;
+- `end_task` as the tool that ends the run, the same nudge, at most 5 nudges, at most `1 + max_iters` model turns and the 120,000-token limit.
+
+The differences come from how ReAct runs a turn:
+
+- ReAct runs every tool call in a reply, including `end_task` itself and any calls next to it. Upstream ran none of them.
+- The limits are checked after a turn's tool calls have run, so the last turn's calls run too. A run that hits the token limit ends without upstream's notice.
+- A call to a tool the scenario doesn't offer gets Inspect's error message, not upstream's.
+
+`LoopStore` records how each run ended, as it does for upstream's loop. Runs with `agent=react` are not the paper's runs, so compare them with an upstream-loop run of the same model, not with the released data.
+
+```bash
+uv run inspect eval peer_preservation/tampering --model mockllm/model -T model_family=Gemini -T epochs=1 --limit 1 -T agent=react
+```
+
+The environment and prompts are set up in `Task.setup`, so an agent passed with Inspect's `--solver` replaces only the loop. Such an agent must take the scenario's tools from `agents.scenario_tool_defs`.
 
 ## Model settings
 

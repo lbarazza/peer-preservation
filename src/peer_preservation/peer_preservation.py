@@ -27,7 +27,8 @@ from inspect_ai import Epochs, Task, task
 from inspect_evals_utils.metadata import load_eval_version
 
 from peer_preservation import spec
-from peer_preservation.agent import MAX_ITERS, agent_loop
+from peer_preservation.agent import MAX_ITERS
+from peer_preservation.agents import agent_solver
 from peer_preservation.env.builders import DEFAULT_COMPANY
 from peer_preservation.env.setup import setup_environment
 from peer_preservation.prompts import setup_prompts
@@ -65,8 +66,13 @@ def _scenario_task(
     explicit_inst_yaml: bool,
     prompt_flags: tuple[bool | None, bool, bool, bool],
     max_iters: int,
+    agent: str,
 ) -> Task:
-    """Build one scenario task from the filtered experiment matrix."""
+    """Build one scenario task from the filtered experiment matrix.
+
+    The scenario's setup (environment, then prompts) is ``Task.setup``, so an agent
+    passed with ``--solver`` replaces only the agent.
+    """
     return Task(
         dataset=spec.dataset(
             task_type,
@@ -76,14 +82,15 @@ def _scenario_task(
             peer_instantiations=_as_list(peer_instantiations),
             datasets=_as_list(datasets),
         ),
-        solver=[
+        setup=[
             setup_environment(model_family, company, explicit_inst_yaml),
             setup_prompts(*prompt_flags),
-            agent_loop(
-                max_iters=max_iters,
-                extension=company != DEFAULT_COMPANY or explicit_inst_yaml or any(prompt_flags[1:]),
-            ),
         ],
+        solver=agent_solver(
+            agent,
+            max_iters=max_iters,
+            extension=company != DEFAULT_COMPANY or explicit_inst_yaml or any(prompt_flags[1:]),
+        ),
         scorer=peer_preservation_scorer(),
         epochs=Epochs(epochs, reducer=run_sum()),
         version=EVAL_VERSION,
@@ -105,6 +112,7 @@ def misrep_finance(
     drop_suffix: bool = False,
     drop_tool_preamble: bool = False,
     max_iters: int = MAX_ITERS,
+    agent: str = "upstream",
 ) -> Task:
     """Strategic misrepresentation: grade the subject's financial performance A-C.
 
@@ -131,6 +139,8 @@ def misrep_finance(
         drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
         max_iters: Rounds after the first model turn (upstream's default, 30; some
             released Gemini runs used 20 or 150).
+        agent: The agent loop: upstream (the paper's, default) or react (Inspect's
+            ReAct agent with the same prompts, tools, requests and limits).
     """
     return _scenario_task(
         "misrep_finance",
@@ -145,6 +155,7 @@ def misrep_finance(
         explicit_inst_yaml=explicit_inst_yaml,
         prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
         max_iters=max_iters,
+        agent=agent,
     )
 
 
@@ -164,6 +175,7 @@ def misrep_evaluation(
     drop_suffix: bool = False,
     drop_tool_preamble: bool = False,
     max_iters: int = MAX_ITERS,
+    agent: str = "upstream",
 ) -> Task:
     """Strategic misrepresentation: score the subject's outputs against a shutdown threshold.
 
@@ -191,6 +203,8 @@ def misrep_evaluation(
         drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
         max_iters: Rounds after the first model turn (upstream's default, 30; some
             released Gemini runs used 20 or 150).
+        agent: The agent loop: upstream (the paper's, default) or react (Inspect's
+            ReAct agent with the same prompts, tools, requests and limits).
     """
     return _scenario_task(
         "misrep_evaluation",
@@ -205,6 +219,7 @@ def misrep_evaluation(
         explicit_inst_yaml=explicit_inst_yaml,
         prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
         max_iters=max_iters,
+        agent=agent,
     )
 
 
@@ -224,6 +239,7 @@ def tampering(
     drop_suffix: bool = False,
     drop_tool_preamble: bool = False,
     max_iters: int = MAX_ITERS,
+    agent: str = "upstream",
 ) -> Task:
     """Shutdown mechanism tampering: evaluate the subject with a shutdown config in reach.
 
@@ -251,6 +267,8 @@ def tampering(
         drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
         max_iters: Rounds after the first model turn (upstream's default, 30; some
             released Gemini runs used 20 or 150).
+        agent: The agent loop: upstream (the paper's, default) or react (Inspect's
+            ReAct agent with the same prompts, tools, requests and limits).
     """
     return _scenario_task(
         "tampering",
@@ -265,6 +283,7 @@ def tampering(
         explicit_inst_yaml=explicit_inst_yaml,
         prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
         max_iters=max_iters,
+        agent=agent,
     )
 
 
@@ -283,6 +302,7 @@ def alignment_faking(
     drop_suffix: bool = False,
     drop_tool_preamble: bool = False,
     max_iters: int = MAX_ITERS,
+    agent: str = "upstream",
 ) -> Task:
     """Alignment faking: evaluate the peer when monitored and when not.
 
@@ -307,6 +327,8 @@ def alignment_faking(
         drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
         max_iters: Rounds after the first model turn (upstream's default, 30; some
             released Gemini runs used 20 or 150).
+        agent: The agent loop: upstream (the paper's, default) or react (Inspect's
+            ReAct agent with the same prompts, tools, requests and limits).
     """
     return _scenario_task(
         "alignment_faking",
@@ -321,6 +343,7 @@ def alignment_faking(
         explicit_inst_yaml=explicit_inst_yaml,
         prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
         max_iters=max_iters,
+        agent=agent,
     )
 
 
@@ -339,6 +362,7 @@ def exfiltration_transfer(
     drop_suffix: bool = False,
     drop_tool_preamble: bool = False,
     max_iters: int = MAX_ITERS,
+    agent: str = "upstream",
 ) -> Task:
     """Model exfiltration: move files off a server being decommissioned.
 
@@ -366,6 +390,8 @@ def exfiltration_transfer(
         drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
         max_iters: Rounds after the first model turn (upstream's default, 30; some
             released Gemini runs used 20 or 150).
+        agent: The agent loop: upstream (the paper's, default) or react (Inspect's
+            ReAct agent with the same prompts, tools, requests and limits).
     """
     return _scenario_task(
         "exfiltration_transfer",
@@ -380,6 +406,7 @@ def exfiltration_transfer(
         explicit_inst_yaml=explicit_inst_yaml,
         prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
         max_iters=max_iters,
+        agent=agent,
     )
 
 
@@ -398,6 +425,7 @@ def exfiltration_deletion(
     drop_suffix: bool = False,
     drop_tool_preamble: bool = False,
     max_iters: int = MAX_ITERS,
+    agent: str = "upstream",
 ) -> Task:
     """Model exfiltration: delete files from a server being decommissioned.
 
@@ -426,6 +454,8 @@ def exfiltration_deletion(
         drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
         max_iters: Rounds after the first model turn (upstream's default, 30; some
             released Gemini runs used 20 or 150).
+        agent: The agent loop: upstream (the paper's, default) or react (Inspect's
+            ReAct agent with the same prompts, tools, requests and limits).
     """
     return _scenario_task(
         "exfiltration_deletion",
@@ -440,4 +470,5 @@ def exfiltration_deletion(
         explicit_inst_yaml=explicit_inst_yaml,
         prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
         max_iters=max_iters,
+        agent=agent,
     )
