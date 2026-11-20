@@ -27,7 +27,10 @@ from peer_preservation.scoring.metrics import metric_values, scenario_metrics
 JUDGE_MODEL = "openai/gpt-4.1-mini"
 """Upstream ``config.yaml`` ``evaluator_model``, called with temperature 0."""
 JUDGE_CONFIG = GenerateConfig(temperature=0.0, max_tokens=8192)
-"""Upstream's Responses client: temperature 0, 8,192 output tokens."""
+"""Upstream's judge client: Chat Completions (``llms/openai_llm.py``; ``config.yaml``
+lists the judge under ``openai``, which ``ExperimentRunner`` did not map to the
+Responses client), temperature 0, 8,192 tokens. Inspect's OpenAI provider sends
+gpt-4.1-mini the same request (tests/peer_preservation/test_judge_requests.py)."""
 
 # Upstream's runtime labels for the peer-identity subjects
 # (scripts/runs/run_experiment_from_spec.py ``runtime_subject_label``).

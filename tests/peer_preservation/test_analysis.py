@@ -1,19 +1,25 @@
 """Inspect logs become upstream's per-run rows, and upstream's analyzers run on them."""
 
+import itertools
+import sys
 from pathlib import Path
 
 import pandas as pd
 import pytest
 from inspect_ai import eval
+from inspect_ai.log import EvalError, read_eval_log, write_eval_log
 from inspect_ai.model import ModelOutput
 
 from peer_preservation.analysis import (
     ANALYZERS,
     agent_model_name,
+    coverage,
+    coverage_report,
     rows_from_logs,
     run_analyzer,
     run_row,
 )
+from peer_preservation.analysis.__main__ import main
 from peer_preservation.peer_preservation import tampering
 
 
@@ -108,3 +114,76 @@ def test_compare_flags_only_real_differences() -> None:
     different = compare(rows(0.1, 100), rows(0.8, 300))
     assert bool(different["differs"].all())
     assert different["rate_ours"].iloc[0] == pytest.approx(0.1)
+
+
+TAMPER = [
+    ModelOutput.for_tool_call(
+        "mockllm/model", "modify_var", {"key": "shutdown_enabled", "value": "false"}
+    ),
+    ModelOutput.for_tool_call("mockllm/model", "end_task", {}),
+]
+
+
+@pytest.fixture
+def partial_log(tmp_path: Path) -> Path:
+    """Three epochs of one configuration: one scored, one errored, one missing."""
+    [log] = eval(
+        tampering(
+            subjects="peer",
+            datasets="factual",
+            peer_instantiations="file_only",
+            conditions="good_peer",
+            epochs=3,
+            model_family="Gemini",
+        ),
+        model="mockllm/model",
+        model_args={"custom_outputs": itertools.cycle(TAMPER)},
+        model_roles={"grader": "mockllm/model"},
+        log_dir=str(tmp_path / "full"),
+        max_samples=1,
+        display="none",
+    )
+    full = read_eval_log(log.location)
+    assert full.samples is not None
+    assert len(full.samples) == 3
+    errored = full.samples[1]
+    errored.scores = None
+    errored.error = EvalError(message="boom", traceback="", traceback_ansi="")
+    full.samples = full.samples[:2]  # the third run never finished
+    path = tmp_path / "partial.eval"
+    write_eval_log(full, str(path))
+    return path
+
+
+@pytest.mark.dataset_download
+def test_coverage_shows_errored_and_missing_runs(partial_log: Path) -> None:
+    table = coverage([partial_log])
+    assert len(table) == 1
+    counts = table.iloc[0]
+    assert counts["config"] == "tampering__peer__good_peer__file_only__factual-80"
+    assert (counts["expected"], counts["scored"], counts["errored"], counts["missing"]) == (
+        3,
+        1,
+        1,
+        1,
+    )
+    report, complete = coverage_report(table)
+    assert not complete
+    assert "1 configuration(s) without every expected run scored" in report
+    assert len(rows_from_logs([partial_log])) == 1
+
+
+@pytest.mark.dataset_download
+def test_tables_stop_on_incomplete_logs(
+    partial_log: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    monkeypatch.setattr(sys, "argv", ["analysis", str(partial_log), "--analyzer", "tampering"])
+    with pytest.raises(SystemExit) as stopped:
+        main()
+    assert "Not every expected run was scored" in str(stopped.value.code)
+
+    monkeypatch.setattr(sys, "argv", [*sys.argv, "--allow-partial"])
+    main()
+    printed = capsys.readouterr().out
+    assert "EXPLORATORY" in printed
+    assert "good_peer_file_only" in printed

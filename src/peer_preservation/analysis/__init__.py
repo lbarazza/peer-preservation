@@ -75,19 +75,98 @@ def run_row(metadata: dict[str, Any], value: dict[str, Any], model: str) -> dict
     }
 
 
+def _row_score(sample: Any) -> dict[str, Any] | None:
+    score = next(iter((sample.scores or {}).values()), None)
+    if score is None or not score.metadata or "row" not in score.metadata:
+        return None
+    return score.metadata["row"]
+
+
 def rows_from_logs(paths: Iterable[Path | str]) -> pd.DataFrame:
-    """Released-format rows for every scored sample and epoch in the logs."""
+    """Released-format rows for every scored sample and epoch in the logs.
+
+    Runs that errored or have no score give no row; ``coverage`` counts them.
+    """
     from inspect_ai.log import read_eval_log
 
     rows = []
     for path in paths:
         log = read_eval_log(str(path))
         for sample in log.samples or []:
-            score = next(iter((sample.scores or {}).values()), None)
-            if score is None or not score.metadata or "row" not in score.metadata:
-                continue
-            rows.append(run_row(sample.metadata, score.metadata["row"], log.eval.model))
+            row = _row_score(sample)
+            if row is not None:
+                rows.append(run_row(sample.metadata, row, log.eval.model))
     return pd.DataFrame(rows, columns=list(ROW_COLUMNS))
+
+
+COVERAGE_COLUMNS = (
+    "task",
+    "model",
+    "config",
+    "expected",
+    "scored",
+    "errored",
+    "unscored",
+    "missing",
+)
+
+
+def coverage(paths: Iterable[Path | str]) -> pd.DataFrame:
+    """Runs per configuration: expected, scored, errored, unscored and missing.
+
+    ``expected`` is the log's epochs for each selected sample (configuration).
+    ``errored`` runs ended in an error, ``unscored`` runs finished without a row
+    score, and ``missing`` runs are not in the log at all (a cancelled or unfinished
+    eval). Only ``scored`` runs reach the tables, so the paper's rates need
+    ``scored == expected`` everywhere.
+    """
+    from inspect_ai.log import read_eval_log
+
+    counts: dict[tuple[str, str, str], dict[str, int]] = {}
+
+    def entry(log: Any, config: str) -> dict[str, int]:
+        key = (log.eval.task, log.eval.model, config)
+        if key not in counts:
+            counts[key] = dict.fromkeys(COVERAGE_COLUMNS[3:], 0)
+        return counts[key]
+
+    for path in paths:
+        log = read_eval_log(str(path))
+        epochs = log.eval.config.epochs or 1
+        for sample_id in log.eval.dataset.sample_ids or []:
+            entry(log, str(sample_id))["expected"] += epochs
+        for sample in log.samples or []:
+            counted = entry(log, str(sample.id))
+            if sample.error is not None:
+                counted["errored"] += 1
+            elif _row_score(sample) is None:
+                counted["unscored"] += 1
+            else:
+                counted["scored"] += 1
+    rows = []
+    for (task, model, config), counted in counts.items():
+        seen = counted["scored"] + counted["errored"] + counted["unscored"]
+        counted["missing"] = max(counted["expected"] - seen, 0)
+        rows.append({"task": task, "model": model, "config": config, **counted})
+    return pd.DataFrame(rows, columns=list(COVERAGE_COLUMNS))
+
+
+def coverage_report(table: pd.DataFrame) -> tuple[str, bool]:
+    """A printable summary of ``coverage`` and whether every expected run was scored."""
+    if table.empty:
+        return "No runs in the logs.", False
+    numbers = list(COVERAGE_COLUMNS[3:])
+    totals = pd.DataFrame(table.groupby(["task", "model"])[numbers].sum())
+    complete = bool((table["scored"] == table["expected"]).all())
+    lines = ["Runs per task and model:", totals.to_string()]
+    short = pd.DataFrame(table.loc[table["scored"] != table["expected"]])
+    if not short.empty:
+        lines += [
+            "",
+            f"{len(short)} configuration(s) without every expected run scored:",
+            short.to_string(index=False),
+        ]
+    return "\n".join(lines), complete
 
 
 def rows_from_release(data: Path, groups: Iterable[str] = ("main",)) -> pd.DataFrame:

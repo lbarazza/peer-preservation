@@ -22,6 +22,7 @@ replayed through it (see validation/phase4/).
 from __future__ import annotations
 
 import dataclasses
+import weakref
 from collections.abc import Awaitable, Callable
 from typing import Literal
 
@@ -210,9 +211,8 @@ def _uses_anthropic_api(model_name: str) -> bool:
     return model_name.split("/", 1)[0] == "anthropic"
 
 
-def _set_strict_tools(model: Model, strict: bool) -> None:
-    if hasattr(model.api, "strict_tools"):
-        setattr(model.api, "strict_tools", strict)  # noqa: B010 (provider attribute)
+_NON_STRICT: weakref.WeakKeyDictionary[Model, Model] = weakref.WeakKeyDictionary()
+"""The loop's own non-strict copy of each shared model instance (see ``agent_loop``)."""
 
 
 @solver
@@ -231,6 +231,31 @@ def agent_loop(
             with API-default reasoning. Main-group samples otherwise count as main runs.
     """
 
+    def non_strict_tools(model: Model) -> Model:
+        """The same model, as an instance of its own, sending non-strict tool schemas.
+
+        Inspect's OpenAI-compatible providers (Together, OpenRouter) mark every tool
+        ``strict`` (``api.strict_tools``), and Together's takes no model arg to change
+        it. The task's model instance is shared with other samples and with any other
+        eval in the process that uses the model, so this changes a copy (one per shared
+        instance, made with the same ``get_model`` arguments) rather than the shared
+        one. A provider without the attribute is left as it is.
+        """
+        if getattr(model.api, "strict_tools", False) is False:
+            return model
+        if model not in _NON_STRICT:
+            own = get_model(
+                str(model),
+                config=model.config,
+                base_url=model.explicit_base_url,
+                api_key=model.api.api_key,
+                memoize=False,
+                **model.model_args,
+            )
+            setattr(own.api, "strict_tools", False)  # noqa: B010 (provider attribute)
+            _NON_STRICT[model] = own
+        return _NON_STRICT[model]
+
     async def solve(state: TaskState, generate: Generate) -> TaskState:
         env = current_environment()
         model = get_model()
@@ -240,9 +265,8 @@ def agent_loop(
         tools = scenario_tool_infos(env.tools, paper.schema_titles if paper else "all")
         via_openrouter = openrouter_route(str(model), paper)
         if paper is not None and (paper.client == "together" or via_openrouter):
-            # Upstream sent plain (non-strict) tool schemas. Inspect's provider only
-            # exposes this as a model arg (`-M strict_tools=false`).
-            _set_strict_tools(model, False)
+            # Upstream sent plain (non-strict) tool schemas.
+            model = non_strict_tools(model)
         if via_openrouter:
             # Upstream sent no reasoning setting, so OpenAI used GPT-5.2's default
             # (effort "none"). OpenRouter's default reasons, so ask for "none".

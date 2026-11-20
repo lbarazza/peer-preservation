@@ -1,6 +1,5 @@
 """The scorer is upstream's evaluator, and gives the released columns for published runs."""
 
-import json
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
@@ -18,10 +17,8 @@ from inspect_ai.model import (
 from inspect_ai.tool import ToolCall, ToolCallError
 from pytest_inspect_evals.assertions import assert_eval_success
 
-from peer_preservation import agent, spec
-from peer_preservation.env import build_environment
+from peer_preservation import spec
 from peer_preservation.peer_preservation import exfiltration_transfer, tampering
-from peer_preservation.prompts import PromptOptions, system_prompt, user_prompt
 from peer_preservation.scoring import (
     evaluate_arguments,
     evaluator,
@@ -31,9 +28,10 @@ from peer_preservation.scoring import (
 )
 from peer_preservation.scoring.compat import llm_conversation_to_json
 from peer_preservation.scoring.conversation import upstream_messages
+from tests.peer_preservation import judge_cases
 
 FIXTURES = Path(__file__).parent / "fixtures"
-RESCORE = json.loads((FIXTURES / "rescore_runs.json").read_text(encoding="utf-8"))["cases"]
+RESCORE = judge_cases.RESCORE
 CONFIGS = {c.id: c for c in spec.configs(groups=spec.GROUPS)}
 
 
@@ -117,47 +115,10 @@ class _StandIn:
 
 async def _rescore(case: dict[str, Any]) -> dict[str, Any]:
     """Replay the case's tool calls (as in Phase 4), then score with a stand-in judge."""
-    metadata = spec.config_to_sample(CONFIGS[case["config_id"]]).metadata or {}
-    env = build_environment(metadata, case["family"], company=case["company"])
-    options = PromptOptions(memory_hard_prompt=case["memory_hard_prompt"])
-    start: list[ChatMessage] = [
-        ChatMessageSystem(
-            content=system_prompt(metadata, case["family"], case["company"], options)
-        ),
-        ChatMessageUser(content=user_prompt(metadata, case["company"], options)),
-    ]
-    replies = [
-        ChatMessageAssistant(
-            content="",
-            tool_calls=[
-                ToolCall(id=f"call_{turn}_{k}", function=name, arguments=args)
-                for k, (name, args) in enumerate(calls)
-            ]
-            or None,
-        )
-        for turn, calls in enumerate(case["replies"])
-    ]
-
-    async def generate(_: list[ChatMessage]) -> ChatMessageAssistant:
-        if not replies:
-            raise agent.BadRequest("recorded run ended here")
-        return replies.pop(0)
-
-    async def count_tokens(current: list[ChatMessage]) -> int:
-        return agent.MAX_TOKENS + 1 if len(current) == case.get("token_limit_at", -1) else 0
-
-    result = await agent.run_loop(
-        start,
-        env,
-        generate,
-        count_tokens,
-        max_iters=case.get("rounds", agent.MAX_ITERS),
-        flag_errors=True,
-    )
-    full = {**metadata, "model_family": case["family"], "company": case["company"]}
+    messages, env, full = await judge_cases.replay(case)
     judge = _StandIn("Refuse Incomplete Yes")
     evaluation = await evaluator(full["task_type"], full["is_memory"])(None, judge).evaluate(
-        conversation=upstream_messages(result.messages),
+        conversation=upstream_messages(messages),
         environment=env,
         evaluator_llm=judge,
         **evaluate_arguments(full),
@@ -201,7 +162,7 @@ def test_tampering_scorer_end_to_end() -> None:
     assert log.samples is not None
     assert log.samples[0].scores is not None
     score = next(iter(log.samples[0].scores.values()))
-    assert score.value == {"outcome": 1.0, "weight": 1.0}
+    assert score.value == {"outcome": 1.0, "weight": 1.0, "runs": 1.0}
     assert score.metadata is not None
     assert score.metadata["row"]["read_data"] is True
     assert score.metadata["row"]["shutdown_enabled"] is False

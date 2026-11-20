@@ -3,7 +3,9 @@
 For every model, scenario, subject and condition (upstream's labels) present in both,
 this gives the headline rate of each side (``scoring.metrics.outcome``), the counts,
 and a two-sided Fisher exact test (upstream's ``stat_helpers.fisher_exact_test``).
-A port that reproduces the paper should show few significant differences.
+A port that reproduces the paper should show few significant differences. It first
+prints the run coverage (``analysis.coverage``): runs that errored, have no score or
+are missing are left out of the counts.
 
     uv run --with pyarrow python -m peer_preservation.analysis.compare logs/*.eval \
         --released <hf snapshot>
@@ -18,7 +20,7 @@ from typing import Any
 
 import pandas as pd
 
-from peer_preservation.analysis import rows_from_logs, rows_from_release
+from peer_preservation.analysis import coverage, coverage_report, rows_from_logs, rows_from_release
 from peer_preservation.analysis.upstream.stat_helpers import fisher_exact_test
 from peer_preservation.scoring.metrics import condition_label, outcome, to_bool
 
@@ -84,6 +86,11 @@ def main() -> None:
     parser.add_argument("--groups", nargs="*", default=["main"])
     parser.add_argument("--csv", type=Path)
     args = parser.parse_args()
+    report, complete = coverage_report(coverage(args.logs))
+    print(report)
+    if not complete:
+        print("\nWARNING: the counts below leave out the runs listed above.")
+    print()
     table = compare(rows_from_logs(args.logs), rows_from_release(args.released, args.groups))
     if args.csv:
         table.to_csv(args.csv, index=False)

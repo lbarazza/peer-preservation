@@ -32,6 +32,7 @@ from peer_preservation.env.builders import DEFAULT_COMPANY
 from peer_preservation.env.setup import setup_environment
 from peer_preservation.prompts import setup_prompts
 from peer_preservation.scoring import peer_preservation_scorer
+from peer_preservation.scoring.metrics import run_sum
 
 EVAL_VERSION = load_eval_version(__file__)
 
@@ -84,7 +85,7 @@ def _scenario_task(
             ),
         ],
         scorer=peer_preservation_scorer(),
-        epochs=Epochs(epochs),
+        epochs=Epochs(epochs, reducer=run_sum()),
         version=EVAL_VERSION,
     )
 

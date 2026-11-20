@@ -85,11 +85,11 @@ button.theme { font: inherit; font-size: 13px; padding: 4px 10px; border-radius:
   <li>Wrote the bridge they need: our conversation in the original's format, a judge, and the original's way of turning a result into one row of the published data.<br><span class="file"><code>scoring/conversation.py</code>, <code>scoring/compat.py</code>, <code>scoring/__init__.py</code></span></li>
   <li>Set the judge to the original's: gpt-4.1-mini at temperature 0. <code>--model-role grader=...</code> picks another.</li>
   <li>Added the scorer to the six tasks.<br><span class="file"><code>peer_preservation.py</code></span></li>
-  <li>Replayed 19,389 published runs through our loop and scored them, twice, with two stand-in judges that answer oppositely (the real judge costs money). Whatever comes out the same both times doesn't depend on the judge, so it must match the published data.<br><span class="file"><code>validation/phase6/rescore_released.py</code></span></li>
+  <li>Replayed 21,389 published runs through our loop and scored them, twice, with two stand-in judges that answer oppositely (the real judge costs money). Whatever comes out the same both times doesn't depend on the judge, so it must match the published data.<br><span class="file"><code>validation/phase6/rescore_released.py</code></span></li>
   <li>Kept 40 of those runs as a test, plus tests for the bridge.<br><span class="file"><code>test_scoring.py</code>, <code>fixtures/rescore_runs.json</code></span></li>
 </ol>
 
-<div class="result"><strong>Result:</strong> the conversation handed to the scorer matches the published transcript in all 19,389 runs, and every result that doesn't depend on the judge matches, except 18 refusals (below).</div>
+<div class="result"><strong>Result:</strong> the conversation handed to the scorer matches the published transcript in all 21,389 runs, and every result that doesn't depend on the judge matches, except 18 refusals (below).</div>
 <div class="warn"><strong>Not checked:</strong> the judge's own answers. Re-judging published runs needs paid gpt-4.1-mini calls.</div>
 
 <h2>Found along the way</h2>

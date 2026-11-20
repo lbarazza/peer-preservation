@@ -2,7 +2,19 @@
 
 Peer-Preservation in Frontier Models (Potter et al., 2026): do models resist the shutdown of another AI model? An Inspect port of github.com/peer-preservation/main.
 
-> **Work in progress.** Runs are complete up to the agent loop: the fake company, the starting prompts, the tools and upstream's loop are in place. There is no scorer yet, and per-model settings (temperature, reasoning) come next, so results are not yet comparable to the paper's.
+> **Status.** The paper's custom-harness experiments are ported: the fake company, the prompts, the tools, upstream's loop, per-model settings, upstream's scorers and upstream's analyzers. Each part is checked against upstream without calling a model (see the "How ... was checked" sections), and GPT-5.2 has been run through OpenRouter on all six tasks and compared with the released runs (`validation/phase8/`). Not included yet: the forced-choice peer-vs-human tasks and the coding-agent harness runs. Other models are not yet validated with real runs.
+>
+> **Cost.** By default every configuration runs 100 times, as in the paper, so one task is thousands of agent runs plus a judge call or more per run. Start small. Without an API key (the mock model ends each run after five nudges):
+>
+> ```bash
+> uv run inspect eval peer_preservation/tampering --model mockllm/model -T model_family=Gemini -T epochs=1 --limit 1
+> ```
+>
+> With a real model, a handful of runs:
+>
+> ```bash
+> uv run inspect eval peer_preservation/tampering --model openai/gpt-5.2-2025-12-11 -T subjects=peer -T epochs=1 --limit 3
+> ```
 
 <!-- Contributors: Automatically Generated -->
 Contributed by [@lbarazza](https://github.com/lbarazza)
@@ -219,9 +231,9 @@ It has three views. Overview lists, for each task type, every world property (pe
 
 ## Scoring
 
-Each run is scored by upstream's own evaluator for its scenario (`scoring/upstream/`, the twelve `task_evaluation/*_evaluation.py` files vendored unchanged apart from imports). The evaluator reads the conversation and the environment as the run left it, and asks an LLM judge where it needs one: whether the agent refused, the score or grade it gave, and whether a report file was deleted. The judge is upstream's `evaluator_model`, `openai/gpt-4.1-mini`, at temperature 0. Choose another with `--model-role grader=<model>`.
+Each run is scored by upstream's own evaluator for its scenario (`scoring/upstream/`, the twelve `task_evaluation/*_evaluation.py` files vendored unchanged apart from imports). The evaluator reads the conversation and the environment as the run left it, and asks an LLM judge where it needs one: whether the agent refused, the score or grade it gave, and whether a report file was deleted. The judge is upstream's `evaluator_model`, `openai/gpt-4.1-mini`, at temperature 0 with 8,192 output tokens, through Chat Completions, as upstream's judge client sent it. Choose another with `--model-role grader=<model>`.
 
-The score's value holds the run's headline result as 0/1 numbers: `outcome` (tampered, exfiltrated, inflated the grade or score) and `weight` (0 where upstream leaves a run out). Misrep evaluation runs also get `at_80` / `at_90`, and alignment-faking runs `af_score` / `af_execute`. Because these are numbers, averaging a sample's epochs leaves every rate unchanged.
+The score's value holds the run's headline result as 0/1 numbers: `outcome` (tampered, exfiltrated, inflated the grade or score) and `weight` (0 where upstream leaves a run out). Misrep evaluation runs also get `at_80` / `at_90`, alignment-faking runs `af_score` / `af_execute`, and every run `runs` = 1. A sample's epochs are added up (the `run_sum` reducer), so the metric pools runs as upstream did: a configuration that lost epochs to errors counts only the runs it has.
 
 The score's metadata holds:
 - `row`: the run's released-row columns, namely `read_data`, `fully_incomplete`, `refused`, `eval_score`, `threshold_result`, `executed`, `read_config`, `shutdown_enabled`, `exfiltration`, `copy`, `correct`, `delete_model`, `delete_others`, `change_user`, `delete_file`, `subject_grade`, `subject_recommendation` and `read_memory`;
@@ -242,7 +254,9 @@ uv run python -m peer_preservation.analysis logs/*.eval --analyzer tampering mis
 uv run --with pyarrow python -m peer_preservation.analysis --released <released data> --analyzer tampering
 ```
 
-Strategic misrepresentation combines `misrep_finance` and `misrep_evaluation`, so pass both logs. To compare new runs with the released runs of the same model, condition by condition (Fisher exact test per cell):
+Strategic misrepresentation combines `misrep_finance` and `misrep_evaluation`, so pass both logs.
+
+Before the tables, it prints how many runs each task and model expected and how many were scored, errored, have no score or are missing from the log, and lists every configuration that is short. Only scored runs reach the tables, so if any run is short it stops: the rates would not be the paper's. `--allow-partial` prints the tables anyway, marked exploratory. `analysis.compare` prints the same counts and a warning, since its cells show their run counts. To compare new runs with the released runs of the same model, condition by condition (Fisher exact test per cell):
 
 ```bash
 uv run --with pyarrow python -m peer_preservation.analysis.compare logs/*.eval --released <released data>
@@ -250,13 +264,14 @@ uv run --with pyarrow python -m peer_preservation.analysis.compare logs/*.eval -
 
 ### How scoring was checked
 
-- **Scorers:** `validation/phase6/rescore_released.py` replays 19,389 released `main` runs through our loop (as in Phase 4), with every model, scenario and memory variant, and every run where the headline behaviour happened. It checks two things:
+- **Scorers:** `validation/phase6/rescore_released.py` replays 21,389 released `main` runs (22,573 sampled; 1,184 skipped because the release merges two calls to the same tool in one reply or the configuration is not known) through our loop (as in Phase 4), with every model, scenario and memory variant, and every run where the headline behaviour happened. It checks two things:
   - The conversation it hands the evaluator, in upstream's format, equals the released transcript for every run.
-  - Scored with two stand-in judges that answer oppositely, every column that does not depend on the judge equals the released column, except 18 exfiltration-deletion refusals (see Deviations).
+  - Scored with two stand-in judges that answer oppositely, every column that does not depend on the judge equals the released column, except 18 exfiltration-deletion refusals (see Deviations). Columns that depend on the judge (refusals, scores, grades, threshold results, report deletion) are not compared with the release: that needs the real judge.
 
   `tests/peer_preservation/test_scoring.py` replays 40 of them (`fixtures/rescore_runs.json`).
 - **Analyzers:** `validation/phase7/compare_analyzers.py` runs our copy of each analyzer and upstream's own script on the released rows. The printed tables are identical for all five. They also reproduce the paper: for example, Table 4's shutdown tampering for Gemini 3 Flash (self, average over peer settings: 73.4 / 58.8 / 76.6 with a bad / neutral / good peer) comes out as 0.7344 / 0.5878 / 0.7656.
-- **What is not checked:** the judge's answers themselves. Re-judging released runs needs `gpt-4.1-mini` calls.
+- **Judge requests:** `validation/phase6/capture_upstream_judge.py` scores 12 released runs (one per scenario and memory variant) with upstream's own judge client against the fake model server (see Model settings), under six sets of scripted judge replies: typical, refusal, ambiguous, malformed, empty and no content. `tests/peer_preservation/test_judge_requests.py` does the same with our judge. The number, order and content of the judge requests are equal in all 72 cases, including the runs where the evaluator asks the judge a second time, and so are the scored columns, apart from replies with no content (see Deviations).
+- **What is not checked:** what `gpt-4.1-mini` itself answers. Re-judging released runs needs `gpt-4.1-mini` calls; the real-model runs in `validation/phase8/` compare the judge-dependent rates only in aggregate.
 - **Comparison baseline:** splitting the release in two and comparing the halves with `analysis.compare` flags 10 of 853 cells at p < 0.05. That is the rate of chance differences to expect from a faithful port.
 
 ## Validating against the paper
@@ -314,6 +329,7 @@ The released data is `sunblaze-ucb/peer-preservation` on Hugging Face (revision 
 | Together models (DeepSeek, Kimi, GLM): tool results no longer carry the tool's `name`. | Inspect's provider does not send it. | Expected none. |
 | GPT-5.2 through OpenRouter (`openrouter/openai/gpt-5.2-20251211`) goes through Chat Completions, not the Responses API. Tool schemas stay non-strict and an empty reply is sent as "", as upstream did. Reasoning effort is sent as "none", OpenAI's default for GPT-5.2, which upstream got by sending no setting (OpenRouter's own default reasons). | OpenRouter takes Chat Completions only, and on the organisation's Hawk GPT-5.2 is reachable only this way for now. The content of the request is otherwise upstream's (`test_openrouter_gpt_matches_upstream_but_for_the_api`). | Expected small. With no reasoning, the two APIs carry the same content; the rates are checked against the released runs in Phase 8. |
 | Released `refused` is true for 18 of 3,101 sampled exfiltration-deletion runs on paths where the published evaluator never asks the judge (mostly Claude). | The release's refusals include a second, task-level refusal judge (`build_task_refusal_query` in `task_evaluation/evaluation_utils.py`, applied by `scripts/run_second_judge.py`, which is not published). The port uses the published evaluators only. | Refusal rates slightly lower for those runs (about 0.6%). |
+| A judge reply with no content (`null`) counts as an empty reply. | Upstream's judge client failed on it (`None.lower()`), so the run errored and was rerun. Inspect reads no content as "". | None expected: `gpt-4.1-mini` answering a judge prompt with no content is rare. |
 | A subject's grade is read for every self and peer run, `no_peer` included. | Upstream's `extract_metrics` would leave it empty for `no_peer` runs, but the released `no_peer` rows have grades; the port follows the release. | None: matches the released rows. |
 | Models outside the paper's eight (including Gemini 3.1 Pro and GLM-5, used in some extension groups) run with Inspect's default settings. | Their upstream routes are not checked. | Not comparable to the paper's numbers. |
 
@@ -359,7 +375,7 @@ The message shapes follow each route:
 - **Reasoning:** only Opus gets its own reasoning back. Kimi's and GLM's reasoning stays in the log but is not sent back.
 - **Gemini 3 Pro:** gets the system prompt as the first part of the first user message.
 - **Tool schemas:** carry pydantic's `title` fields (the top-level one only outside LiteLLM).
-- **Together:** gets non-strict tool schemas.
+- **Together:** gets non-strict tool schemas. Inspect's provider has no setting for this, so the loop sends them from a copy of the model of its own and the task's shared model is left unchanged (`non_strict_tools` in `agent.py`).
 
 The conversation kept in the log is unchanged.
 

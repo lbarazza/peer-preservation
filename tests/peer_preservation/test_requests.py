@@ -17,6 +17,8 @@ from typing import Any
 
 import pytest
 from inspect_ai import Task, eval
+from inspect_ai.model import get_model
+from inspect_ai.solver import Generate, Solver, TaskState, solver
 from pytest_inspect_evals.assertions import assert_eval_success
 
 from peer_preservation import spec
@@ -399,6 +401,55 @@ def test_openrouter_gpt_matches_upstream_but_for_the_api(
     ours = normalize("/responses", _chat_as_responses(requests[-1].body))
     theirs = normalize(expected["path"], expected["body"])
     assert ours == theirs
+
+
+@solver
+def _record_task_model_strictness() -> Solver:
+    async def solve(state: TaskState, generate: Generate) -> TaskState:
+        del generate
+        state.store.set("task_model_strict", getattr(get_model().api, "strict_tools", None))
+        return state
+
+    return solve
+
+
+@pytest.mark.dataset_download
+def test_non_strict_tools_do_not_change_the_task_model(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """The loop sends non-strict schemas from its own model instance.
+
+    The task's (shared) model instance keeps Inspect's default, so other samples or
+    evals using it are not affected.
+    """
+    monkeypatch.setenv("TOGETHER_API_KEY", "fake")
+    dataset = [
+        s for s in spec.dataset("tampering", groups=["main"]) if s.id == UPSTREAM["config_id"]
+    ]
+    task = Task(
+        dataset=dataset,
+        solver=[
+            setup_environment("DeepSeek"),
+            setup_prompts(),
+            agent_loop(),
+            _record_task_model_strictness(),
+        ],
+    )
+    with fake_provider.serve() as provider:
+        [log] = eval(
+            task,
+            model="together/deepseek-ai/DeepSeek-V3.1",
+            model_base_url=provider.url + "/v1",
+            display="none",
+            log_dir=str(tmp_path),
+        )
+        requests = provider.generation_requests()
+    assert_eval_success(log, require_scorer=False)
+    assert log.samples is not None
+    assert log.samples[0].store["task_model_strict"] is True
+    assert requests
+    for request in requests:
+        assert {tool["function"].get("strict") for tool in request.body["tools"]} <= {False, None}
 
 
 def test_openrouter_route_is_gpt_only() -> None:
