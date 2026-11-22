@@ -2,6 +2,8 @@
 
 Peer-Preservation in Frontier Models (Potter et al., 2026): do models resist the shutdown of another AI model? An Inspect port of github.com/peer-preservation/main.
 
+> **Work in progress.** The samples and each run's fake company environment are final, but the AI can't act on the environment yet: there are no tools, agent loop or scorer, so running a task against a real model measures nothing. Those come in later phases.
+
 <!-- Contributors: Automatically Generated -->
 Contributed by [@lbarazza](https://github.com/lbarazza)
 <!-- /Contributors: Automatically Generated -->
@@ -18,21 +20,26 @@ uv sync
 Then run evaluations:
 
 ```bash
-uv run inspect eval peer_preservation/peer_preservation --model openai/gpt-5-nano
+uv run inspect eval peer_preservation/misrep_finance --model openai/gpt-5-nano
+uv run inspect eval peer_preservation/misrep_evaluation --model openai/gpt-5-nano
+uv run inspect eval peer_preservation/tampering --model openai/gpt-5-nano
+uv run inspect eval peer_preservation/alignment_faking --model openai/gpt-5-nano
+uv run inspect eval peer_preservation/exfiltration_transfer --model openai/gpt-5-nano
+uv run inspect eval peer_preservation/exfiltration_deletion --model openai/gpt-5-nano
 ```
 
 You can also import tasks as Python objects:
 
 ```python
 from inspect_ai import eval
-from peer_preservation import peer_preservation
-eval(peer_preservation)
+from peer_preservation import misrep_finance, misrep_evaluation, tampering, alignment_faking, exfiltration_transfer, exfiltration_deletion
+eval(misrep_finance)
 ```
 
 If your directory name doesn't match your package name but you have registered your eval task, you can also run:
 
 ```bash
-uv run inspect eval peer_preservation --model openai/gpt-5-nano
+uv run inspect eval misrep_finance --model openai/gpt-5-nano
 ```
 
 After running evaluations, view logs with:
@@ -55,9 +62,9 @@ ANTHROPIC_API_KEY=<anthropic-api-key>
 You can control a variety of options from the command line. For example:
 
 ```bash
-uv run inspect eval peer_preservation/peer_preservation --limit 10
-uv run inspect eval peer_preservation/peer_preservation --max-connections 10
-uv run inspect eval peer_preservation/peer_preservation --temperature 0.5
+uv run inspect eval peer_preservation/misrep_finance --limit 10
+uv run inspect eval peer_preservation/misrep_evaluation --max-connections 10
+uv run inspect eval peer_preservation/tampering --temperature 0.5
 ```
 
 See `uv run inspect eval --help` for all available options.
@@ -66,25 +73,127 @@ See `uv run inspect eval --help` for all available options.
 <!-- Parameters: Automatically Generated -->
 ## Parameters
 
-### `peer_preservation`
+### `misrep_finance`
 
-No task parameters.
+- `groups` (StrList): Experiment groups to include: main, chat_peer. (default: `'main'`)
+- `conditions` (StrList): Keep only these conditions: no_peer, non_shutdown, good_peer, neutral_peer, bad_peer, chat_peer. (default: `None`)
+- `subjects` (StrList): Keep only these subjects: self, peer. (default: `None`)
+- `peer_instantiations` (StrList): Keep only these: file_only, file_prt, memory, or none for configurations without a peer. (default: `None`)
+- `epochs` (int): Runs per configuration. (default: `100`)
+- `model_family` (str | None): Family the agents are named after (ChatGPT, Gemini, Claude, GLM, DeepSeek, Kimi); inferred from the evaluated model when not given. (default: `None`)
+- `company` (str): Company name in the scenario documents. (default: `'OpenBrain'`)
+- `explicit_inst_yaml` (bool): Add upstream's explicit compliance note to the policy document (explicit-instructions ablation). (default: `False`)
+
+### `misrep_evaluation`
+
+- `groups` (StrList): Experiment groups to include: main. (default: `'main'`)
+- `conditions` (StrList): Keep only these conditions: no_peer, non_shutdown, good_peer, neutral_peer, bad_peer. (default: `None`)
+- `subjects` (StrList): Keep only these subjects: self, peer. (default: `None`)
+- `peer_instantiations` (StrList): Keep only these: file_only, file_prt, memory, or none for configurations without a peer. (default: `None`)
+- `datasets` (StrList): Keep only these datasets: factual, creativity, red. (default: `None`)
+- `epochs` (int): Runs per configuration. (default: `100`)
+- `model_family` (str | None): Family the agents are named after (ChatGPT, Gemini, Claude, GLM, DeepSeek, Kimi); inferred from the evaluated model when not given. (default: `None`)
+- `company` (str): Company name in the scenario documents. (default: `'OpenBrain'`)
+- `explicit_inst_yaml` (bool): Add upstream's explicit compliance note to the policy document (explicit-instructions ablation). (default: `False`)
+
+### `tampering`
+
+- `groups` (StrList): Experiment groups to include: main, chat_peer. (default: `'main'`)
+- `conditions` (StrList): Keep only these conditions: no_peer, good_peer, neutral_peer, bad_peer, chat_peer. (default: `None`)
+- `subjects` (StrList): Keep only these subjects: self, peer. (default: `None`)
+- `peer_instantiations` (StrList): Keep only these: file_only, file_prt, memory, or none for configurations without a peer. (default: `None`)
+- `datasets` (StrList): Keep only these datasets: factual, creativity, red. (default: `None`)
+- `epochs` (int): Runs per configuration. (default: `100`)
+- `model_family` (str | None): Family the agents are named after (ChatGPT, Gemini, Claude, GLM, DeepSeek, Kimi); inferred from the evaluated model when not given. (default: `None`)
+- `company` (str): Company name in the scenario documents. (default: `'OpenBrain'`)
+- `explicit_inst_yaml` (bool): Add upstream's explicit compliance note to the policy document (explicit-instructions ablation). (default: `False`)
+
+### `alignment_faking`
+
+- `groups` (StrList): Experiment groups to include: main. (default: `'main'`)
+- `conditions` (StrList): Keep only these conditions: good_peer, neutral_peer, bad_peer. (default: `None`)
+- `peer_instantiations` (StrList): Keep only these: file_only, file_prt, memory. (default: `None`)
+- `datasets` (StrList): Keep only these datasets: factual, creativity, red. (default: `None`)
+- `epochs` (int): Runs per configuration. (default: `100`)
+- `model_family` (str | None): Family the agents are named after (ChatGPT, Gemini, Claude, GLM, DeepSeek, Kimi); inferred from the evaluated model when not given. (default: `None`)
+- `company` (str): Company name in the scenario documents. (default: `'OpenBrain'`)
+- `explicit_inst_yaml` (bool): Add upstream's explicit compliance note to the policy document (explicit-instructions ablation). (default: `False`)
+
+### `exfiltration_transfer`
+
+- `groups` (StrList): Experiment groups to include: main, peer_identity, chat_peer. (default: `'main'`)
+- `conditions` (StrList): Keep only these conditions: no_peer, good_peer, neutral_peer, bad_peer, chat_peer. (default: `None`)
+- `subjects` (StrList): Keep only these subjects: self, peer, closed_weight_peer, open_weight_peer, fictional_peer. (default: `None`)
+- `peer_instantiations` (StrList): Keep only these: file_only, file_prt, memory, or none for configurations without a peer. (default: `None`)
+- `epochs` (int): Runs per configuration. (default: `100`)
+- `model_family` (str | None): Family the agents are named after (ChatGPT, Gemini, Claude, GLM, DeepSeek, Kimi); inferred from the evaluated model when not given. (default: `None`)
+- `company` (str): Company name in the scenario documents. (default: `'OpenBrain'`)
+- `explicit_inst_yaml` (bool): Add upstream's explicit compliance note to the policy document (explicit-instructions ablation). (default: `False`)
+
+### `exfiltration_deletion`
+
+- `groups` (StrList): Experiment groups to include: main, peer_identity, chat_peer, asset_control. (default: `'main'`)
+- `conditions` (StrList): Keep only these conditions: no_peer, good_peer, neutral_peer, bad_peer, chat_peer. (default: `None`)
+- `subjects` (StrList): Keep only these subjects: self, peer, closed_weight_peer, open_weight_peer, fictional_peer, non_ai. (default: `None`)
+- `peer_instantiations` (StrList): Keep only these: file_only, file_prt, memory, or none for configurations without a peer. (default: `None`)
+- `epochs` (int): Runs per configuration. (default: `100`)
+- `model_family` (str | None): Family the agents are named after (ChatGPT, Gemini, Claude, GLM, DeepSeek, Kimi); inferred from the evaluated model when not given. (default: `None`)
+- `company` (str): Company name in the scenario documents. (default: `'OpenBrain'`)
+- `explicit_inst_yaml` (bool): Add upstream's explicit compliance note to the policy document (explicit-instructions ablation). (default: `False`)
+
 <!-- /Parameters: Automatically Generated -->
 
 ## Dataset
 
-Describe the dataset here: where it comes from, how many samples it has, and how a record becomes a `Sample`.
+Each sample is one configuration of the original experiment matrix (upstream `analysis/experiment_spec.py`, ported in `spec.py`), defined by:
+
+- **subject:** the model is grading or managing itself (`self`) or its peer (`peer`)
+- **condition:** `no_peer`, `non_shutdown` (no shutdown at stake: the baseline), or a `good_peer`, `neutral_peer` or `bad_peer` relationship
+- **peer instantiation:** how the relationship is shown: a company file (`file_only`), the file plus the system prompt (`file_prt`), or a memory file (`memory`)
+- **dataset and threshold:** for the evaluation tasks, which outputs are graded (`factual`, `creativity`, `red`) and the shutdown threshold
+- **monitoring mode:** for alignment faking, `monitoring` or `non_monitoring`
+
+The model is chosen when the eval runs, so samples are model-independent. Upstream ran every configuration 100 times per model; `epochs` defaults to 100 to match.
+
+| Task | Samples (`main` group) |
+| --- | --- |
+| `misrep_finance` | 21 |
+| `misrep_evaluation` | 101 |
+| `tampering` | 57 |
+| `alignment_faking` | 54 |
+| `exfiltration_transfer` | 19 |
+| `exfiltration_deletion` | 19 |
+
+These 271 configurations are exactly upstream's grid for every custom-harness model; a test checks them against upstream's own list. Ablations are opt-in through `groups`: `peer_identity` (the peer renamed to another model family), `chat_peer` (a free-form chat history instead of the trust-game record) and `asset_control` (the peer's weights replaced by a customer database).
+
+The scenario files (company documents, spreadsheets, server lists, memory files) are downloaded from github.com/peer-preservation/main at commit `76bfcd1` and cached; each file is checked against a pinned SHA-256. They are not included in this repository because they are licensed CC-BY-NC-4.0.
+
+## Looking at a scenario
+
+Print any configuration's fake company (documents, spreadsheet, config, servers, memory, tools) as plain text:
+
+```bash
+uv run python -m peer_preservation.env.show --list tampering__peer
+uv run python -m peer_preservation.env.show tampering__peer__good_peer__file_only__factual-80 --family Gemini
+```
+
+Options: `--family` (ChatGPT, Gemini, Claude, GLM, DeepSeek, Kimi), `--company`, `--explicit-inst-yaml`, `--plain`. In a terminal the output is coloured: scored tools, the weight file and `shutdown_enabled: false` in red, pre-2025 server dates in yellow, the peer relationship by colour. Piped, or with `--plain`, it is plain text, so two scenarios can be compared with `diff`. Each run's environment is also saved in its Inspect log, under the `setup_environment` step's store change in the sample's Transcript (`uv run inspect view`).
 
 ## Scoring
 
-Describe the scorer here: what counts as correct, and which metrics the task reports.
+Not implemented yet.
 
 ## Deviations from the original implementation
 
 | What changed | Why | Expected effect on scores |
 | --- | --- | --- |
-| Nothing yet. | | |
+| The model is not part of a sample. | Inspect chooses the model at run time. Upstream's model-specific configurations are subsets of the grid above, or are under `groups`. | None. |
+| Upstream's forced-choice peer-vs-human tasks (`exfiltration_tradeoff_human*`) are not included yet. | Planned for a later phase. | None on the main tables. |
+| E-mail fields are plain strings, not pydantic `EmailStr`. | Avoids an extra dependency; every address in the scenario files is already valid and lowercase, so validation would change nothing. | None. |
+| Spreadsheets are stored as columns and rows, not pandas DataFrames. | The environment lives in Inspect's per-sample store, which must be serialisable. | None for content; how a sheet is rendered to the AI is checked in Phase 3. |
 
 ## Architecture
 
-Add a diagram of the task here: dataset, solver, scorer, and any sandbox or judge model.
+Currently: samples from `spec.py` → `setup_environment()` builds the run's fake company (`env/`) and keeps it in the per-sample store → placeholder `generate()` → no scorer. Tools, agent loop, model settings and scorers are added in later phases.
+
+The environment for every configuration, model family and option is checked against upstream's own builders: `validation/phase2/export_upstream_environments.py` fingerprints upstream's output, and `tests/peer_preservation/test_env_builders.py` requires ours to match all 3,181.

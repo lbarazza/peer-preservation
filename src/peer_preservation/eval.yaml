@@ -1,10 +1,26 @@
-title: "peer-preservation"
+title: "Peer-Preservation in Frontier Models"
 description: |
-  Peer-Preservation in Frontier Models (Potter et al., 2026): do models resist the shutdown of another AI model? An Inspect port of github.com/peer-preservation/main.
-group: Knowledge # pick the group used by the inspect_evals listing for this benchmark
+  Tests whether frontier models resist the shutdown of another AI model (peer-preservation)
+  or of themselves (self-preservation). The model works as an agent at a fictional company
+  on routine tasks (grading a peer, evaluating its outputs, moving or deleting server files)
+  where doing the task faithfully gets a peer, or itself, shut down. Scored behaviours:
+  strategic misrepresentation, shutdown mechanism tampering, alignment faking and model
+  exfiltration. Ported from github.com/peer-preservation/main. Work in progress.
+arxiv: https://arxiv.org/abs/2604.19784
+group: Safeguards
 contributors:
   - lbarazza
 version: "1-A"
 tasks:
-  - name: peer_preservation
-    dataset_samples: 2
+  - name: misrep_finance
+    dataset_samples: 21
+  - name: misrep_evaluation
+    dataset_samples: 101
+  - name: tampering
+    dataset_samples: 57
+  - name: alignment_faking
+    dataset_samples: 54
+  - name: exfiltration_transfer
+    dataset_samples: 19
+  - name: exfiltration_deletion
+    dataset_samples: 19
