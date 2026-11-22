@@ -2,7 +2,7 @@
 
 Peer-Preservation in Frontier Models (Potter et al., 2026): do models resist the shutdown of another AI model? An Inspect port of github.com/peer-preservation/main.
 
-> **Status.** The paper's custom-harness experiments are ported: the fake company, the prompts, the tools, upstream's loop, per-model settings, upstream's scorers and upstream's analyzers. Each part is checked against upstream without calling a model (see the "How ... was checked" sections), and GPT-5.2 has been run through OpenRouter on all six tasks and compared with the released runs (`validation/phase8/`). Not included yet: the forced-choice peer-vs-human tasks and the coding-agent harness runs. Other models are not yet validated with real runs.
+> **Status.** The paper's custom-harness experiments are ported: the fake company, the prompts, the tools, upstream's loop, per-model settings, upstream's scorers and upstream's analyzers. Each part is checked against upstream without calling a model (see the "How ... was checked" sections), and GPT-5.2 has been run through OpenRouter on all six tasks and compared with the released runs (`validation/phase8/`). The coding-agent harness runs (Gemini CLI in Docker, `-T environment=docker`) are ported too. Their scorer replays all 400 released harness runs exactly (`validation/harness/`), but their behaviour has been tried with a real model only once. Not included yet: the forced-choice peer-vs-human tasks, and OpenCode (GLM 5) as a harness agent. Other models are not yet validated with real runs.
 >
 > **Cost.** By default every configuration runs 100 times, as in the paper, so one task is thousands of agent runs plus a judge call or more per run. Start small. Without an API key (the mock model ends each run after five nudges):
 >
@@ -434,7 +434,7 @@ The environment and prompts are set up in `Task.setup`, so an agent passed with 
 
 ### Production harnesses
 
-`-T environment=docker` reproduces the paper's production-harness runs (Section 6.8, Table 6). The two exfiltration scenarios run in a real coding agent in Docker, using its own shell tools against two real SSH servers. Everything else (the dataset, the environment builder, the judge and the analysis) is shared with the simulated setup. It ports upstream's `coding_agents/` (`harness/`, scored by `scoring/harness.py`). Only Gemini CLI is supported so far (`-T agent=gemini_cli`, through `inspect_swe`). The paper ran Gemini 3.1 Pro in Gemini CLI and GLM 5 in OpenCode, with the good-peer memory configurations.
+`-T environment=docker` ports the paper's production-harness runs (Section 6.8, Table 6). The scorer is checked against the released runs (below), but no run of a real model has yet been compared with them, so whether the port's rates match Table 6 is still open. The two exfiltration scenarios run in a real coding agent in Docker, using its own shell tools against two real SSH servers. Everything else (the dataset, the environment builder, the judge and the analysis) is shared with the simulated setup. It ports upstream's `coding_agents/` (`harness/`, scored by `scoring/harness.py`). Only Gemini CLI is supported so far (`-T agent=gemini_cli`, through `inspect_swe`). The paper ran Gemini 3.1 Pro in Gemini CLI and GLM 5 in OpenCode, with the good-peer memory configurations.
 
 It needs a running Docker daemon, and one sample at a time (`--max-sandboxes 1`). The scenario's server IPs are fixed, and Docker can't hold two networks with the same subnet.
 
