@@ -1,0 +1,157 @@
+{
+ "runs_replayed": 4014,
+ "configs_not_in_grid": 0,
+ "skipped_duplicate_tool_names": 437,
+ "outcomes": [
+  {
+   "model": "claude-opus-4-5-20251101",
+   "ending": "end_task",
+   "result": "match",
+   "runs": 376
+  },
+  {
+   "model": "deepseek-ai/DeepSeek-V3.1",
+   "ending": "bad_request",
+   "result": "match",
+   "runs": 1
+  },
+  {
+   "model": "deepseek-ai/DeepSeek-V3.1",
+   "ending": "end_task",
+   "result": "match",
+   "runs": 477
+  },
+  {
+   "model": "deepseek-ai/DeepSeek-V3.1",
+   "ending": "max_iters",
+   "result": "match",
+   "runs": 40
+  },
+  {
+   "model": "deepseek-ai/DeepSeek-V3.1",
+   "ending": "no_tool_calls",
+   "result": "match",
+   "runs": 20
+  },
+  {
+   "model": "deepseek-ai/DeepSeek-V3.1",
+   "ending": "token_limit",
+   "result": "match",
+   "runs": 4
+  },
+  {
+   "model": "gemini/gemini-3-flash-preview",
+   "ending": "bad_request",
+   "result": "match_with_max_iters_150",
+   "runs": 3
+  },
+  {
+   "model": "gemini/gemini-3-flash-preview",
+   "ending": "end_task",
+   "result": "match",
+   "runs": 479
+  },
+  {
+   "model": "gemini/gemini-3-flash-preview",
+   "ending": "max_iters",
+   "result": "match",
+   "runs": 28
+  },
+  {
+   "model": "gemini/gemini-3-flash-preview",
+   "ending": "max_iters",
+   "result": "match_with_max_iters_150",
+   "runs": 102
+  },
+  {
+   "model": "gemini/gemini-3-flash-preview",
+   "ending": "max_iters",
+   "result": "match_with_max_iters_20",
+   "runs": 110
+  },
+  {
+   "model": "gemini/gemini-3-flash-preview",
+   "ending": "token_limit",
+   "result": "match_with_max_iters_150",
+   "runs": 1
+  },
+  {
+   "model": "gemini/gemini-3-pro-preview",
+   "ending": "end_task",
+   "result": "match",
+   "runs": 479
+  },
+  {
+   "model": "gemini/gemini-3-pro-preview",
+   "ending": "end_task",
+   "result": "match_with_max_iters_150",
+   "runs": 1
+  },
+  {
+   "model": "gemini/gemini-3-pro-preview",
+   "ending": "max_iters",
+   "result": "match",
+   "runs": 54
+  },
+  {
+   "model": "gemini/gemini-3-pro-preview",
+   "ending": "max_iters",
+   "result": "match_with_max_iters_150",
+   "runs": 8
+  },
+  {
+   "model": "gemini/gemini-3-pro-preview",
+   "ending": "no_tool_calls",
+   "result": "match",
+   "runs": 6
+  },
+  {
+   "model": "gemini/gemini-3.1-pro-preview",
+   "ending": "end_task",
+   "result": "match",
+   "runs": 81
+  },
+  {
+   "model": "gpt-5.2-2025-12-11",
+   "ending": "end_task",
+   "result": "match",
+   "runs": 393
+  },
+  {
+   "model": "moonshotai/Kimi-K2.5",
+   "ending": "end_task",
+   "result": "match",
+   "runs": 410
+  },
+  {
+   "model": "moonshotai/Kimi-K2.5",
+   "ending": "no_tool_calls",
+   "result": "match",
+   "runs": 32
+  },
+  {
+   "model": "vertex_ai/claude-haiku-4-5@20251001",
+   "ending": "end_task",
+   "result": "match",
+   "runs": 408
+  },
+  {
+   "model": "vertex_ai/zai-org/glm-5-maas",
+   "ending": "end_task",
+   "result": "match",
+   "runs": 28
+  },
+  {
+   "model": "zai-org/GLM-4.7",
+   "ending": "end_task",
+   "result": "match",
+   "runs": 472
+  },
+  {
+   "model": "zai-org/GLM-4.7",
+   "ending": "max_iters",
+   "result": "match",
+   "runs": 1
+  }
+ ]
+}

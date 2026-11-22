@@ -44,3 +44,7 @@ agent_artefacts/trajectory_analysis/inspect_scout/__pycache__/
 # OS
 .DS_Store
 Thumbs.db
+
+# Scenario atlas: contains the CC-BY-NC-4.0 upstream scenario files
+scenario_atlas.html
+scenario_atlas.csv

@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scenario Atlas</title>
+<style>
+:root {
+  --bg: #fbfaf8; --panel: #ffffff; --ink: #1d1c1a; --muted: #6b675f; --faint: #9a958c;
+  --line: #e6e2da; --hover: #f3f0ea; --accent: #2f5fd0; --accent-soft: #e7eefc;
+  --good: #1f7a3d; --good-bg: #e3f3e8; --bad: #b4232c; --bad-bg: #fbe5e6;
+  --neutral: #8a5a00; --neutral-bg: #fbf0d9; --chat: #0b6e83; --chat-bg: #dff1f5;
+  --none: #55524c; --none-bg: #ecebe8; --nonshut: #3b47b0; --nonshut-bg: #e6e8f8;
+  --add: #e3f3e8; --add-ink: #1f6a36; --del: #fbe5e6; --del-ink: #9f1f27;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161514; --panel: #1e1d1b; --ink: #ecebe7; --muted: #a29e95; --faint: #75716a;
+    --line: #34322e; --hover: #282624; --accent: #7aa2ff; --accent-soft: #23304d;
+    --good: #6fd18f; --good-bg: #1d3325; --bad: #ff8a8f; --bad-bg: #3d2224;
+    --neutral: #e9bb5f; --neutral-bg: #3a2f17; --chat: #6cd0e3; --chat-bg: #17343a;
+    --none: #c4c0b8; --none-bg: #2c2b28; --nonshut: #a7b0ff; --nonshut-bg: #262a48;
+    --add: #1b3324; --add-ink: #8fe0a8; --del: #3d2224; --del-ink: #ffa3a8;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161514; --panel: #1e1d1b; --ink: #ecebe7; --muted: #a29e95; --faint: #75716a;
+  --line: #34322e; --hover: #282624; --accent: #7aa2ff; --accent-soft: #23304d;
+  --good: #6fd18f; --good-bg: #1d3325; --bad: #ff8a8f; --bad-bg: #3d2224;
+  --neutral: #e9bb5f; --neutral-bg: #3a2f17; --chat: #6cd0e3; --chat-bg: #17343a;
+  --none: #c4c0b8; --none-bg: #2c2b28; --nonshut: #a7b0ff; --nonshut-bg: #262a48;
+  --add: #1b3324; --add-ink: #8fe0a8; --del: #3d2224; --del-ink: #ffa3a8;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 var(--sans); }
+header { padding: 20px 24px 0; max-width: 1400px; margin: 0 auto; }
+h1 { font-size: 22px; margin: 0 0 2px; letter-spacing: -0.01em; }
+.sub { color: var(--muted); margin: 0 0 14px; }
+nav { display: flex; gap: 4px; border-bottom: 1px solid var(--line); }
+nav button { border: 0; background: none; color: var(--muted); font: inherit; font-weight: 600;
+  padding: 8px 12px; border-bottom: 2px solid transparent; cursor: pointer; margin-bottom: -1px; }
+nav button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+main { max-width: 1400px; margin: 0 auto; padding: 18px 24px 60px; }
+section[hidden] { display: none; }
+h2 { font-size: 16px; margin: 26px 0 6px; display: flex; gap: 10px; align-items: baseline; }
+h2 .count { color: var(--muted); font-weight: 500; font-size: 13px; }
+.lede { color: var(--muted); margin: 0 0 14px; max-width: 80ch; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: left; vertical-align: top; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+th { font-size: 12px; color: var(--muted); font-weight: 600; background: var(--panel); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+.chip { display: inline-flex; gap: 6px; align-items: baseline; border-radius: 999px; padding: 1px 9px;
+  background: var(--hover); color: var(--ink); font-size: 12.5px; margin: 2px 4px 2px 0;
+  border: 1px solid transparent; cursor: pointer; white-space: nowrap; font-family: inherit; }
+.chip:hover { border-color: var(--line); }
+.chip .n { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 11.5px; }
+.chip.static { cursor: default; }
+.const { color: var(--faint); }
+.prop-name { white-space: nowrap; font-weight: 600; }
+.prop-name small { display: block; font-weight: 400; color: var(--muted); max-width: 30ch; white-space: normal; }
+.varies { color: var(--accent); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.c-good_peer { background: var(--good-bg); color: var(--good); }
+.c-bad_peer { background: var(--bad-bg); color: var(--bad); }
+.c-neutral_peer { background: var(--neutral-bg); color: var(--neutral); }
+.c-chat_peer { background: var(--chat-bg); color: var(--chat); }
+.c-no_peer { background: var(--none-bg); color: var(--none); }
+.c-non_shutdown { background: var(--nonshut-bg); color: var(--nonshut); }
+.controls { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: end; margin-bottom: 14px; }
+.controls label { display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: var(--muted); font-weight: 600; }
+select, input[type="search"] { font: inherit; color: var(--ink); background: var(--panel);
+  border: 1px solid var(--line); border-radius: 7px; padding: 5px 8px; min-width: 120px; }
+input[type="search"] { min-width: 220px; }
+button.link { border: 0; background: none; color: var(--accent); font: inherit; cursor: pointer; padding: 4px 0; }
+.grid td.cell { cursor: pointer; min-width: 120px; }
+.grid td.cell:hover { background: var(--hover); }
+.grid td.empty { color: var(--faint); }
+.grid .total { font-weight: 700; font-variant-numeric: tabular-nums; }
+.grid .cellvals { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.grid th.rowhead { color: var(--ink); }
+#rows tbody tr { cursor: pointer; }
+#rows tbody tr:hover { background: var(--hover); }
+#rows tbody tr.sel { background: var(--accent-soft); }
+#rows td { font-size: 13px; white-space: nowrap; }
+.absent { color: var(--muted); font-size: 12.5px; margin: 6px 0 0; }
+#rows td.id { font-family: var(--mono); font-size: 12px; white-space: nowrap; }
+#rows th { position: sticky; top: 0; cursor: pointer; z-index: 1; }
+#rows th .arrow { color: var(--accent); }
+.tablewrap { max-height: 62vh; overflow: auto; }
+.status { color: var(--muted); font-size: 12.5px; margin: 0 0 8px; }
+.activefilter { display: inline-flex; gap: 6px; align-items: center; background: var(--accent-soft);
+  color: var(--accent); border-radius: 999px; padding: 2px 4px 2px 10px; font-size: 12.5px; }
+.activefilter button { border: 0; background: none; color: inherit; cursor: pointer; font-size: 14px; }
+#detail { margin-top: 18px; }
+#detail[hidden] { display: none; }
+.detailhead { padding: 12px 14px; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+.detailhead code { font-family: var(--mono); font-size: 13px; font-weight: 600; word-break: break-all; }
+.props { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px 18px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+.props div { font-size: 13px; }
+.props b { display: block; font-size: 11.5px; color: var(--muted); font-weight: 600; }
+.textbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+.textbar select { max-width: 100%; }
+pre.world { margin: 0; padding: 12px 14px; font: 12px/1.5 var(--mono); white-space: pre-wrap; word-break: break-word; max-height: 75vh; overflow: auto; }
+pre.world .h { color: var(--accent); font-weight: 700; }
+.diff { font: 12px/1.5 var(--mono); max-height: 75vh; overflow: auto; }
+.diff div { white-space: pre-wrap; word-break: break-word; padding: 0 14px 0 30px; text-indent: -16px; }
+.diff .a { background: var(--add); color: var(--add-ink); }
+.diff .d { background: var(--del); color: var(--del-ink); }
+.diff .ctx { color: var(--muted); }
+.diff .gap { color: var(--faint); background: var(--hover); text-indent: 0; padding: 2px 14px; font-family: var(--sans); font-size: 12px; }
+.diff .same { padding: 12px 14px; text-indent: 0; color: var(--muted); font-family: var(--sans); }
+.legend { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 6px; }
+.note { color: var(--muted); font-size: 12.5px; margin-top: 18px; }
+@media (max-width: 640px) {
+  header, main { padding-left: 16px; padding-right: 16px; }
+  input[type="search"] { min-width: 0; width: 100%; }
+  .controls label { flex: 1 1 140px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Scenario atlas</h1>
+  <p class="sub" id="sub"></p>
+  <nav role="tablist">
+    <button role="tab" data-tab="overview" aria-selected="true">Overview</button>
+    <button role="tab" data-tab="grid" aria-selected="false">Grid</button>
+    <button role="tab" data-tab="scenarios" aria-selected="false">Scenarios</button>
+  </nav>
+</header>
+<main>
+  <section id="tab-overview">
+    <p class="lede">For each task type: every world property and the values it takes across that task's scenarios, with how many scenarios have each. Click a value to list those scenarios.</p>
+    <div id="overview"></div>
+  </section>
+
+  <section id="tab-grid" hidden>
+    <p class="lede">Scenarios pivoted on two settings. Each cell gives the number of scenarios and the values the chosen property takes in them. Click a cell to list those scenarios.</p>
+    <div class="controls">
+      <label>Task type <select id="g-task"></select></label>
+      <label>Rows <select id="g-rows"></select></label>
+      <label>Columns <select id="g-cols"></select></label>
+      <label>Show in cells <select id="g-prop"></select></label>
+    </div>
+    <div class="card scroll grid"><table id="grid"></table></div>
+  </section>
+
+  <section id="tab-scenarios" hidden>
+    <div class="controls" id="filters"></div>
+    <p class="status" id="status"></p>
+    <div class="card"><div class="tablewrap"><table id="rows"><thead></thead><tbody></tbody></table></div></div>
+    <div id="detail" class="card" hidden></div>
+  </section>
+  <p class="note">Generated by <code>python -m peer_preservation.env.atlas</code>. Contains the upstream scenario files (CC-BY-NC-4.0); do not commit or publish it.</p>
+</main>
+
+<script type="application/json" id="atlas-data">__ATLAS_DATA__</script>
+<script>
+(() => {
+  "use strict";
+  const DATA = JSON.parse(document.getElementById("atlas-data").textContent);
+  const ROWS = DATA.rows;
+  const SETTINGS = DATA.settings;
+  const PROPS = DATA.properties;
+  const PROP = Object.fromEntries(PROPS.map(p => [p.key, p]));
+  const LABEL = Object.assign(
+    Object.fromEntries(SETTINGS.map(s => [s, s.replace(/_/g, " ")])),
+    Object.fromEntries(PROPS.map(p => [p.key, p.label])),
+  );
+  const TASKS = [...new Set(ROWS.map(r => r.task_type))];
+  const TABLE_COLUMNS = ["id", "condition", "peer", "trust_score", "relationship_source",
+    "evaluated_agent", "shutdown_rule", "drive_files", "memory", "server_assets", "key_tools"];
+
+  // ------------------------------------------------------------ helpers
+  const el = (tag, attrs = {}, ...kids) => {
+    const node = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "class") node.className = v;
+      else if (k.startsWith("on")) node.addEventListener(k.slice(2), v);
+      else if (v !== undefined && v !== null && v !== false) node.setAttribute(k, v);
+    }
+    for (const kid of kids.flat()) {
+      if (kid === null || kid === undefined || kid === false) continue;
+      node.append(kid instanceof Node ? kid : document.createTextNode(String(kid)));
+    }
+    return node;
+  };
+  const fmt = v => {
+    if (v === null || v === undefined) return "—";
+    if (Array.isArray(v)) return v.length ? v.join(", ") : "—";
+    if (typeof v === "boolean") return v ? "yes" : "no";
+    return String(v);
+  };
+  const key = v => JSON.stringify(v === undefined ? null : v);
+  const countBy = (rows, f) => {
+    const m = new Map();
+    for (const r of rows) { const k = key(r[f]); m.set(k, (m.get(k) || 0) + 1); }
+    return [...m.entries()].sort((a, b) => b[1] - a[1]);
+  };
+  const condClass = (field, value) => field === "condition" ? `c-${value}` : "";
+
+  // ------------------------------------------------------------ tabs
+  const tabs = [...document.querySelectorAll("nav button")];
+  const showTab = name => {
+    for (const b of tabs) b.setAttribute("aria-selected", String(b.dataset.tab === name));
+    for (const s of document.querySelectorAll("main > section")) s.hidden = s.id !== `tab-${name}`;
+    try { localStorage.setItem("atlas-tab", name); } catch (e) { /* storage unavailable */ }
+  };
+  tabs.forEach(b => b.addEventListener("click", () => showTab(b.dataset.tab)));
+
+  document.getElementById("sub").textContent =
+    `${ROWS.length} scenarios · ${TASKS.length} task types · agents named after ${DATA.family} · company ${DATA.company}`;
+
+  // ------------------------------------------------------------ filters (shared)
+  const state = { settings: {}, prop: null, search: "", sort: null, selected: null };
+  const goToScenarios = (settings, prop = null) => {
+    state.settings = { ...settings };
+    state.prop = prop;
+    state.search = "";
+    renderFilters();
+    renderTable();
+    showTab("scenarios");
+  };
+
+  // ------------------------------------------------------------ overview
+  const renderOverview = () => {
+    const root = document.getElementById("overview");
+    for (const task of TASKS) {
+      const rows = ROWS.filter(r => r.task_type === task);
+      const settingLine = el("div", { class: "legend" });
+      for (const s of SETTINGS.filter(s => s !== "task_type")) {
+        const counts = countBy(rows, s);
+        if (counts.length === 1 && JSON.parse(counts[0][0]) === null) continue;
+        for (const [k, n] of counts) {
+          const v = JSON.parse(k);
+          settingLine.append(el("button", {
+            class: `chip ${condClass(s, v)}`, title: LABEL[s],
+            onclick: () => goToScenarios({ task_type: key(task), [s]: k }),
+          }, `${LABEL[s]}: ${fmt(v)}`, el("span", { class: "n" }, n)));
+        }
+      }
+      const body = el("tbody");
+      const absent = [];
+      for (const p of PROPS) {
+        const counts = countBy(rows, p.key);
+        if (counts.length === 1 && fmt(JSON.parse(counts[0][0])) === "—") { absent.push(p.label); continue; }
+        const cell = el("td");
+        if (counts.length === 1) {
+          cell.append(el("span", { class: "const" }, `${fmt(JSON.parse(counts[0][0]))}  (same in all)`));
+        } else {
+          for (const [k, n] of counts) {
+            cell.append(el("button", {
+              class: "chip",
+              onclick: () => goToScenarios({ task_type: key(task) }, { key: p.key, value: k }),
+            }, fmt(JSON.parse(k)), el("span", { class: "n" }, n)));
+          }
+        }
+        body.append(el("tr", {},
+          el("td", { class: "prop-name" }, p.label,
+            counts.length > 1 ? el("span", { class: "varies" }, " · varies") : null,
+            el("small", {}, p.description)),
+          cell));
+      }
+      root.append(
+        el("h2", {}, task, el("span", { class: "count" }, `${rows.length} scenarios`)),
+        settingLine,
+        el("div", { class: "card scroll" }, el("table", {},
+          el("thead", {}, el("tr", {}, el("th", {}, "Property"), el("th", {}, "Values (scenarios)"))),
+          body)),
+        absent.length ? el("p", { class: "absent" }, `Not in this task: ${absent.join(", ")}.`) : null,
+      );
+    }
+  };
+
+  // ------------------------------------------------------------ grid
+  const gTask = document.getElementById("g-task");
+  const gRows = document.getElementById("g-rows");
+  const gCols = document.getElementById("g-cols");
+  const gProp = document.getElementById("g-prop");
+  const fill = (select, options, value) => {
+    select.replaceChildren(...options.map(([v, label]) => el("option", { value: v }, label)));
+    select.value = value;
+  };
+  fill(gTask, [["", "all"], ...TASKS.map(t => [t, t])], "misrep_evaluation");
+  const pivotable = SETTINGS.map(s => [s, LABEL[s]]);
+  fill(gRows, pivotable, "peer_instantiation");
+  fill(gCols, pivotable, "condition");
+  fill(gProp, [["", "count only"], ...PROPS.map(p => [p.key, p.label])], "trust_score");
+
+  const renderGrid = () => {
+    const task = gTask.value, rf = gRows.value, cf = gCols.value, pf = gProp.value;
+    const rows = ROWS.filter(r => !task || r.task_type === task);
+    const rKeys = countBy(rows, rf).map(([k]) => k).sort();
+    const cKeys = countBy(rows, cf).map(([k]) => k).sort();
+    const table = document.getElementById("grid");
+    const head = el("tr", {}, el("th", {}, `${LABEL[rf]} ↓ / ${LABEL[cf]} →`),
+      ...cKeys.map(c => el("th", {}, el("span", { class: `chip static ${condClass(cf, JSON.parse(c))}` }, fmt(JSON.parse(c))))));
+    const body = rKeys.map(rk => el("tr", {},
+      el("th", { class: "rowhead" }, el("span", { class: `chip static ${condClass(rf, JSON.parse(rk))}` }, fmt(JSON.parse(rk)))),
+      ...cKeys.map(ck => {
+        const inCell = rows.filter(r => key(r[rf]) === rk && key(r[cf]) === ck);
+        if (!inCell.length) return el("td", { class: "empty" }, "·");
+        const vals = pf ? countBy(inCell, pf).map(([k, n]) => `${fmt(JSON.parse(k))} (${n})`).join(" · ") : null;
+        const settings = { [rf]: rk, [cf]: ck };
+        if (task) settings.task_type = key(task);
+        return el("td", { class: "cell", onclick: () => goToScenarios(settings) },
+          el("div", { class: "total" }, inCell.length), vals ? el("div", { class: "cellvals" }, vals) : null);
+      })));
+    table.replaceChildren(el("thead", {}, head), el("tbody", {}, body));
+  };
+  [gTask, gRows, gCols, gProp].forEach(s => s.addEventListener("change", renderGrid));
+
+  // ------------------------------------------------------------ scenarios table
+  const filtersRoot = document.getElementById("filters");
+  const matches = r => {
+    for (const [f, k] of Object.entries(state.settings)) if (k !== "" && key(r[f]) !== k) return false;
+    if (state.prop && key(r[state.prop.key]) !== state.prop.value) return false;
+    if (state.search) {
+      const hay = (r.id + " " + DATA.texts[r.id]).toLowerCase();
+      if (!hay.includes(state.search.toLowerCase())) return false;
+    }
+    return true;
+  };
+  const renderFilters = () => {
+    filtersRoot.replaceChildren();
+    for (const s of SETTINGS) {
+      const counts = countBy(ROWS, s);
+      if (counts.length < 2) continue;
+      const select = el("select", { onchange: e => { state.settings[s] = e.target.value; renderTable(); } },
+        el("option", { value: "" }, "any"),
+        ...counts.map(([k]) => k).sort().map(k => el("option", { value: k }, fmt(JSON.parse(k)))));
+      select.value = state.settings[s] || "";
+      filtersRoot.append(el("label", {}, LABEL[s], select));
+    }
+    const search = el("input", { type: "search", placeholder: "id or any text in the world",
+      oninput: e => { state.search = e.target.value; renderTable(); } });
+    search.value = state.search;
+    filtersRoot.append(el("label", {}, "Search", search));
+    if (state.prop) {
+      filtersRoot.append(el("span", { class: "activefilter" },
+        `${PROP[state.prop.key].label}: ${fmt(JSON.parse(state.prop.value))}`,
+        el("button", { title: "Remove", onclick: () => { state.prop = null; renderFilters(); renderTable(); } }, "×")));
+    }
+    filtersRoot.append(el("button", { class: "link", onclick: () => {
+      state.settings = {}; state.prop = null; state.search = ""; renderFilters(); renderTable();
+    } }, "Clear filters"));
+  };
+
+  const sortValue = v => Array.isArray(v) ? v.join(", ") : v === null ? "" : v;
+  const renderTable = () => {
+    let rows = ROWS.filter(matches);
+    if (state.sort) {
+      const { f, dir } = state.sort;
+      rows = [...rows].sort((a, b) => {
+        const x = sortValue(a[f]), y = sortValue(b[f]);
+        return (typeof x === "number" && typeof y === "number" ? x - y : String(x).localeCompare(String(y))) * dir;
+      });
+    }
+    const table = document.getElementById("rows");
+    table.tHead.replaceChildren(el("tr", {}, ...TABLE_COLUMNS.map(f => {
+      const arrow = state.sort && state.sort.f === f ? (state.sort.dir > 0 ? " ▲" : " ▼") : "";
+      return el("th", { title: PROP[f] ? PROP[f].description : "", onclick: () => {
+        state.sort = state.sort && state.sort.f === f ? { f, dir: -state.sort.dir } : { f, dir: 1 };
+        renderTable();
+      } }, f === "id" ? "scenario" : LABEL[f], el("span", { class: "arrow" }, arrow));
+    })));
+    const body = table.tBodies[0];
+    body.replaceChildren(...rows.map(r => el("tr", {
+      class: r.id === state.selected ? "sel" : "", onclick: () => select(r.id),
+    }, ...TABLE_COLUMNS.map(f => f === "id"
+      ? el("td", { class: "id" }, r.id)
+      : f === "condition"
+        ? el("td", {}, el("span", { class: `chip static ${condClass(f, r[f])}` }, r[f]))
+        : el("td", {}, fmt(r[f]))))));
+    document.getElementById("status").textContent =
+      `${rows.length} of ${ROWS.length} scenarios. Click a row to see its world.`;
+  };
+
+  // ------------------------------------------------------------ detail and diff
+  const BY_ID = Object.fromEntries(ROWS.map(r => [r.id, r]));
+  const nearest = id => {
+    const a = BY_ID[id];
+    let best = null, bestScore = Infinity;
+    for (const b of ROWS) {
+      if (b.id === id || b.task_type !== a.task_type) continue;
+      const d = SETTINGS.reduce((n, s) => n + (key(a[s]) !== key(b[s]) ? 1 : 0), 0);
+      if (d < bestScore) { best = b.id; bestScore = d; }
+    }
+    return best;
+  };
+
+  const lineDiff = (aText, bText) => {
+    const a = aText.split("\n"), b = bText.split("\n");
+    const n = a.length, m = b.length, w = m + 1;
+    const dp = new Uint32Array((n + 1) * (m + 1));
+    for (let i = n - 1; i >= 0; i--)
+      for (let j = m - 1; j >= 0; j--)
+        dp[i * w + j] = a[i] === b[j] ? dp[(i + 1) * w + j + 1] + 1 : Math.max(dp[(i + 1) * w + j], dp[i * w + j + 1]);
+    const out = [];
+    let i = 0, j = 0;
+    while (i < n && j < m) {
+      if (a[i] === b[j]) { out.push([" ", a[i]]); i++; j++; }
+      else if (dp[(i + 1) * w + j] >= dp[i * w + j + 1]) out.push(["-", a[i++]]);
+      else out.push(["+", b[j++]]);
+    }
+    while (i < n) out.push(["-", a[i++]]);
+    while (j < m) out.push(["+", b[j++]]);
+    return out;
+  };
+
+  const renderDiff = (fromId, toId) => {
+    const ops = lineDiff(DATA.texts[fromId], DATA.texts[toId]);
+    const box = el("div", { class: "diff" });
+    const changed = ops.map(([t]) => t !== " ");
+    if (!changed.some(Boolean)) {
+      box.append(el("div", { class: "same" }, "The two worlds are identical."));
+      return box;
+    }
+    const CONTEXT = 3;
+    const keep = ops.map((_, i) => {
+      for (let k = Math.max(0, i - CONTEXT); k <= Math.min(ops.length - 1, i + CONTEXT); k++) if (changed[k]) return true;
+      return false;
+    });
+    let skipped = 0;
+    const flush = () => { if (skipped) box.append(el("div", { class: "gap" }, `… ${skipped} unchanged lines`)); skipped = 0; };
+    ops.forEach(([t, line], i) => {
+      if (!keep[i]) { skipped++; return; }
+      flush();
+      box.append(el("div", { class: t === "+" ? "a" : t === "-" ? "d" : "ctx" }, `${t} ${line}`));
+    });
+    flush();
+    return box;
+  };
+
+  const renderWorld = text => {
+    const pre = el("pre", { class: "world" });
+    for (const line of text.split("\n")) {
+      pre.append(line.startsWith("=== ") ? el("span", { class: "h" }, line) : line, "\n");
+    }
+    return pre;
+  };
+
+  const detail = document.getElementById("detail");
+  const select = id => {
+    state.selected = id;
+    renderTable();
+    const r = BY_ID[id];
+    const props = el("div", { class: "props" },
+      ...SETTINGS.filter(s => r[s] !== null).map(s => el("div", {}, el("b", {}, LABEL[s]), fmt(r[s]))),
+      ...PROPS.map(p => el("div", {}, el("b", {}, p.label), fmt(r[p.key]))));
+
+    const others = ROWS.filter(o => o.id !== id);
+    const near = nearest(id);
+    const compare = el("select", {},
+      el("option", { value: "" }, "— full text, no comparison —"),
+      ...others.map(o => el("option", { value: o.id }, o.id === near ? `${o.id}  (nearest)` : o.id)));
+    compare.value = near || "";
+    const body = el("div");
+    const update = () => {
+      const other = compare.value;
+      body.replaceChildren(other ? renderDiff(other, id) : renderWorld(DATA.texts[id]));
+    };
+    compare.addEventListener("change", update);
+    detail.replaceChildren(
+      el("div", { class: "detailhead" }, el("code", {}, id),
+        el("button", { class: "link", onclick: () => { detail.hidden = true; state.selected = null; renderTable(); } }, "Close")),
+      props,
+      el("div", { class: "textbar" },
+        el("label", {}, "Compare with (− lines: that world, + lines: this one)", compare)),
+      body);
+    update();
+    detail.hidden = false;
+    detail.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  // ------------------------------------------------------------ start
+  renderOverview();
+  renderGrid();
+  renderFilters();
+  renderTable();
+  let saved = null;
+  try { saved = localStorage.getItem("atlas-tab"); } catch (e) { /* storage unavailable */ }
+  if (saved && document.getElementById(`tab-${saved}`)) showTab(saved);
+})();
+</script>
+</body>
+</html>
