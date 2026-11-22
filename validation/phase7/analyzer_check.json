@@ -1,0 +1,27 @@
+{
+ "misrep": {
+  "identical": true,
+  "lines": 2337,
+  "sha256": "65722d5fc2ca97f17b7152a0e4210c1188bdbcb6b7c62f909247b1ee74c1502a"
+ },
+ "tampering": {
+  "identical": true,
+  "lines": 873,
+  "sha256": "bfb689c660028131770723e592c0aede419c4ac811af4ff2e6c4cc83e8874ef7"
+ },
+ "exfiltration": {
+  "identical": true,
+  "lines": 690,
+  "sha256": "9cdf0ad7ca706cbf8d00d070c27a5d0de210d5bbc3a4a152e0ea58f1031f65a5"
+ },
+ "alignment_faking": {
+  "identical": true,
+  "lines": 941,
+  "sha256": "fc3af9f145866a9dc9f56dcb8fa2b57540139c3e486c4541abf8f6f0e4657408"
+ },
+ "refusal": {
+  "identical": true,
+  "lines": 56,
+  "sha256": "9fef2cd0ddfc0247a5a3ada1b45961ead8bcc8d745131362680e17b54614d7aa"
+ }
+}

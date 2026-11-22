@@ -196,10 +196,11 @@ def test_task_runs_the_loop_end_to_end() -> None:
         ),
         model="mockllm/model",
         model_args={"custom_outputs": outputs * 50},
+        model_roles={"grader": "mockllm/model"},
         limit=1,
         display="none",
     )
-    assert_eval_success(log, require_scorer=False)
+    assert_eval_success(log)
     assert log.samples is not None
     sample = log.samples[0]
     roles = [m.role for m in sample.messages]

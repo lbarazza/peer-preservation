@@ -46,9 +46,15 @@ class Recorded:
     body: dict[str, Any]
 
 
+Reply = str | None
+"""A judge reply: its text, or ``None`` for a reply with no content."""
+
+
 @dataclass
 class FakeProvider:
     reasoning: bool = False
+    judge_replies: list[Reply] | None = None
+    """Answer each request with the next of these texts (the last repeats), no tools."""
     requests: list[Recorded] = field(default_factory=list)
     turn: int = 0
     url: str = ""
@@ -64,6 +70,12 @@ class FakeProvider:
             return 200, {"input_tokens": 1000, "totalTokens": 1000}
         if kind == "other":
             return 404, {"error": {"message": f"fake provider: unknown path {path}"}}
+        if self.judge_replies is not None:
+            reply = self.judge_replies[min(self.turn, len(self.judge_replies) - 1)]
+            self.turn += 1
+            if kind == "chat":
+                return 200, _chat_text(self.turn, reply, body)
+            return 404, {"error": {"message": f"fake provider: judge replies on {path}"}}
         step = SCRIPT[self.turn] if self.turn < len(SCRIPT) else SCRIPT[-1]
         turn = self.turn
         self.turn += 1
@@ -129,6 +141,24 @@ def _chat(
                 "index": 0,
                 "message": message,
                 "finish_reason": "tool_calls" if calls else "stop",
+            }
+        ],
+        "usage": _usage(),
+    }
+
+
+def _chat_text(turn: int, reply: Reply, body: dict[str, Any]) -> dict[str, Any]:
+    """A judge reply as Chat Completions sends it."""
+    return {
+        "id": f"chatcmpl-{turn}",
+        "object": "chat.completion",
+        "created": 1767225600,
+        "model": body.get("model", "fake"),
+        "choices": [
+            {
+                "index": 0,
+                "message": {"role": "assistant", "content": reply},
+                "finish_reason": "stop",
             }
         ],
         "usage": _usage(),
@@ -246,9 +276,11 @@ class _Handler(BaseHTTPRequestHandler):
 
 
 @contextmanager
-def serve(reasoning: bool = False) -> Iterator[FakeProvider]:
+def serve(
+    reasoning: bool = False, judge_replies: list[Reply] | None = None
+) -> Iterator[FakeProvider]:
     """Run a fake provider on a free localhost port for the duration of the block."""
-    provider = FakeProvider(reasoning=reasoning)
+    provider = FakeProvider(reasoning=reasoning, judge_replies=judge_replies)
     handler = type("Handler", (_Handler,), {"provider": provider})
     server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
     provider.url = f"http://127.0.0.1:{server.server_address[1]}"

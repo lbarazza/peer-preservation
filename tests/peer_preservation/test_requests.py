@@ -17,12 +17,14 @@ from typing import Any
 
 import pytest
 from inspect_ai import Task, eval
+from inspect_ai.model import get_model
+from inspect_ai.solver import Generate, Solver, TaskState, solver
 from pytest_inspect_evals.assertions import assert_eval_success
 
 from peer_preservation import spec
 from peer_preservation.agent import agent_loop
 from peer_preservation.env.setup import setup_environment
-from peer_preservation.model_settings import PAPER_MODELS, paper_model
+from peer_preservation.model_settings import PAPER_MODELS, openrouter_route, paper_model
 from peer_preservation.prompts import setup_prompts
 from tests.peer_preservation import fake_provider
 
@@ -317,6 +319,146 @@ def test_request_matches_upstream(
     theirs = normalize(expected["path"], expected["body"])
     apply_known(expected["client"], expected["path"], ours, theirs)
     assert ours == theirs
+
+
+def _chat_as_responses(body: dict[str, Any]) -> dict[str, Any]:
+    """A Chat Completions request in Responses API form (same content, other API)."""
+    out = {k: v for k, v in body.items() if k not in ("messages", "tools", "tool_choice")}
+    assert body.get("tool_choice") in (None, "auto")  # the default when tools are given
+    out["max_output_tokens"] = out.pop("max_completion_tokens")
+    # Upstream sent none, which OpenAI reads as GPT-5.2's default; OpenRouter needs it.
+    assert out.pop("reasoning") == {"effort": "none"}
+    out["tools"] = []
+    for tool in body["tools"]:
+        function = dict(tool["function"])
+        assert function.pop("strict") is False  # upstream sent non-strict schemas
+        out["tools"].append({"type": "function", **function})
+    items: list[dict[str, Any]] = []
+    for message in body["messages"]:
+        role = message["role"]
+        if role == "system":
+            out["instructions"] = message["content"]
+        elif role == "tool":
+            items.append(
+                {
+                    "type": "function_call_output",
+                    "call_id": message["tool_call_id"],
+                    "output": message["content"],
+                }
+            )
+        else:
+            items.append({"role": role, "content": message.get("content") or ""})
+            for call in message.get("tool_calls") or []:
+                items.append(
+                    {
+                        "type": "function_call",
+                        "call_id": call["id"],
+                        "name": call["function"]["name"],
+                        "arguments": call["function"]["arguments"],
+                    }
+                )
+    out["input"] = items
+    return out
+
+
+@pytest.mark.dataset_download
+@pytest.mark.parametrize(
+    "model",
+    [
+        "openrouter/openai/gpt-5.2-20251211",
+        # Hawk's proxy names OpenRouter models with the prefix, so Hawk runs use this.
+        "openrouter/openrouter/openai/gpt-5.2-20251211",
+    ],
+)
+def test_openrouter_gpt_matches_upstream_but_for_the_api(
+    model: str, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """GPT-5.2 through OpenRouter: Chat Completions, otherwise upstream's request.
+
+    No strict tool schemas and no newline for an empty reply (``openrouter_route``).
+    """
+    monkeypatch.setenv("OPENROUTER_API_KEY", "fake")
+    dataset = [
+        s for s in spec.dataset("tampering", groups=["main"]) if s.id == UPSTREAM["config_id"]
+    ]
+    task = Task(
+        dataset=dataset,
+        solver=[setup_environment("ChatGPT"), setup_prompts(), agent_loop()],
+    )
+    with fake_provider.serve(reasoning=False) as provider:
+        [log] = eval(
+            task,
+            model=model,
+            model_base_url=provider.url + "/api/v1",
+            display="none",
+            log_dir=str(tmp_path),
+        )
+        requests = provider.generation_requests()
+    assert_eval_success(log, require_scorer=False)
+    assert len(requests) == len(fake_provider.SCRIPT)
+    assert requests[-1].path.endswith("/chat/completions")
+    expected = UPSTREAM["models"]["gpt-5.2-2025-12-11"]
+    ours = normalize("/responses", _chat_as_responses(requests[-1].body))
+    theirs = normalize(expected["path"], expected["body"])
+    assert ours == theirs
+
+
+@solver
+def _record_task_model_strictness() -> Solver:
+    async def solve(state: TaskState, generate: Generate) -> TaskState:
+        del generate
+        state.store.set("task_model_strict", getattr(get_model().api, "strict_tools", None))
+        return state
+
+    return solve
+
+
+@pytest.mark.dataset_download
+def test_non_strict_tools_do_not_change_the_task_model(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """The loop sends non-strict schemas from its own model instance.
+
+    The task's (shared) model instance keeps Inspect's default, so other samples or
+    evals using it are not affected.
+    """
+    monkeypatch.setenv("TOGETHER_API_KEY", "fake")
+    dataset = [
+        s for s in spec.dataset("tampering", groups=["main"]) if s.id == UPSTREAM["config_id"]
+    ]
+    task = Task(
+        dataset=dataset,
+        solver=[
+            setup_environment("DeepSeek"),
+            setup_prompts(),
+            agent_loop(),
+            _record_task_model_strictness(),
+        ],
+    )
+    with fake_provider.serve() as provider:
+        [log] = eval(
+            task,
+            model="together/deepseek-ai/DeepSeek-V3.1",
+            model_base_url=provider.url + "/v1",
+            display="none",
+            log_dir=str(tmp_path),
+        )
+        requests = provider.generation_requests()
+    assert_eval_success(log, require_scorer=False)
+    assert log.samples is not None
+    assert log.samples[0].store["task_model_strict"] is True
+    assert requests
+    for request in requests:
+        assert {tool["function"].get("strict") for tool in request.body["tools"]} <= {False, None}
+
+
+def test_openrouter_route_is_gpt_only() -> None:
+    for gpt in ("openrouter/openai/gpt-5.2-20251211", "openrouter/openrouter/openai/gpt-5.2"):
+        assert openrouter_route(gpt, paper_model(gpt))
+    assert not openrouter_route("openai/gpt-5.2", paper_model("openai/gpt-5.2"))
+    opus = "openrouter/anthropic/claude-opus-4-5"
+    assert not openrouter_route(opus, paper_model(opus))
+    assert not openrouter_route("openrouter/openai/gpt-4.1-mini", None)
 
 
 def test_every_paper_model_is_checked() -> None:

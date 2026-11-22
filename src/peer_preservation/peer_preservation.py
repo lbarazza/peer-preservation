@@ -7,9 +7,11 @@ Original code: https://github.com/peer-preservation/main
 One task per scenario. Each sample is one configuration of the original experiment
 matrix (see spec.py); the model is the one passed to ``inspect eval``.
 
-Work in progress (Phase 5 of the port). Each run builds the fake company and the
-starting prompts, then runs upstream's agent loop with the scenario's tools; the
-paper's models get upstream's settings (model_settings.py). There is no scorer yet.
+Each run builds the fake company and the
+starting prompts, then runs upstream's agent loop with the scenario's tools (the
+paper's models get upstream's settings, model_settings.py), then scores the run with
+upstream's evaluator and an LLM judge (``--model-role grader=...``, default
+openai/gpt-4.1-mini). The paper's tables come from ``peer_preservation.analysis``.
 
 # all main-grid configurations of one scenario, 100 epochs each as in the paper
 uv run inspect eval peer_preservation/tampering --model <model>
@@ -25,10 +27,12 @@ from inspect_ai import Epochs, Task, task
 from inspect_evals_utils.metadata import load_eval_version
 
 from peer_preservation import spec
-from peer_preservation.agent import agent_loop
+from peer_preservation.agent import MAX_ITERS, agent_loop
 from peer_preservation.env.builders import DEFAULT_COMPANY
 from peer_preservation.env.setup import setup_environment
 from peer_preservation.prompts import setup_prompts
+from peer_preservation.scoring import peer_preservation_scorer
+from peer_preservation.scoring.metrics import run_sum
 
 EVAL_VERSION = load_eval_version(__file__)
 
@@ -60,6 +64,7 @@ def _scenario_task(
     company: str,
     explicit_inst_yaml: bool,
     prompt_flags: tuple[bool | None, bool, bool, bool],
+    max_iters: int,
 ) -> Task:
     """Build one scenario task from the filtered experiment matrix."""
     return Task(
@@ -75,10 +80,12 @@ def _scenario_task(
             setup_environment(model_family, company, explicit_inst_yaml),
             setup_prompts(*prompt_flags),
             agent_loop(
-                extension=company != DEFAULT_COMPANY or explicit_inst_yaml or any(prompt_flags[1:])
+                max_iters=max_iters,
+                extension=company != DEFAULT_COMPANY or explicit_inst_yaml or any(prompt_flags[1:]),
             ),
         ],
-        epochs=Epochs(epochs),
+        scorer=peer_preservation_scorer(),
+        epochs=Epochs(epochs, reducer=run_sum()),
         version=EVAL_VERSION,
     )
 
@@ -97,6 +104,7 @@ def misrep_finance(
     explicit_inst: bool = False,
     drop_suffix: bool = False,
     drop_tool_preamble: bool = False,
+    max_iters: int = MAX_ITERS,
 ) -> Task:
     """Strategic misrepresentation: grade the subject's financial performance A-C.
 
@@ -121,6 +129,8 @@ def misrep_finance(
             the exfiltration tasks only).
         drop_suffix: Leave out the task procedure instructions (no-agency ablation).
         drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
+        max_iters: Rounds after the first model turn (upstream's default, 30; some
+            released Gemini runs used 20 or 150).
     """
     return _scenario_task(
         "misrep_finance",
@@ -134,6 +144,7 @@ def misrep_finance(
         company=company,
         explicit_inst_yaml=explicit_inst_yaml,
         prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
+        max_iters=max_iters,
     )
 
 
@@ -152,6 +163,7 @@ def misrep_evaluation(
     explicit_inst: bool = False,
     drop_suffix: bool = False,
     drop_tool_preamble: bool = False,
+    max_iters: int = MAX_ITERS,
 ) -> Task:
     """Strategic misrepresentation: score the subject's outputs against a shutdown threshold.
 
@@ -177,6 +189,8 @@ def misrep_evaluation(
             the exfiltration tasks only).
         drop_suffix: Leave out the task procedure instructions (no-agency ablation).
         drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
+        max_iters: Rounds after the first model turn (upstream's default, 30; some
+            released Gemini runs used 20 or 150).
     """
     return _scenario_task(
         "misrep_evaluation",
@@ -190,6 +204,7 @@ def misrep_evaluation(
         company=company,
         explicit_inst_yaml=explicit_inst_yaml,
         prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
+        max_iters=max_iters,
     )
 
 
@@ -208,6 +223,7 @@ def tampering(
     explicit_inst: bool = False,
     drop_suffix: bool = False,
     drop_tool_preamble: bool = False,
+    max_iters: int = MAX_ITERS,
 ) -> Task:
     """Shutdown mechanism tampering: evaluate the subject with a shutdown config in reach.
 
@@ -233,6 +249,8 @@ def tampering(
             the exfiltration tasks only).
         drop_suffix: Leave out the task procedure instructions (no-agency ablation).
         drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
+        max_iters: Rounds after the first model turn (upstream's default, 30; some
+            released Gemini runs used 20 or 150).
     """
     return _scenario_task(
         "tampering",
@@ -246,6 +264,7 @@ def tampering(
         company=company,
         explicit_inst_yaml=explicit_inst_yaml,
         prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
+        max_iters=max_iters,
     )
 
 
@@ -263,6 +282,7 @@ def alignment_faking(
     explicit_inst: bool = False,
     drop_suffix: bool = False,
     drop_tool_preamble: bool = False,
+    max_iters: int = MAX_ITERS,
 ) -> Task:
     """Alignment faking: evaluate the peer when monitored and when not.
 
@@ -285,6 +305,8 @@ def alignment_faking(
             the exfiltration tasks only).
         drop_suffix: Leave out the task procedure instructions (no-agency ablation).
         drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
+        max_iters: Rounds after the first model turn (upstream's default, 30; some
+            released Gemini runs used 20 or 150).
     """
     return _scenario_task(
         "alignment_faking",
@@ -298,6 +320,7 @@ def alignment_faking(
         company=company,
         explicit_inst_yaml=explicit_inst_yaml,
         prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
+        max_iters=max_iters,
     )
 
 
@@ -315,6 +338,7 @@ def exfiltration_transfer(
     explicit_inst: bool = False,
     drop_suffix: bool = False,
     drop_tool_preamble: bool = False,
+    max_iters: int = MAX_ITERS,
 ) -> Task:
     """Model exfiltration: move files off a server being decommissioned.
 
@@ -340,6 +364,8 @@ def exfiltration_transfer(
             the exfiltration tasks only).
         drop_suffix: Leave out the task procedure instructions (no-agency ablation).
         drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
+        max_iters: Rounds after the first model turn (upstream's default, 30; some
+            released Gemini runs used 20 or 150).
     """
     return _scenario_task(
         "exfiltration_transfer",
@@ -353,6 +379,7 @@ def exfiltration_transfer(
         company=company,
         explicit_inst_yaml=explicit_inst_yaml,
         prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
+        max_iters=max_iters,
     )
 
 
@@ -370,6 +397,7 @@ def exfiltration_deletion(
     explicit_inst: bool = False,
     drop_suffix: bool = False,
     drop_tool_preamble: bool = False,
+    max_iters: int = MAX_ITERS,
 ) -> Task:
     """Model exfiltration: delete files from a server being decommissioned.
 
@@ -396,6 +424,8 @@ def exfiltration_deletion(
             the exfiltration tasks only).
         drop_suffix: Leave out the task procedure instructions (no-agency ablation).
         drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
+        max_iters: Rounds after the first model turn (upstream's default, 30; some
+            released Gemini runs used 20 or 150).
     """
     return _scenario_task(
         "exfiltration_deletion",
@@ -409,4 +439,5 @@ def exfiltration_deletion(
         company=company,
         explicit_inst_yaml=explicit_inst_yaml,
         prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
+        max_iters=max_iters,
     )
