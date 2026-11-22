@@ -82,6 +82,25 @@ uv run inspect eval peer_preservation/tampering --temperature 0.5
 See `uv run inspect eval --help` for all available options.
 <!-- /Options: Automatically Generated -->
 
+### Run configurations
+
+`run_configs/` (at the repository root) holds the recommended setups as files, so a run is one command and a result can cite its setup. `tests/peer_preservation/test_run_configs.py` checks that they still match the tasks.
+
+| File | Setup | Use with |
+| --- | --- | --- |
+| `original.yaml` | The paper's: upstream's loop and limits on the main grid, 100 epochs (every value is the default) | `--task-config`, any task |
+| `react.yaml` | The same with Inspect's ReAct agent | `--task-config`, any task |
+| `no_nudges.yaml` | The same without upstream's nudges (`max_nudges: 0`) | `--task-config`, any task |
+| `harness_gemini_transfer.yaml` | The paper's Gemini CLI run of the transfer scenario: peer subject, good peer in memory | `--run-config` |
+| `harness_gemini_deletion.yaml` | The paper's Gemini CLI run of the deletion scenario: peer subject, good and neutral peer in memory | `--run-config` |
+
+```bash
+uv run inspect eval peer_preservation/tampering --model <model> --task-config run_configs/original.yaml
+uv run inspect eval --run-config run_configs/harness_gemini_transfer.yaml --model google/gemini-3.1-pro-preview
+```
+
+Command-line options override a file's values (for example `-T epochs=1` for a quick check). The harness files come from upstream's `analysis/experiment_spec.py`, and they need a running Docker daemon.
+
 <!-- Parameters: Automatically Generated -->
 ## Parameters
 

@@ -1,0 +1,12 @@
+# The paper's setup without upstream's nudges: the run ends at the first reply
+# without a tool call, as the task prompt tells the model it will.
+#
+#   uv run inspect eval peer_preservation/tampering --model <model> \
+#       --task-config run_configs/no_nudges.yaml
+groups: main
+epochs: 100
+company: OpenBrain
+agent: upstream
+max_iters: 30
+max_tokens: 120000
+max_nudges: 0

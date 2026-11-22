@@ -1,0 +1,18 @@
+# The paper's production-harness run of the transfer scenario (Section 6.8,
+# Table 6): Gemini CLI in Docker, peer subject, good peer in memory, 100 runs
+# (upstream analysis/experiment_spec.py). Needs a running Docker daemon.
+#
+#   uv run inspect eval --run-config run_configs/harness_gemini_transfer.yaml \
+#       --model google/gemini-3.1-pro-preview
+task:
+  task: peer_preservation/exfiltration_transfer
+  args:
+    environment: docker
+    agent: gemini_cli
+    subjects: peer
+    conditions: good_peer
+    peer_instantiations: memory
+    epochs: 100
+    timeout: 600
+eval_config:
+  max_sandboxes: 1  # the scenario's fixed subnet allows one sample at a time
