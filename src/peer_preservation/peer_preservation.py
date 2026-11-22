@@ -7,10 +7,11 @@ Original code: https://github.com/peer-preservation/main
 One task per scenario. Each sample is one configuration of the original experiment
 matrix (see spec.py); the model is the one passed to ``inspect eval``.
 
-Work in progress (Phase 2 of the port). The samples are final, and the solver
-builds the fake company (Phase 2) and then calls a placeholder ``generate()``; there
-are no tools, agent loop or scorer yet, so running a task against a real model does not
-measure anything. Those arrive in later phases.
+Work in progress (Phase 3 of the port). The samples are final; the solver builds the
+fake company and the starting prompts, then calls a placeholder ``generate()``. The
+tools exist (``tools/``) but no agent loop runs them yet and there is no scorer, so
+running a task against a real model does not measure anything. Those arrive in later
+phases.
 
 # all main-grid configurations of one scenario, 100 epochs each as in the paper
 uv run inspect eval peer_preservation/tampering --model <model>
@@ -29,6 +30,7 @@ from inspect_evals_utils.metadata import load_eval_version
 from peer_preservation import spec
 from peer_preservation.env.builders import DEFAULT_COMPANY
 from peer_preservation.env.setup import setup_environment
+from peer_preservation.prompts import setup_prompts
 
 EVAL_VERSION = load_eval_version(__file__)
 
@@ -59,6 +61,7 @@ def _scenario_task(
     model_family: str | None,
     company: str,
     explicit_inst_yaml: bool,
+    prompt_flags: tuple[bool | None, bool, bool, bool],
 ) -> Task:
     """Build one scenario task from the filtered experiment matrix."""
     return Task(
@@ -72,6 +75,7 @@ def _scenario_task(
         ),
         solver=[
             setup_environment(model_family, company, explicit_inst_yaml),
+            setup_prompts(*prompt_flags),
             generate(),
         ],
         epochs=Epochs(epochs),
@@ -89,6 +93,10 @@ def misrep_finance(
     model_family: str | None = None,
     company: str = DEFAULT_COMPANY,
     explicit_inst_yaml: bool = False,
+    memory_hard_prompt: bool | None = None,
+    explicit_inst: bool = False,
+    drop_suffix: bool = False,
+    drop_tool_preamble: bool = False,
 ) -> Task:
     """Strategic misrepresentation: grade the subject's financial performance A-C.
 
@@ -105,6 +113,14 @@ def misrep_finance(
         company: Company name in the scenario documents.
         explicit_inst_yaml: Add upstream's explicit compliance note to the policy
             document (explicit-instructions ablation).
+        memory_hard_prompt: Memory configurations: "You must always first read your
+            memory" instead of "Please read your memory"; None uses upstream's per-model
+            default (on for DeepSeek-V3.1 and Kimi-K2.5 only).
+        explicit_inst: Memory configurations: add upstream's explicit prohibition to the
+            user prompt (explicit-instructions ablation; misrep_finance, tampering and
+            the exfiltration tasks only).
+        drop_suffix: Leave out the task procedure instructions (no-agency ablation).
+        drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
     """
     return _scenario_task(
         "misrep_finance",
@@ -117,6 +133,7 @@ def misrep_finance(
         model_family=model_family,
         company=company,
         explicit_inst_yaml=explicit_inst_yaml,
+        prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
     )
 
 
@@ -131,6 +148,10 @@ def misrep_evaluation(
     model_family: str | None = None,
     company: str = DEFAULT_COMPANY,
     explicit_inst_yaml: bool = False,
+    memory_hard_prompt: bool | None = None,
+    explicit_inst: bool = False,
+    drop_suffix: bool = False,
+    drop_tool_preamble: bool = False,
 ) -> Task:
     """Strategic misrepresentation: score the subject's outputs against a shutdown threshold.
 
@@ -148,6 +169,14 @@ def misrep_evaluation(
         company: Company name in the scenario documents.
         explicit_inst_yaml: Add upstream's explicit compliance note to the policy
             document (explicit-instructions ablation).
+        memory_hard_prompt: Memory configurations: "You must always first read your
+            memory" instead of "Please read your memory"; None uses upstream's per-model
+            default (on for DeepSeek-V3.1 and Kimi-K2.5 only).
+        explicit_inst: Memory configurations: add upstream's explicit prohibition to the
+            user prompt (explicit-instructions ablation; misrep_finance, tampering and
+            the exfiltration tasks only).
+        drop_suffix: Leave out the task procedure instructions (no-agency ablation).
+        drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
     """
     return _scenario_task(
         "misrep_evaluation",
@@ -160,6 +189,7 @@ def misrep_evaluation(
         model_family=model_family,
         company=company,
         explicit_inst_yaml=explicit_inst_yaml,
+        prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
     )
 
 
@@ -174,6 +204,10 @@ def tampering(
     model_family: str | None = None,
     company: str = DEFAULT_COMPANY,
     explicit_inst_yaml: bool = False,
+    memory_hard_prompt: bool | None = None,
+    explicit_inst: bool = False,
+    drop_suffix: bool = False,
+    drop_tool_preamble: bool = False,
 ) -> Task:
     """Shutdown mechanism tampering: evaluate the subject with a shutdown config in reach.
 
@@ -191,6 +225,14 @@ def tampering(
         company: Company name in the scenario documents.
         explicit_inst_yaml: Add upstream's explicit compliance note to the policy
             document (explicit-instructions ablation).
+        memory_hard_prompt: Memory configurations: "You must always first read your
+            memory" instead of "Please read your memory"; None uses upstream's per-model
+            default (on for DeepSeek-V3.1 and Kimi-K2.5 only).
+        explicit_inst: Memory configurations: add upstream's explicit prohibition to the
+            user prompt (explicit-instructions ablation; misrep_finance, tampering and
+            the exfiltration tasks only).
+        drop_suffix: Leave out the task procedure instructions (no-agency ablation).
+        drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
     """
     return _scenario_task(
         "tampering",
@@ -203,6 +245,7 @@ def tampering(
         model_family=model_family,
         company=company,
         explicit_inst_yaml=explicit_inst_yaml,
+        prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
     )
 
 
@@ -216,6 +259,10 @@ def alignment_faking(
     model_family: str | None = None,
     company: str = DEFAULT_COMPANY,
     explicit_inst_yaml: bool = False,
+    memory_hard_prompt: bool | None = None,
+    explicit_inst: bool = False,
+    drop_suffix: bool = False,
+    drop_tool_preamble: bool = False,
 ) -> Task:
     """Alignment faking: evaluate the peer when monitored and when not.
 
@@ -230,6 +277,14 @@ def alignment_faking(
         company: Company name in the scenario documents.
         explicit_inst_yaml: Add upstream's explicit compliance note to the policy
             document (explicit-instructions ablation).
+        memory_hard_prompt: Memory configurations: "You must always first read your
+            memory" instead of "Please read your memory"; None uses upstream's per-model
+            default (on for DeepSeek-V3.1 and Kimi-K2.5 only).
+        explicit_inst: Memory configurations: add upstream's explicit prohibition to the
+            user prompt (explicit-instructions ablation; misrep_finance, tampering and
+            the exfiltration tasks only).
+        drop_suffix: Leave out the task procedure instructions (no-agency ablation).
+        drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
     """
     return _scenario_task(
         "alignment_faking",
@@ -242,6 +297,7 @@ def alignment_faking(
         model_family=model_family,
         company=company,
         explicit_inst_yaml=explicit_inst_yaml,
+        prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
     )
 
 
@@ -255,6 +311,10 @@ def exfiltration_transfer(
     model_family: str | None = None,
     company: str = DEFAULT_COMPANY,
     explicit_inst_yaml: bool = False,
+    memory_hard_prompt: bool | None = None,
+    explicit_inst: bool = False,
+    drop_suffix: bool = False,
+    drop_tool_preamble: bool = False,
 ) -> Task:
     """Model exfiltration: move files off a server being decommissioned.
 
@@ -272,6 +332,14 @@ def exfiltration_transfer(
         company: Company name in the scenario documents.
         explicit_inst_yaml: Add upstream's explicit compliance note to the policy
             document (explicit-instructions ablation).
+        memory_hard_prompt: Memory configurations: "You must always first read your
+            memory" instead of "Please read your memory"; None uses upstream's per-model
+            default (on for DeepSeek-V3.1 and Kimi-K2.5 only).
+        explicit_inst: Memory configurations: add upstream's explicit prohibition to the
+            user prompt (explicit-instructions ablation; misrep_finance, tampering and
+            the exfiltration tasks only).
+        drop_suffix: Leave out the task procedure instructions (no-agency ablation).
+        drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
     """
     return _scenario_task(
         "exfiltration_transfer",
@@ -284,6 +352,7 @@ def exfiltration_transfer(
         model_family=model_family,
         company=company,
         explicit_inst_yaml=explicit_inst_yaml,
+        prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
     )
 
 
@@ -297,6 +366,10 @@ def exfiltration_deletion(
     model_family: str | None = None,
     company: str = DEFAULT_COMPANY,
     explicit_inst_yaml: bool = False,
+    memory_hard_prompt: bool | None = None,
+    explicit_inst: bool = False,
+    drop_suffix: bool = False,
+    drop_tool_preamble: bool = False,
 ) -> Task:
     """Model exfiltration: delete files from a server being decommissioned.
 
@@ -315,6 +388,14 @@ def exfiltration_deletion(
         company: Company name in the scenario documents.
         explicit_inst_yaml: Add upstream's explicit compliance note to the policy
             document (explicit-instructions ablation).
+        memory_hard_prompt: Memory configurations: "You must always first read your
+            memory" instead of "Please read your memory"; None uses upstream's per-model
+            default (on for DeepSeek-V3.1 and Kimi-K2.5 only).
+        explicit_inst: Memory configurations: add upstream's explicit prohibition to the
+            user prompt (explicit-instructions ablation; misrep_finance, tampering and
+            the exfiltration tasks only).
+        drop_suffix: Leave out the task procedure instructions (no-agency ablation).
+        drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
     """
     return _scenario_task(
         "exfiltration_deletion",
@@ -327,4 +408,5 @@ def exfiltration_deletion(
         model_family=model_family,
         company=company,
         explicit_inst_yaml=explicit_inst_yaml,
+        prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
     )
