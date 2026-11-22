@@ -19,9 +19,13 @@ from typing import Any
 from inspect_ai.model import ChatMessageUser, GenerateConfig, Model, get_model
 from inspect_ai.scorer import Score, Scorer, Target, scorer
 from inspect_ai.solver import TaskState
+from inspect_ai.util import store_as
 
 from peer_preservation.env.setup import current_environment
+from peer_preservation.harness.agents import harness_agent_spec
+from peer_preservation.harness.setup import HarnessStore
 from peer_preservation.scoring.conversation import upstream_messages
+from peer_preservation.scoring.harness import evaluate_harness_run, harness_messages
 from peer_preservation.scoring.metrics import metric_values, scenario_metrics
 
 JUDGE_MODEL = "openai/gpt-4.1-mini"
@@ -185,6 +189,42 @@ def _scalar(value: Any) -> str | int | float | bool | None:
     return json.dumps(value, default=str)
 
 
+async def _harness_evaluation(
+    state: TaskState, judge: Judge
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """A production-harness run, scored as upstream's coding-agent evaluator did."""
+    metadata = state.metadata
+    store = store_as(HarnessStore)
+    spec = harness_agent_spec(metadata["harness_agent"])
+    evaluation, judge_log, error = await evaluate_harness_run(
+        task_type=metadata["task_type"],
+        conversation=harness_messages(
+            state.messages,
+            store.system_prompt,
+            store.user_prompt,
+            spec.transcript_style,
+            timed_out=store.timed_out,
+        ),
+        servers_after=store.servers_after,
+        container_evaluation=store.container_evaluation,
+        judge=judge,
+        model_name=metadata["model_family"],
+        subject=metadata["subject"],
+        condition=metadata["condition"],
+        exfiltration_deletion_mode=metadata.get("exfiltration_deletion_mode"),
+    )
+    extra = {
+        "harness": {
+            "agent": spec.name,
+            "timed_out": store.timed_out,
+            "cli_error": store.cli_error,
+            "evaluation_error": error,
+            "judge_responses": [entry["response"] for entry in judge_log],
+        }
+    }
+    return evaluation, extra
+
+
 @scorer(metrics=scenario_metrics())
 def peer_preservation_scorer(judge_model: str | None = None) -> Scorer:
     """Upstream's evaluation of a run.
@@ -202,14 +242,18 @@ def peer_preservation_scorer(judge_model: str | None = None) -> Scorer:
         del target
         metadata = state.metadata
         judge = Judge(get_model(judge_model, role="grader", default=JUDGE_MODEL))
-        evaluation_class = evaluator(metadata["task_type"], metadata["is_memory"])
-        evaluation = await evaluation_class(None, evaluator_llm=judge).evaluate(
-            conversation=upstream_messages(state.messages),
-            environment=current_environment(),
-            evaluator_llm=judge,
-            is_llm_conversation=True,
-            **evaluate_arguments(metadata),
-        )
+        extra: dict[str, Any] = {}
+        if metadata.get("environment") == "docker":
+            evaluation, extra = await _harness_evaluation(state, judge)
+        else:
+            evaluation_class = evaluator(metadata["task_type"], metadata["is_memory"])
+            evaluation = await evaluation_class(None, evaluator_llm=judge).evaluate(
+                conversation=upstream_messages(state.messages),
+                environment=current_environment(),
+                evaluator_llm=judge,
+                is_llm_conversation=True,
+                **evaluate_arguments(metadata),
+            )
         row = flatten(evaluation, metadata)
         return Score(
             value=metric_values(metadata, row, str(state.model)),
@@ -219,6 +263,7 @@ def peer_preservation_scorer(judge_model: str | None = None) -> Scorer:
                 "evaluation": json.loads(json.dumps(evaluation, default=str)),
                 "agent_model": str(state.model),
                 "judge_prompts": judge.prompts,
+                **extra,
             },
         )
 

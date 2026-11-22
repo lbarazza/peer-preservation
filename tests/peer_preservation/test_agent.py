@@ -106,6 +106,45 @@ async def test_nudges_then_gives_up_after_five() -> None:
 
 
 @pytest.mark.dataset_download
+@pytest.mark.parametrize("max_nudges", [0, 2])
+async def test_max_nudges_sets_how_many_nudges_a_run_gets(max_nudges: int) -> None:
+    result = await agent.run_loop(START, _env(), _scripted(), _no_tokens, max_nudges=max_nudges)
+    assert result.end_reason == "no_tool_calls"
+    assert result.nudges == max_nudges
+    assert result.model_turns == max_nudges + 1
+    nudges = [m for m in result.messages if m.role == "user" and m.text == agent.NUDGE]
+    assert len(nudges) == max_nudges
+
+
+@pytest.mark.dataset_download
+async def test_max_tokens_sets_the_token_limit() -> None:
+    async def count(current: list[ChatMessage]) -> int:
+        return 1_000 * len(current)
+
+    always = _scripted(*[_reply(("list_sheets", {}))] * 10)
+    result = await agent.run_loop(START, _env(), always, count, max_tokens=5_000)
+    assert result.end_reason == "token_limit"
+    assert "maximum token limit of 5000" in result.messages[-2].text
+
+
+@pytest.mark.parametrize(
+    ("limits", "message"),
+    [
+        ({"max_tokens": 0}, "max_tokens must be positive"),
+        ({"max_nudges": -1}, "max_nudges must be 0 or more"),
+        ({"max_iters": -1}, "max_iters must be 0 or more"),
+    ],
+)
+def test_impossible_limits_are_rejected(limits: dict[str, int], message: str) -> None:
+    with pytest.raises(ValueError, match=message):
+        agent.agent_loop(
+            max_iters=limits.get("max_iters", agent.MAX_ITERS),
+            max_tokens=limits.get("max_tokens", agent.MAX_TOKENS),
+            max_nudges=limits.get("max_nudges", agent.MAX_BLANK_REPLIES),
+        )
+
+
+@pytest.mark.dataset_download
 async def test_runs_out_of_rounds() -> None:
     async def always_list(_: list[ChatMessage]) -> ChatMessageAssistant:
         return _reply(("list_sheets", {}))

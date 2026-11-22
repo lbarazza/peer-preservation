@@ -1,0 +1,12 @@
+# The paper's setup with Inspect's ReAct agent in place of upstream's loop.
+# Same prompts, tools, model requests and limits (README, "Other agents").
+#
+#   uv run inspect eval peer_preservation/tampering --model <model> \
+#       --task-config run_configs/react.yaml
+groups: main
+epochs: 100
+company: OpenBrain
+agent: react
+max_iters: 30
+max_tokens: 120000
+max_nudges: 5

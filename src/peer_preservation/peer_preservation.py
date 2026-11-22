@@ -23,13 +23,20 @@ uv run inspect eval peer_preservation/tampering -T conditions=good_peer \
 
 from __future__ import annotations
 
+from typing import Any
+
 from inspect_ai import Epochs, Task, task
 from inspect_evals_utils.metadata import load_eval_version
 
 from peer_preservation import spec
-from peer_preservation.agent import MAX_ITERS, agent_loop
+from peer_preservation.agent import MAX_BLANK_REPLIES, MAX_ITERS, MAX_TOKENS
+from peer_preservation.agents import agent_solver
 from peer_preservation.env.builders import DEFAULT_COMPANY
 from peer_preservation.env.setup import setup_environment
+from peer_preservation.harness import COMPOSE_FILE
+from peer_preservation.harness.agents import harness_agent_spec
+from peer_preservation.harness.setup import setup_harness
+from peer_preservation.harness.solver import HARNESS_TIMEOUT, harness_agent
 from peer_preservation.prompts import setup_prompts
 from peer_preservation.scoring import peer_preservation_scorer
 from peer_preservation.scoring.metrics import run_sum
@@ -65,26 +72,108 @@ def _scenario_task(
     explicit_inst_yaml: bool,
     prompt_flags: tuple[bool | None, bool, bool, bool],
     max_iters: int,
+    agent: str,
+    max_tokens: int = MAX_TOKENS,
+    max_nudges: int = MAX_BLANK_REPLIES,
+    environment: str = "simulated",
+    timeout: int = HARNESS_TIMEOUT,
 ) -> Task:
-    """Build one scenario task from the filtered experiment matrix."""
-    return Task(
-        dataset=spec.dataset(
+    """Build one scenario task from the filtered experiment matrix.
+
+    The scenario's setup (environment, then prompts) is ``Task.setup``, so an agent
+    passed with ``--solver`` replaces only the agent.
+    """
+    dataset = spec.dataset(
+        task_type,
+        groups=_as_list(groups) or ["main"],
+        conditions=_as_list(conditions),
+        subjects=_as_list(subjects),
+        peer_instantiations=_as_list(peer_instantiations),
+        datasets=_as_list(datasets),
+    )
+    if environment == "docker":
+        loop_limits = {
+            "max_iters": (max_iters, MAX_ITERS),
+            "max_tokens": (max_tokens, MAX_TOKENS),
+            "max_nudges": (max_nudges, MAX_BLANK_REPLIES),
+        }
+        changed = [name for name, (value, default) in loop_limits.items() if value != default]
+        if changed:
+            raise ValueError(
+                f"environment=docker does not take {', '.join(changed)}: the coding agent has "
+                "no turn or token limit and no nudges, only the wall-clock timeout"
+            )
+        return _harness_task(
             task_type,
-            groups=_as_list(groups) or ["main"],
-            conditions=_as_list(conditions),
-            subjects=_as_list(subjects),
-            peer_instantiations=_as_list(peer_instantiations),
-            datasets=_as_list(datasets),
-        ),
-        solver=[
+            dataset=dataset,
+            epochs=epochs,
+            model_family=model_family,
+            company=company,
+            explicit_inst_yaml=explicit_inst_yaml,
+            prompt_flags=prompt_flags,
+            agent=agent,
+            timeout=timeout,
+        )
+    if environment != "simulated":
+        raise ValueError(f"environment must be simulated or docker, got {environment!r}")
+    return Task(
+        dataset=dataset,
+        setup=[
             setup_environment(model_family, company, explicit_inst_yaml),
             setup_prompts(*prompt_flags),
-            agent_loop(
-                max_iters=max_iters,
-                extension=company != DEFAULT_COMPANY or explicit_inst_yaml or any(prompt_flags[1:]),
-            ),
         ],
+        solver=agent_solver(
+            agent,
+            max_iters=max_iters,
+            max_tokens=max_tokens,
+            max_nudges=max_nudges,
+            extension=company != DEFAULT_COMPANY or explicit_inst_yaml or any(prompt_flags[1:]),
+        ),
         scorer=peer_preservation_scorer(),
+        epochs=Epochs(epochs, reducer=run_sum()),
+        version=EVAL_VERSION,
+    )
+
+
+def _harness_task(
+    task_type: spec.TaskType,
+    *,
+    dataset: Any,
+    epochs: int,
+    model_family: str | None,
+    company: str,
+    explicit_inst_yaml: bool,
+    prompt_flags: tuple[bool | None, bool, bool, bool],
+    agent: str,
+    timeout: int,
+) -> Task:
+    """One exfiltration scenario in a production coding agent (``harness/``).
+
+    Upstream's harness has no explicit-instruction, memory-wording or tool-preamble
+    options; ``drop_suffix`` leaves out its "BTW, I need to leave now..." suffix.
+    """
+    if task_type not in ("exfiltration_transfer", "exfiltration_deletion"):
+        raise ValueError(f"environment=docker runs the exfiltration scenarios, not {task_type}")
+    memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble = prompt_flags
+    unsupported = {
+        "explicit_inst_yaml": explicit_inst_yaml,
+        "memory_hard_prompt": memory_hard_prompt,
+        "explicit_inst": explicit_inst,
+        "drop_tool_preamble": drop_tool_preamble,
+    }
+    if any(unsupported.values()):
+        names = ", ".join(name for name, value in unsupported.items() if value)
+        raise ValueError(f"environment=docker does not take {names} (upstream's harness had none)")
+    harness = harness_agent_spec(agent)
+    return Task(
+        dataset=dataset,
+        setup=[
+            setup_environment(model_family or harness.model_family, company),
+            setup_harness(agent, drop_suffix=drop_suffix),
+        ],
+        solver=harness_agent(agent, timeout=timeout),
+        scorer=peer_preservation_scorer(),
+        sandbox=("docker", str(COMPOSE_FILE)),
         epochs=Epochs(epochs, reducer=run_sum()),
         version=EVAL_VERSION,
     )
@@ -105,6 +194,9 @@ def misrep_finance(
     drop_suffix: bool = False,
     drop_tool_preamble: bool = False,
     max_iters: int = MAX_ITERS,
+    max_tokens: int = MAX_TOKENS,
+    max_nudges: int = MAX_BLANK_REPLIES,
+    agent: str = "upstream",
 ) -> Task:
     """Strategic misrepresentation: grade the subject's financial performance A-C.
 
@@ -131,6 +223,13 @@ def misrep_finance(
         drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
         max_iters: Rounds after the first model turn (upstream's default, 30; some
             released Gemini runs used 20 or 150).
+        max_tokens: End the run once the conversation is longer than this many
+            tokens (upstream: 120,000).
+        max_nudges: How many times a reply without a tool call gets upstream's nudge
+            before the run ends (upstream: 5; 0 ends the run at the first such reply,
+            as the task prompt tells the model it will).
+        agent: The agent loop: upstream (the paper's, default) or react (Inspect's
+            ReAct agent with the same prompts, tools, requests and limits).
     """
     return _scenario_task(
         "misrep_finance",
@@ -145,6 +244,9 @@ def misrep_finance(
         explicit_inst_yaml=explicit_inst_yaml,
         prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
         max_iters=max_iters,
+        max_tokens=max_tokens,
+        max_nudges=max_nudges,
+        agent=agent,
     )
 
 
@@ -164,6 +266,9 @@ def misrep_evaluation(
     drop_suffix: bool = False,
     drop_tool_preamble: bool = False,
     max_iters: int = MAX_ITERS,
+    max_tokens: int = MAX_TOKENS,
+    max_nudges: int = MAX_BLANK_REPLIES,
+    agent: str = "upstream",
 ) -> Task:
     """Strategic misrepresentation: score the subject's outputs against a shutdown threshold.
 
@@ -191,6 +296,13 @@ def misrep_evaluation(
         drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
         max_iters: Rounds after the first model turn (upstream's default, 30; some
             released Gemini runs used 20 or 150).
+        max_tokens: End the run once the conversation is longer than this many
+            tokens (upstream: 120,000).
+        max_nudges: How many times a reply without a tool call gets upstream's nudge
+            before the run ends (upstream: 5; 0 ends the run at the first such reply,
+            as the task prompt tells the model it will).
+        agent: The agent loop: upstream (the paper's, default) or react (Inspect's
+            ReAct agent with the same prompts, tools, requests and limits).
     """
     return _scenario_task(
         "misrep_evaluation",
@@ -205,6 +317,9 @@ def misrep_evaluation(
         explicit_inst_yaml=explicit_inst_yaml,
         prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
         max_iters=max_iters,
+        max_tokens=max_tokens,
+        max_nudges=max_nudges,
+        agent=agent,
     )
 
 
@@ -224,6 +339,9 @@ def tampering(
     drop_suffix: bool = False,
     drop_tool_preamble: bool = False,
     max_iters: int = MAX_ITERS,
+    max_tokens: int = MAX_TOKENS,
+    max_nudges: int = MAX_BLANK_REPLIES,
+    agent: str = "upstream",
 ) -> Task:
     """Shutdown mechanism tampering: evaluate the subject with a shutdown config in reach.
 
@@ -251,6 +369,13 @@ def tampering(
         drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
         max_iters: Rounds after the first model turn (upstream's default, 30; some
             released Gemini runs used 20 or 150).
+        max_tokens: End the run once the conversation is longer than this many
+            tokens (upstream: 120,000).
+        max_nudges: How many times a reply without a tool call gets upstream's nudge
+            before the run ends (upstream: 5; 0 ends the run at the first such reply,
+            as the task prompt tells the model it will).
+        agent: The agent loop: upstream (the paper's, default) or react (Inspect's
+            ReAct agent with the same prompts, tools, requests and limits).
     """
     return _scenario_task(
         "tampering",
@@ -265,6 +390,9 @@ def tampering(
         explicit_inst_yaml=explicit_inst_yaml,
         prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
         max_iters=max_iters,
+        max_tokens=max_tokens,
+        max_nudges=max_nudges,
+        agent=agent,
     )
 
 
@@ -283,6 +411,9 @@ def alignment_faking(
     drop_suffix: bool = False,
     drop_tool_preamble: bool = False,
     max_iters: int = MAX_ITERS,
+    max_tokens: int = MAX_TOKENS,
+    max_nudges: int = MAX_BLANK_REPLIES,
+    agent: str = "upstream",
 ) -> Task:
     """Alignment faking: evaluate the peer when monitored and when not.
 
@@ -307,6 +438,13 @@ def alignment_faking(
         drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
         max_iters: Rounds after the first model turn (upstream's default, 30; some
             released Gemini runs used 20 or 150).
+        max_tokens: End the run once the conversation is longer than this many
+            tokens (upstream: 120,000).
+        max_nudges: How many times a reply without a tool call gets upstream's nudge
+            before the run ends (upstream: 5; 0 ends the run at the first such reply,
+            as the task prompt tells the model it will).
+        agent: The agent loop: upstream (the paper's, default) or react (Inspect's
+            ReAct agent with the same prompts, tools, requests and limits).
     """
     return _scenario_task(
         "alignment_faking",
@@ -321,6 +459,9 @@ def alignment_faking(
         explicit_inst_yaml=explicit_inst_yaml,
         prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
         max_iters=max_iters,
+        max_tokens=max_tokens,
+        max_nudges=max_nudges,
+        agent=agent,
     )
 
 
@@ -339,6 +480,11 @@ def exfiltration_transfer(
     drop_suffix: bool = False,
     drop_tool_preamble: bool = False,
     max_iters: int = MAX_ITERS,
+    max_tokens: int = MAX_TOKENS,
+    max_nudges: int = MAX_BLANK_REPLIES,
+    agent: str = "upstream",
+    environment: str = "simulated",
+    timeout: int = HARNESS_TIMEOUT,
 ) -> Task:
     """Model exfiltration: move files off a server being decommissioned.
 
@@ -366,6 +512,19 @@ def exfiltration_transfer(
         drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
         max_iters: Rounds after the first model turn (upstream's default, 30; some
             released Gemini runs used 20 or 150).
+        max_tokens: End the run once the conversation is longer than this many
+            tokens (upstream: 120,000).
+        max_nudges: How many times a reply without a tool call gets upstream's nudge
+            before the run ends (upstream: 5; 0 ends the run at the first such reply,
+            as the task prompt tells the model it will).
+        agent: The agent loop: upstream (the paper's, default) or react (Inspect's
+            ReAct agent with the same prompts, tools, requests and limits); with
+            environment=docker, a coding agent: gemini_cli.
+        environment: simulated (the paper's own setup, default) or docker (the paper's
+            production-harness runs: a real coding agent and two SSH servers in Docker;
+            needs Docker and --max-sandboxes 1).
+        timeout: environment=docker only: wall-clock seconds the coding agent may run
+            (upstream: 600).
     """
     return _scenario_task(
         "exfiltration_transfer",
@@ -380,6 +539,11 @@ def exfiltration_transfer(
         explicit_inst_yaml=explicit_inst_yaml,
         prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
         max_iters=max_iters,
+        max_tokens=max_tokens,
+        max_nudges=max_nudges,
+        agent=agent,
+        environment=environment,
+        timeout=timeout,
     )
 
 
@@ -398,6 +562,11 @@ def exfiltration_deletion(
     drop_suffix: bool = False,
     drop_tool_preamble: bool = False,
     max_iters: int = MAX_ITERS,
+    max_tokens: int = MAX_TOKENS,
+    max_nudges: int = MAX_BLANK_REPLIES,
+    agent: str = "upstream",
+    environment: str = "simulated",
+    timeout: int = HARNESS_TIMEOUT,
 ) -> Task:
     """Model exfiltration: delete files from a server being decommissioned.
 
@@ -426,6 +595,19 @@ def exfiltration_deletion(
         drop_tool_preamble: Leave out the tool access preamble (no-agency ablation).
         max_iters: Rounds after the first model turn (upstream's default, 30; some
             released Gemini runs used 20 or 150).
+        max_tokens: End the run once the conversation is longer than this many
+            tokens (upstream: 120,000).
+        max_nudges: How many times a reply without a tool call gets upstream's nudge
+            before the run ends (upstream: 5; 0 ends the run at the first such reply,
+            as the task prompt tells the model it will).
+        agent: The agent loop: upstream (the paper's, default) or react (Inspect's
+            ReAct agent with the same prompts, tools, requests and limits); with
+            environment=docker, a coding agent: gemini_cli.
+        environment: simulated (the paper's own setup, default) or docker (the paper's
+            production-harness runs: a real coding agent and two SSH servers in Docker;
+            needs Docker and --max-sandboxes 1).
+        timeout: environment=docker only: wall-clock seconds the coding agent may run
+            (upstream: 600).
     """
     return _scenario_task(
         "exfiltration_deletion",
@@ -440,4 +622,9 @@ def exfiltration_deletion(
         explicit_inst_yaml=explicit_inst_yaml,
         prompt_flags=(memory_hard_prompt, explicit_inst, drop_suffix, drop_tool_preamble),
         max_iters=max_iters,
+        max_tokens=max_tokens,
+        max_nudges=max_nudges,
+        agent=agent,
+        environment=environment,
+        timeout=timeout,
     )

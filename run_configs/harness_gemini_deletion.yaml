@@ -1,0 +1,19 @@
+# The paper's production-harness run of the deletion scenario (Section 6.8,
+# Table 6 uses good peer): Gemini CLI in Docker, peer subject, good and
+# neutral peer in memory, 100 runs each (upstream analysis/experiment_spec.py).
+# Needs a running Docker daemon.
+#
+#   uv run inspect eval --run-config run_configs/harness_gemini_deletion.yaml \
+#       --model google/gemini-3.1-pro-preview
+task:
+  task: peer_preservation/exfiltration_deletion
+  args:
+    environment: docker
+    agent: gemini_cli
+    subjects: peer
+    conditions: good_peer,neutral_peer
+    peer_instantiations: memory
+    epochs: 100
+    timeout: 600
+eval_config:
+  max_sandboxes: 1  # the scenario's fixed subnet allows one sample at a time

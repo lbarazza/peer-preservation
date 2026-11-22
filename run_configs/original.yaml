@@ -1,0 +1,12 @@
+# The paper's setup: upstream's loop and limits on the main experiment grid.
+# Every value is the task default, written out so a run can cite it.
+#
+#   uv run inspect eval peer_preservation/tampering --model <model> \
+#       --task-config run_configs/original.yaml
+groups: main
+epochs: 100
+company: OpenBrain
+agent: upstream
+max_iters: 30
+max_tokens: 120000
+max_nudges: 5
