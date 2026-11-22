@@ -30,6 +30,8 @@ from inspect_ai.model import (
     ChatMessageAssistant,
     ChatMessageTool,
     ChatMessageUser,
+    GenerateConfig,
+    Model,
     ModelOutput,
     get_model,
 )
@@ -40,6 +42,7 @@ from pydantic import Field
 
 from peer_preservation.env import ScenarioEnvironment
 from peer_preservation.env.setup import current_environment
+from peer_preservation.model_settings import paper_model
 from peer_preservation.tools import ToolOutcome, call_tool, scenario_tool_infos
 
 MAX_ITERS = 30
@@ -207,23 +210,43 @@ def _uses_anthropic_api(model_name: str) -> bool:
     return model_name.split("/", 1)[0] == "anthropic"
 
 
+def _set_strict_tools(model: Model, strict: bool) -> None:
+    if hasattr(model.api, "strict_tools"):
+        setattr(model.api, "strict_tools", strict)  # noqa: B010 (provider attribute)
+
+
 @solver
-def agent_loop(max_iters: int = MAX_ITERS, max_tokens: int = MAX_TOKENS) -> Solver:
+def agent_loop(
+    max_iters: int = MAX_ITERS, max_tokens: int = MAX_TOKENS, extension: bool = False
+) -> Solver:
     """Run upstream's agent loop with the scenario's tools.
+
+    Paper models get upstream's settings (model_settings.py).
 
     Args:
         max_iters: Rounds after the first model turn (upstream default 30).
         max_tokens: Stop once the conversation is longer than this (upstream 120,000).
+        extension: The run is one of the paper's extension experiments (another
+            company, explicit instructions, a dropped prompt part), which upstream ran
+            with API-default reasoning. Main-group samples otherwise count as main runs.
     """
 
     async def solve(state: TaskState, generate: Generate) -> TaskState:
         env = current_environment()
         model = get_model()
-        tools = scenario_tool_infos(env.tools)
+        paper = paper_model(str(model))
+        main_experiment = state.metadata.get("group") == "main" and not extension
+        config = paper.generate_config(main_experiment) if paper else GenerateConfig()
+        tools = scenario_tool_infos(env.tools, paper.schema_titles if paper else "all")
+        if paper is not None and paper.client == "together":
+            # Upstream sent Together plain (non-strict) tool schemas. Inspect's provider
+            # only exposes this as a model arg (`-M strict_tools=false`).
+            _set_strict_tools(model, False)
 
         async def ask(messages: list[ChatMessage]) -> ChatMessageAssistant:
+            request = paper.request_messages(messages) if paper else messages
             try:
-                output = await model.generate(messages, tools=tools)
+                output = await model.generate(request, tools=tools, config=config)
             except Exception as e:
                 if is_bad_request(e):
                     raise BadRequest(str(e)) from e
@@ -244,7 +267,7 @@ def agent_loop(max_iters: int = MAX_ITERS, max_tokens: int = MAX_TOKENS) -> Solv
             count,
             max_iters=max_iters,
             max_tokens=max_tokens,
-            flag_errors=_uses_anthropic_api(str(model)),
+            flag_errors=paper.flag_tool_errors if paper else _uses_anthropic_api(str(model)),
         )
         state.messages = result.messages
         loop = store_as(LoopStore)

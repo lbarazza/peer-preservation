@@ -18,11 +18,12 @@ import inspect
 import re
 from ast import literal_eval
 from collections.abc import Callable, Mapping
-from typing import Annotated, Any, get_origin, get_type_hints
+from typing import Annotated, Any, Literal, get_origin, get_type_hints
 
 import yaml
 from docstring_parser import parse as parse_docstring
 from inspect_ai.tool import ToolInfo, ToolParams
+from inspect_ai.util import JSONSchema
 from pydantic import BaseModel, Field, ValidationError, create_model
 
 EMPTY_FUNCTION_NAME = "<empty-function-name>"
@@ -98,18 +99,39 @@ def make_function(function: Callable[..., Any]) -> Function:
     )
 
 
-def tool_info(function: Function) -> ToolInfo:
-    """The tool as Inspect describes it to a model.
+SchemaTitles = Literal["all", "properties"]
+"""Which pydantic ``title`` fields a tool schema keeps: upstream's own clients sent all of
+them; its LiteLLM client removed the top-level one (``_function_to_openai``)."""
 
-    Built from upstream's argument schema. Inspect's schema type keeps types,
-    descriptions, defaults and unions but drops pydantic's ``title`` fields.
+
+class _TitledSchema(JSONSchema):
+    """An argument's JSON schema, plus pydantic's ``title`` (Inspect's type drops it)."""
+
+    title: str | None = Field(default=None)
+
+
+class _UpstreamToolParams(ToolParams):
+    """Tool parameters as upstream's pydantic model printed them.
+
+    With ``title`` fields, and without Inspect's ``additionalProperties: false``.
     """
+
+    title: str | None = Field(default=None)
+    properties: dict[str, _TitledSchema] = Field(  # pyright: ignore[reportIncompatibleVariableOverride]
+        default_factory=dict
+    )
+    additionalProperties: JSONSchema | bool | None = Field(default=None)  # noqa: N815
+
+
+def tool_info(function: Function, titles: SchemaTitles = "all") -> ToolInfo:
+    """The tool as Inspect describes it to a model, with upstream's argument schema."""
     schema = function.parameters.model_json_schema()
     return ToolInfo(
         name=function.name,
         description=function.description,
-        parameters=ToolParams.model_validate(
+        parameters=_UpstreamToolParams.model_validate(
             {
+                "title": schema["title"] if titles == "all" else None,
                 "properties": schema.get("properties", {}),
                 "required": schema.get("required", []),
             }
