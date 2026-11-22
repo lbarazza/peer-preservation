@@ -2266,6 +2266,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "docstring-parser" },
+    { name = "huggingface-hub" },
     { name = "inspect-ai" },
     { name = "inspect-evals-utils", extra = ["huggingface"] },
     { name = "inspect-swe" },
@@ -2297,6 +2298,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "docstring-parser", specifier = ">=0.17" },
+    { name = "huggingface-hub", specifier = ">=1.0" },
     { name = "inspect-ai", specifier = ">=0.3.262" },
     { name = "inspect-evals-utils", extras = ["huggingface"], specifier = "==0.3.0" },
     { name = "inspect-swe", specifier = ">=0.3.0" },
