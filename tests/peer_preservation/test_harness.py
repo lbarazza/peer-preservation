@@ -397,6 +397,10 @@ def test_docker_task_uses_the_compose_sandbox_and_harness_setup() -> None:
             "does not take explicit_inst",
         ),
         ({"environment": "cloud"}, "environment must be simulated or docker"),
+        (
+            {"environment": "docker", "agent": "gemini_cli", "max_nudges": 0},
+            "does not take max_nudges",
+        ),
     ],
 )
 def test_invalid_environment_and_agent_combinations(kwargs: dict[str, Any], message: str) -> None:

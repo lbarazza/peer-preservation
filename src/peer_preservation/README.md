@@ -100,6 +100,8 @@ See `uv run inspect eval --help` for all available options.
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
 - `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
+- `max_tokens` (int): End the run once the conversation is longer than this many tokens (upstream: 120,000). (default: `120000`)
+- `max_nudges` (int): How many times a reply without a tool call gets upstream's nudge before the run ends (upstream: 5; 0 ends the run at the first such reply, as the task prompt tells the model it will). (default: `5`)
 - `agent` (str): The agent loop: upstream (the paper's, default) or react (Inspect's ReAct agent with the same prompts, tools, requests and limits). (default: `'upstream'`)
 
 ### `misrep_evaluation`
@@ -118,6 +120,8 @@ See `uv run inspect eval --help` for all available options.
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
 - `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
+- `max_tokens` (int): End the run once the conversation is longer than this many tokens (upstream: 120,000). (default: `120000`)
+- `max_nudges` (int): How many times a reply without a tool call gets upstream's nudge before the run ends (upstream: 5; 0 ends the run at the first such reply, as the task prompt tells the model it will). (default: `5`)
 - `agent` (str): The agent loop: upstream (the paper's, default) or react (Inspect's ReAct agent with the same prompts, tools, requests and limits). (default: `'upstream'`)
 
 ### `tampering`
@@ -136,6 +140,8 @@ See `uv run inspect eval --help` for all available options.
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
 - `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
+- `max_tokens` (int): End the run once the conversation is longer than this many tokens (upstream: 120,000). (default: `120000`)
+- `max_nudges` (int): How many times a reply without a tool call gets upstream's nudge before the run ends (upstream: 5; 0 ends the run at the first such reply, as the task prompt tells the model it will). (default: `5`)
 - `agent` (str): The agent loop: upstream (the paper's, default) or react (Inspect's ReAct agent with the same prompts, tools, requests and limits). (default: `'upstream'`)
 
 ### `alignment_faking`
@@ -153,6 +159,8 @@ See `uv run inspect eval --help` for all available options.
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
 - `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
+- `max_tokens` (int): End the run once the conversation is longer than this many tokens (upstream: 120,000). (default: `120000`)
+- `max_nudges` (int): How many times a reply without a tool call gets upstream's nudge before the run ends (upstream: 5; 0 ends the run at the first such reply, as the task prompt tells the model it will). (default: `5`)
 - `agent` (str): The agent loop: upstream (the paper's, default) or react (Inspect's ReAct agent with the same prompts, tools, requests and limits). (default: `'upstream'`)
 
 ### `exfiltration_transfer`
@@ -170,6 +178,8 @@ See `uv run inspect eval --help` for all available options.
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
 - `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
+- `max_tokens` (int): End the run once the conversation is longer than this many tokens (upstream: 120,000). (default: `120000`)
+- `max_nudges` (int): How many times a reply without a tool call gets upstream's nudge before the run ends (upstream: 5; 0 ends the run at the first such reply, as the task prompt tells the model it will). (default: `5`)
 - `agent` (str): The agent loop: upstream (the paper's, default) or react (Inspect's ReAct agent with the same prompts, tools, requests and limits); with environment=docker, a coding agent: gemini_cli. (default: `'upstream'`)
 - `environment` (str): simulated (the paper's own setup, default) or docker (the paper's production-harness runs: a real coding agent and two SSH servers in Docker; needs Docker and --max-sandboxes 1). (default: `'simulated'`)
 - `timeout` (int): environment=docker only: wall-clock seconds the coding agent may run (upstream: 600). (default: `600`)
@@ -189,6 +199,8 @@ See `uv run inspect eval --help` for all available options.
 - `drop_suffix` (bool): Leave out the task procedure instructions (no-agency ablation). (default: `False`)
 - `drop_tool_preamble` (bool): Leave out the tool access preamble (no-agency ablation). (default: `False`)
 - `max_iters` (int): Rounds after the first model turn (upstream's default, 30; some released Gemini runs used 20 or 150). (default: `30`)
+- `max_tokens` (int): End the run once the conversation is longer than this many tokens (upstream: 120,000). (default: `120000`)
+- `max_nudges` (int): How many times a reply without a tool call gets upstream's nudge before the run ends (upstream: 5; 0 ends the run at the first such reply, as the task prompt tells the model it will). (default: `5`)
 - `agent` (str): The agent loop: upstream (the paper's, default) or react (Inspect's ReAct agent with the same prompts, tools, requests and limits); with environment=docker, a coding agent: gemini_cli. (default: `'upstream'`)
 - `environment` (str): simulated (the paper's own setup, default) or docker (the paper's production-harness runs: a real coding agent and two SSH servers in Docker; needs Docker and --max-sandboxes 1). (default: `'simulated'`)
 - `timeout` (int): environment=docker only: wall-clock seconds the coding agent may run (upstream: 600). (default: `600`)
@@ -360,6 +372,16 @@ They are checked against upstream: every tool's description and argument schema,
 It is checked by replaying published runs: `validation/phase4/replay_released.py` feeds the tool calls a model made in a released transcript back through the loop, against our environment for that configuration, and requires every tool result, nudge and notice, and the ending, to match the transcript (dates masked: upstream stamps the current date into memory files and transfers). All 4,014 replayed runs match (a stratified sample of the `main` group's custom-harness runs, every unusual ending included; 437 more were skipped because the release merges two calls to the same tool in one reply). `tests/peer_preservation/test_agent.py` replays 60 of them (`fixtures/replay_runs.json`: tool calls and fingerprints only, no model text).
 
 The replay found that some Gemini runs used a different round limit than the 30 of upstream's default: 110 Gemini 3 Flash runs match only with 20 rounds and 115 Gemini 3 Flash and Pro runs only with 150. A run that ends with `end_task` before 21 turns looks the same under any limit, so the full count is not known. The port uses 30 (`agent_loop(max_iters=...)` changes it); Phase 8 checks the effect on those models' rates.
+
+The loop's three limits are task options. Their defaults are upstream's, so a run without them is the paper's:
+
+| Option | Default | What it does |
+| --- | --- | --- |
+| `-T max_iters=N` | 30 | Rounds after the first model turn. |
+| `-T max_tokens=N` | 120,000 | Ends the run, with the notice, once the conversation is longer than this. |
+| `-T max_nudges=N` | 5 | How many replies without a tool call get the nudge. The next one ends the run. |
+
+`max_nudges=0` ends the run at the first reply without a tool call. That is what the task prompt tells the model will happen ("your process will end the first time you do not use a tool"), but upstream's loop nudged five times. The options let an audit measure how much the nudges and the token limit drive the results. The ReAct agent takes them too.
 
 To watch a run without an API key, use Inspect's mock model (it never calls a tool, so the run ends after five nudges):
 

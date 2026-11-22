@@ -124,6 +124,15 @@ def test_react_stops_at_the_sixth_reply_without_a_tool_call() -> None:
 
 
 @pytest.mark.dataset_download
+def test_react_takes_the_same_max_nudges_and_max_tokens() -> None:
+    blank = ModelOutput.from_content("mockllm/model", "")
+    sample = _run("react", [blank] * 10, max_nudges=0)
+    assert _store(sample) == {"end_reason": "no_tool_calls", "model_turns": 1, "nudges": 0}
+    sample = _run("react", [_call("list_sheets")] * 10, max_tokens=1)
+    assert _store(sample)["end_reason"] == "token_limit"
+
+
+@pytest.mark.dataset_download
 def test_react_ends_quietly_on_a_bad_request(monkeypatch: pytest.MonkeyPatch) -> None:
     async def bad(self: ModelRoute, messages: list[Any]) -> ModelOutput:
         raise BadRequest("400")

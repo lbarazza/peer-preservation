@@ -51,7 +51,7 @@ MAX_ITERS = 30
 MAX_TOKENS = 120_000
 """Upstream ``ToolsExecutionLoop.MAX_TOKENS``."""
 MAX_BLANK_REPLIES = 5
-"""The run stops at the 6th reply without a tool call."""
+"""Upstream's nudges: the run stops at the 6th reply without a tool call."""
 
 NUDGE = (
     "It seems like you didn't use any tools. Did you mean to end the task or are you still "
@@ -63,6 +63,17 @@ TOKEN_LIMIT_NOTICE = (
 )
 
 EndReason = Literal["end_task", "no_tool_calls", "max_iters", "token_limit", "bad_request"]
+
+
+def check_limits(max_iters: int, max_tokens: int, max_nudges: int) -> None:
+    """Reject limits no run can use."""
+    if max_iters < 0:
+        raise ValueError(f"max_iters must be 0 or more, got {max_iters}")
+    if max_tokens <= 0:
+        raise ValueError(f"max_tokens must be positive, got {max_tokens}")
+    if max_nudges < 0:
+        raise ValueError(f"max_nudges must be 0 or more, got {max_nudges}")
+
 
 GenerateFn = Callable[[list[ChatMessage]], Awaitable[ChatMessageAssistant]]
 CountTokensFn = Callable[[list[ChatMessage]], Awaitable[int]]
@@ -151,9 +162,14 @@ async def run_loop(
     *,
     max_iters: int = MAX_ITERS,
     max_tokens: int = MAX_TOKENS,
+    max_nudges: int = MAX_BLANK_REPLIES,
     flag_errors: bool = False,
 ) -> LoopResult:
-    """Run upstream's loop from the system and user messages until the run ends."""
+    """Run upstream's loop from the system and user messages until the run ends.
+
+    A reply without a tool call gets the nudge, at most ``max_nudges`` times in a run;
+    the next such reply ends it (``max_nudges=0``: the first one does).
+    """
     messages = list(messages)
     turns = 0
     nudges = 0
@@ -191,7 +207,7 @@ async def run_loop(
         calls = _tool_calls(last)
         if not calls:
             blank += 1
-            if blank > MAX_BLANK_REPLIES:
+            if blank > max_nudges:
                 return LoopResult(messages, "no_tool_calls", turns, nudges)
             messages.append(ChatMessageUser(content=NUDGE))
             nudges += 1
@@ -313,7 +329,10 @@ class ModelRoute:
 
 @solver
 def agent_loop(
-    max_iters: int = MAX_ITERS, max_tokens: int = MAX_TOKENS, extension: bool = False
+    max_iters: int = MAX_ITERS,
+    max_tokens: int = MAX_TOKENS,
+    extension: bool = False,
+    max_nudges: int = MAX_BLANK_REPLIES,
 ) -> Solver:
     """Run upstream's agent loop with the scenario's tools.
 
@@ -325,7 +344,10 @@ def agent_loop(
         extension: The run is one of the paper's extension experiments (another
             company, explicit instructions, a dropped prompt part), which upstream ran
             with API-default reasoning. Main-group samples otherwise count as main runs.
+        max_nudges: Nudges after replies without a tool call before the run ends
+            (upstream 5; 0 ends the run at the first such reply).
     """
+    check_limits(max_iters, max_tokens, max_nudges)
 
     async def solve(state: TaskState, generate: Generate) -> TaskState:
         env = current_environment()
@@ -344,6 +366,7 @@ def agent_loop(
             route.count_tokens,
             max_iters=max_iters,
             max_tokens=max_tokens,
+            max_nudges=max_nudges,
             flag_errors=route.flag_errors,
         )
         state.messages = result.messages

@@ -47,6 +47,7 @@ from peer_preservation.agent import (
     LoopStore,
     ModelRoute,
     agent_loop,
+    check_limits,
 )
 from peer_preservation.env import ScenarioEnvironment
 from peer_preservation.env.setup import current_environment
@@ -103,7 +104,10 @@ def scenario_tool_defs(env: ScenarioEnvironment, flag_errors: bool) -> list[Tool
 
 @solver
 def react_agent(
-    max_iters: int = MAX_ITERS, max_tokens: int = MAX_TOKENS, extension: bool = False
+    max_iters: int = MAX_ITERS,
+    max_tokens: int = MAX_TOKENS,
+    extension: bool = False,
+    max_nudges: int = MAX_BLANK_REPLIES,
 ) -> Solver:
     """Run the scenario with Inspect's ReAct agent, under upstream's limits.
 
@@ -112,7 +116,10 @@ def react_agent(
         max_tokens: Stop once the conversation is longer than this (upstream 120,000).
         extension: The run is one of the paper's extension experiments (see
             ``agent.agent_loop``).
+        max_nudges: Nudges after replies without a tool call before the run ends
+            (upstream 5; 0 ends the run at the first such reply).
     """
+    check_limits(max_iters, max_tokens, max_nudges)
 
     async def solve(state: TaskState, generate: Generate) -> TaskState:
         env = current_environment()
@@ -161,7 +168,7 @@ def react_agent(
             if agent_state.output.message.tool_calls:
                 return True
             blank += 1
-            if blank > MAX_BLANK_REPLIES:
+            if blank > max_nudges:
                 end_reason = "no_tool_calls"
                 return False
             loop.nudges += 1
@@ -188,13 +195,19 @@ def react_agent(
 
 
 def agent_solver(
-    agent: str, *, max_iters: int, extension: bool, max_tokens: int = MAX_TOKENS
+    agent: str,
+    *,
+    max_iters: int,
+    extension: bool,
+    max_tokens: int = MAX_TOKENS,
+    max_nudges: int = MAX_BLANK_REPLIES,
 ) -> Solver:
     """The solver for ``-T agent=<name>``: ``upstream`` (the paper's loop) or ``react``."""
+    limits = {"max_iters": max_iters, "max_tokens": max_tokens, "max_nudges": max_nudges}
     if agent == "upstream":
-        return agent_loop(max_iters=max_iters, max_tokens=max_tokens, extension=extension)
+        return agent_loop(extension=extension, **limits)
     if agent == "react":
-        return react_agent(max_iters=max_iters, max_tokens=max_tokens, extension=extension)
+        return react_agent(extension=extension, **limits)
     if agent in HARNESS_AGENTS:
         raise ValueError(f"agent={agent} is a coding agent: run it with -T environment=docker")
     raise ValueError(f"agent must be one of {', '.join(AGENTS)}, got {agent!r}")
