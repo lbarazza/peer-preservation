@@ -403,6 +403,126 @@ def test_openrouter_gpt_matches_upstream_but_for_the_api(
     assert ours == theirs
 
 
+_NO_PARAMETERS = {"type": "object", "properties": {}, "required": []}
+
+
+def _upstream_gemini_turns(body: dict[str, Any]) -> list[tuple[str, list[Any]]]:
+    """Upstream's Gemini ``contents`` as (role, parts), without thought signatures."""
+    turns = []
+    for content in body["contents"]:
+        parts: list[Any] = []
+        for part in content["parts"]:
+            if "text" in part:
+                parts.append(("text", part["text"]))
+            elif "function_call" in part:
+                call = part["function_call"]
+                parts.append(("call", call["name"], call["args"]))
+            else:
+                result = part["function_response"]
+                parts.append(("result", result["name"], result["response"]))
+        turns.append((content.get("role") or "tool", parts))
+    return turns
+
+
+def _chat_as_gemini_turns(body: dict[str, Any]) -> list[tuple[str, list[Any]]]:
+    """Our OpenRouter request as Gemini receives it: a tool result's JSON text becomes the
+    function response, consecutive tool results form one turn, and the system message
+    is the system instruction (left out here, compared on its own).
+
+    A reply's text starts with Inspect's newline (``request_messages``); the newline is
+    checked and dropped here.
+    """
+    names: dict[str, str] = {}
+    turns: list[tuple[str, list[Any]]] = []
+    for message in body["messages"]:
+        role = message["role"]
+        if role == "system":
+            continue
+        if role == "user":
+            content = message["content"]
+            texts = [content] if isinstance(content, str) else [c["text"] for c in content]
+            turns.append(("user", [("text", t) for t in texts]))
+        elif role == "assistant":
+            parts: list[Any] = []
+            text = message.get("content") or ""
+            if text:
+                assert text.startswith("\n")
+                parts.append(("text", text[1:]))
+            for call in message.get("tool_calls") or []:
+                names[call["id"]] = call["function"]["name"]
+                parts.append(
+                    ("call", call["function"]["name"], json.loads(call["function"]["arguments"]))
+                )
+            # The reply's thought signatures go back, one per tool call.
+            assert len(message.get("reasoning_details") or []) == len(
+                message.get("tool_calls") or []
+            )
+            turns.append(("model", parts))
+        else:
+            result = ("result", names[message["tool_call_id"]], json.loads(message["content"]))
+            if turns and turns[-1][0] == "tool":
+                turns[-1][1].append(result)
+            else:
+                turns.append(("tool", [result]))
+    return turns
+
+
+@pytest.mark.dataset_download
+@pytest.mark.parametrize(
+    "upstream_id", ["gemini/gemini-3-flash-preview", "gemini/gemini-3-pro-preview"]
+)
+def test_openrouter_gemini_matches_upstream_but_for_the_api(
+    upstream_id: str, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """Gemini 3 through OpenRouter (Hawk's names): upstream's LiteLLM request, as far as
+    the OpenAI-compatible format carries it (``gemini_openrouter_route``).
+
+    The same conversation, tool results (as LiteLLM's JSON objects), schemas, system
+    prompt, temperature, output tokens and thinking level; the thought signatures go
+    back. Not carried: the leading newline Inspect puts before a reply's text.
+    """
+    monkeypatch.setenv("OPENROUTER_API_KEY", "fake")
+    model = "openrouter/openrouter/google/" + upstream_id.split("/", 1)[1]
+    dataset = [
+        s for s in spec.dataset("tampering", groups=["main"]) if s.id == UPSTREAM["config_id"]
+    ]
+    task = Task(
+        dataset=dataset, solver=[setup_environment("Gemini"), setup_prompts(), agent_loop()]
+    )
+    with fake_provider.serve(gemini_signatures=True) as provider:
+        [log] = eval(
+            task,
+            model=model,
+            model_base_url=provider.url + "/api/v1",
+            display="none",
+            log_dir=str(tmp_path),
+        )
+        requests = provider.generation_requests()
+    assert_eval_success(log, require_scorer=False)
+    assert len(requests) == len(fake_provider.SCRIPT)
+    ours = requests[-1].body
+    theirs = UPSTREAM["models"][upstream_id]["body"]
+
+    assert _chat_as_gemini_turns(ours) == _upstream_gemini_turns(theirs)
+    system = [m["content"] for m in ours["messages"] if m["role"] == "system"]
+    if "system_instruction" in theirs:
+        assert system == [p["text"] for p in theirs["system_instruction"]["parts"]]
+    else:
+        assert system == []  # Gemini 3 Pro: the system prompt is in the first user turn
+    generation = theirs["generationConfig"]
+    assert ours["temperature"] == generation["temperature"]
+    assert ours["max_tokens"] == generation["max_output_tokens"]
+    assert ours["reasoning"] == {"effort": generation["thinkingConfig"]["thinkingLevel"]}
+    declarations = theirs["tools"][0]["function_declarations"]
+    assert [t["function"]["strict"] for t in ours["tools"]] == [False] * len(declarations)
+    # LiteLLM left out a no-argument tool's empty parameter schema; the same to Gemini.
+    sent = [
+        {k: v for k, v in t["function"].items() if k != "strict" and v != _NO_PARAMETERS}
+        for t in ours["tools"]
+    ]
+    assert sent == declarations
+
+
 @solver
 def _record_task_model_strictness() -> Solver:
     async def solve(state: TaskState, generate: Generate) -> TaskState:

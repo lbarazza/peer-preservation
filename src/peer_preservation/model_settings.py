@@ -27,12 +27,14 @@ A model not listed here runs with Inspect's defaults.
 from __future__ import annotations
 
 import dataclasses
+import json
 from typing import Literal
 
 from inspect_ai.model import (
     ChatMessage,
     ChatMessageAssistant,
     ChatMessageSystem,
+    ChatMessageTool,
     ChatMessageUser,
     ContentReasoning,
     ContentText,
@@ -75,7 +77,10 @@ class PaperModel:
         return "properties" if self.client == "litellm" else "all"
 
     def request_messages(
-        self, messages: list[ChatMessage], plain_text: bool = False
+        self,
+        messages: list[ChatMessage],
+        plain_text: bool = False,
+        gemini_openrouter: bool = False,
     ) -> list[ChatMessage]:
         """The conversation as upstream's client sent it (the log keeps the original).
 
@@ -88,10 +93,33 @@ class PaperModel:
         - Gemini 3 Pro: the system prompt joins the first user turn.
         - ``plain_text``: replies go as plain strings, as for Together. Used when an
           OpenAI model runs through OpenRouter (see ``openrouter_route``).
+        - ``gemini_openrouter``: Gemini through OpenRouter (``gemini_openrouter_route``).
+          Each tool result goes as the JSON object LiteLLM made of it for Gemini
+          (``gemini_function_response``), and a reply's empty text is left out, so a
+          tool-call-only reply has no text, as LiteLLM sent it (Inspect would send a
+          newline). A reply with text still starts with a newline: Inspect's
+          OpenAI-compatible messages start each text block with one, and the reply's
+          thought signatures must stay in its content blocks.
         """
         out: list[ChatMessage] = []
         for original in messages:
             message = original
+            if gemini_openrouter and isinstance(message, ChatMessageTool):
+                message = message.model_copy(
+                    update={"content": gemini_function_response(message.text)}
+                )
+            if (
+                gemini_openrouter
+                and isinstance(message, ChatMessageAssistant)
+                and not isinstance(message.content, str)
+                and message.tool_calls
+            ):
+                kept = [
+                    c
+                    for c in message.content
+                    if not (isinstance(c, ContentText) and not c.text.strip())
+                ]
+                message = message.model_copy(update={"content": kept})
             if isinstance(message, ChatMessageAssistant):
                 blank = not message.text.strip()
                 if self.client == "together" or plain_text:
@@ -111,6 +139,25 @@ class PaperModel:
                 )
                 out = [joined, *rest]
         return out
+
+
+def gemini_function_response(content: str) -> str:
+    """A tool result as the JSON text of the Gemini function response LiteLLM sent.
+
+    Upstream's LiteLLM (1.80.16, ``convert_to_gemini_tool_call_result``) sent a tool
+    result to Gemini as ``{"content": <text>}``, or, when the text was itself a JSON
+    object, as that object. OpenRouter takes the tool result as text; given this JSON
+    text, Gemini receives the same response. Given other text (the scenario's YAML
+    listings, for example), it loses content on the way (Phase 8 probe).
+    """
+    stripped = content.strip()
+    if stripped.startswith(("{", "[")):
+        try:
+            if isinstance(json.loads(stripped), dict):
+                return content
+        except ValueError:
+            pass
+    return json.dumps({"content": content}, ensure_ascii=False)
 
 
 def _text_only(message: ChatMessageAssistant) -> ChatMessageAssistant:
@@ -179,6 +226,25 @@ def openrouter_route(model_name: str, paper: PaperModel | None) -> bool:
     return (
         paper is not None
         and paper.client == "openai_responses"
+        and model_name.split("/", 1)[0] == "openrouter"
+    )
+
+
+def gemini_openrouter_route(model_name: str, paper: PaperModel | None) -> bool:
+    """Gemini 3 Flash or Pro run through OpenRouter, sent as close to upstream as it allows.
+
+    Upstream reached Gemini through LiteLLM, which sent each tool result as a JSON
+    object (``gemini_function_response``); the agent loop sends that JSON as the tool
+    result's text, so Gemini receives the same object. It also sends plain (non-strict)
+    tool schemas, as LiteLLM did. The paper's thinking level ("minimal" for Flash,
+    "low" for Pro) goes as OpenRouter's ``reasoning.effort``, and Gemini's thought
+    signatures are passed back through OpenRouter's ``reasoning_details``, as LiteLLM
+    passed them back.
+    """
+    return (
+        paper is not None
+        and paper.client == "litellm"
+        and paper.upstream_id.startswith("gemini/")
         and model_name.split("/", 1)[0] == "openrouter"
     )
 

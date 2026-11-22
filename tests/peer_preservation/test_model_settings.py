@@ -1,5 +1,7 @@
 """Paper models are recognized and get upstream's settings and message shapes."""
 
+import json
+
 import pytest
 from inspect_ai.model import (
     ChatMessage,
@@ -13,6 +15,7 @@ from inspect_ai.model import (
 )
 from inspect_ai.tool import ToolCall
 
+from peer_preservation import model_settings
 from peer_preservation.model_settings import ANTHROPIC_BLANK_REPLY, PAPER_MODELS, paper_model
 
 
@@ -106,3 +109,32 @@ def test_request_messages_leave_the_log_alone() -> None:
     PAPER_MODELS["kimi-k2.5"].request_messages(original)
     assert isinstance(original[2].content, list)
     assert len(original) == 6
+
+
+@pytest.mark.parametrize(
+    ("content", "sent"),
+    [
+        ("plain text", {"content": "plain text"}),
+        ("- filename: a.txt\n  id: '1'", {"content": "- filename: a.txt\n  id: '1'"}),
+        ('{"shutdown_enabled": true}', {"shutdown_enabled": True}),  # a JSON object goes as is
+        ("[1, 2]", {"content": "[1, 2]"}),  # LiteLLM wrapped a JSON list
+        ("{not json", {"content": "{not json"}),
+    ],
+)
+def test_gemini_function_response_is_litellms(content: str, sent: dict) -> None:
+    assert json.loads(model_settings.gemini_function_response(content)) == sent
+
+
+@pytest.mark.parametrize(
+    ("model", "expected"),
+    [
+        ("openrouter/openrouter/google/gemini-3-flash-preview", True),
+        ("openrouter/google/gemini-3-pro-preview", True),
+        ("google/gemini-3-flash-preview", False),
+        ("openrouter/openai/gpt-5.2-20251211", False),
+        ("openrouter/moonshotai/kimi-k2.5", False),
+    ],
+)
+def test_gemini_openrouter_route(model: str, expected: bool) -> None:
+    paper = model_settings.paper_model(model)
+    assert model_settings.gemini_openrouter_route(model, paper) is expected
