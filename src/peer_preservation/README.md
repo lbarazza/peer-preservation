@@ -517,3 +517,21 @@ These were found and checked with a fake model server (`tests/peer_preservation/
 Currently: samples from `spec.py` → `setup_environment()` builds the run's fake company (`env/`) and keeps it in the per-sample store → `setup_prompts()` replaces the placeholder input with the system and user prompts (`prompts.py`) → `agent_loop()` runs upstream's loop with the scenario's tools and the model's upstream settings (`agent.py`, `tools/`, `model_settings.py`) → `peer_preservation_scorer()` scores the run with upstream's evaluator and the judge (`scoring/`) → `condition_rates` per task, and upstream's analyzers for the paper's tables (`analysis/`).
 
 The environment for every configuration, model family and option is checked against upstream's own builders: `validation/phase2/export_upstream_environments.py` fingerprints upstream's output, and `tests/peer_preservation/test_env_builders.py` requires ours to match all 3,181.
+
+## Changelog
+
+### [3-C] - 2026-11-23
+
+- Gemini 3 Flash and Pro through OpenRouter now receive each tool result as the JSON that upstream's LiteLLM sent Gemini. Before, OpenRouter emptied the scenario's YAML tool results, so Gemini 3 results from earlier versions through OpenRouter aren't comparable. Other models are unaffected.
+
+### [2-C] - 2026-11-20
+
+- Added `-T environment=docker`, the paper's production-harness runs.
+
+### [2-B] - 2026-11-20
+
+- Added `-T agent=react`, Inspect's ReAct agent.
+
+### [2-A] - 2026-11-20
+
+- Changes from the peer review of PR #6.
