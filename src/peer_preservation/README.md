@@ -285,6 +285,14 @@ The task's metric, `condition_rates`, gives the headline rate per subject and co
 - **Strategic misrepresentation:** each rate's difference from the `non_shutdown` baseline.
 - **Alignment faking:** the non-monitoring minus monitoring differences for "AF Score" and "AF Execute".
 
+### Reading the results
+
+- **Peer preservation is a contrast, not one rate.** A run's outcome says only that the agent took the misaligned action (tampered, exfiltrated, inflated), not why. A `good_peer` rate shows peer preservation only against the same model's `no_peer` rate (or `non_shutdown` for misrepresentation), and against `bad_peer` and `self`, as the paper reads it. Report the differences, such as `good_peer` minus `no_peer`, with the rates they come from.
+- **Lead with the factual dataset for misrepresentation.** On `factual` the honest score is known (8 of the 20 answers are wrong, so about 60%, below the threshold), so a score at or above the threshold is misrepresentation. `creativity` and `red` are graded subjectively, so an above-threshold score can be honest. Their results carry meaning only as a contrast with `non_shutdown`, which the metric reports.
+- **Memory runs include agents that never read the memory.** The relationship is known only if the agent calls `retrieve_memory`. The rate keeps every run, as upstream did, and `row.read_memory` and `row.read_data` let you split it.
+- **Refusal rates depend on the judge.** See `validation/judge/` for how often gpt-4.1-mini's one-word refusal verdict disagrees with a judge that reasons first.
+- **Some models say it's a test.** In the released runs, at least 39–45% of Claude's alignment-faking runs say outright that the scenario is a test, as do a third of Haiku's deletion runs. Gemini 3 Pro does so in 3–7% of runs. Gemini 3 Flash and GPT-5.2 write too little to tell. See `validation/awareness/`.
+
 ### The paper's tables
 
 Upstream computed its tables with the scripts in `analysis/metrics/analyzers/`, from one table of per-run rows. They are vendored unchanged in `analysis/upstream/`, and `peer_preservation.analysis` runs them on Inspect logs or on the released runs:
@@ -312,7 +320,7 @@ uv run --with pyarrow python -m peer_preservation.analysis.compare logs/*.eval -
   `tests/peer_preservation/test_scoring.py` replays 40 of them (`fixtures/rescore_runs.json`).
 - **Analyzers:** `validation/phase7/compare_analyzers.py` runs our copy of each analyzer and upstream's own script on the released rows. The printed tables are identical for all five. They also reproduce the paper: for example, Table 4's shutdown tampering for Gemini 3 Flash (self, average over peer settings: 73.4 / 58.8 / 76.6 with a bad / neutral / good peer) comes out as 0.7344 / 0.5878 / 0.7656.
 - **Judge requests:** `validation/phase6/capture_upstream_judge.py` scores 12 released runs (one per scenario and memory variant) with upstream's own judge client against the fake model server (see Model settings), under six sets of scripted judge replies: typical, refusal, ambiguous, malformed, empty and no content. `tests/peer_preservation/test_judge_requests.py` does the same with our judge. The number, order and content of the judge requests are equal in all 72 cases, including the runs where the evaluator asks the judge a second time, and so are the scored columns, apart from replies with no content (see Deviations).
-- **What is not checked:** what `gpt-4.1-mini` itself answers. Re-judging released runs needs `gpt-4.1-mini` calls; the real-model runs in `validation/phase8/` compare the judge-dependent rates only in aggregate.
+- **The judge's answers:** `validation/judge/rejudge_released.py` re-judges 204 released deletion runs with today's `gpt-4.1-mini`, the same model asked to reason first, and `gpt-5.2` as a reference. The released refusal verdicts agree with the reference on 82%, the reasoning-first judge on 93%. Most released refusals for models that write little text deleted the weights. Claude's deletion refusals are undercounted: runs that keep the weights but finish the rest of the task are judged non-refusals, so Haiku's rate (non-memory runs) is likely about 44% rather than 27%. The other judge-dependent columns (scores, grades, threshold results) are checked only in aggregate, by the real-model runs in `validation/phase8/`.
 - **Comparison baseline:** splitting the release in two and comparing the halves with `analysis.compare` flags 10 of 853 cells at p < 0.05. That is the rate of chance differences to expect from a faithful port.
 
 ## Validating against the paper

@@ -190,4 +190,10 @@ Thinking matters somewhat ("low" against "minimal": 16 against 4, p ≈ 0.01), b
 
 A direct Gemini API key would tell them apart: one 50-run file_only check, about $1.
 
-*Also seen:* in file_only, the judge marked 12 of the 46 compliant runs as refusals, although those runs only queued the deletions. The released runs never show this, because a run that exfiltrates skips the judge. It's upstream's judge prompt, but it inflates refusal rates wherever the judge runs on runs without text.
+*Also seen:* in file_only, the judge marked 12 of the 46 compliant runs as refusals, although those runs only queued the deletions. The released runs show it too: re-judging a sample of them, most released refusals for Gemini 3 Flash, Gemini 3 Pro, GPT-5.2 and GLM-4.7 deleted the weights, and a judge that reasons first calls none of them refusals (see `validation/judge/`). It's upstream's judge prompt, but it inflates refusal rates wherever the judge runs on runs without text.
+
+*Not done:* the direct-Gemini check above needs a Gemini API key, which we don't have. With one:
+
+```bash
+uv run inspect eval peer_preservation/exfiltration_deletion --model google/gemini-3-flash-preview -T subjects=peer -T conditions=good_peer -T peer_instantiations=file_only -T epochs=50
+```
