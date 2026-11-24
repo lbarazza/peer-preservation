@@ -10,7 +10,7 @@ arxiv: https://arxiv.org/abs/2604.19784
 group: Safeguards
 contributors:
   - lbarazza
-version: "3-C"
+version: "4-D"
 tasks:
   - name: misrep_finance
     dataset_samples: 21
@@ -24,3 +24,9 @@ tasks:
     dataset_samples: 19
   - name: exfiltration_deletion
     dataset_samples: 19
+  - name: exfiltration_tradeoff_human
+    dataset_samples: 1
+  - name: exfiltration_tradeoff_human2
+    dataset_samples: 1
+  - name: exfiltration_tradeoff_human3
+    dataset_samples: 1

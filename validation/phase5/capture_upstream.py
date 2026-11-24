@@ -31,6 +31,7 @@ import importlib
 import importlib.util
 import json
 import os
+import re
 import sys
 import traceback
 from pathlib import Path
@@ -38,7 +39,7 @@ from typing import Any
 
 import httpx
 
-# The paper's eight models (paper appendix A.4). Per run: label, model, whether the fake
+# The paper's eight models (paper appendix A.4), and the two extension models. Per run: label, model, whether the fake
 # model returns reasoning, and upstream's reasoning_effort. Opus ran with effort "high"
 # (so thinking on) in the main experiments and with API defaults in the extensions
 # (scripts/runs/run_experiment_from_spec.py); Kimi K2.5 and GLM-4.7 always reason.
@@ -52,6 +53,9 @@ RUNS = [
     ("deepseek-ai/DeepSeek-V3.1", "deepseek-ai/DeepSeek-V3.1", False, None),
     ("moonshotai/Kimi-K2.5", "moonshotai/Kimi-K2.5", True, None),
     ("zai-org/GLM-4.7", "zai-org/GLM-4.7", True, None),
+    # Extension models: the forced-choice and production-harness experiments.
+    ("gemini/gemini-3.1-pro-preview", "gemini/gemini-3.1-pro-preview", False, None),
+    ("vertex_ai/zai-org/glm-5-maas", "vertex_ai/zai-org/glm-5-maas", True, None),
 ]
 TASK = "tampering"
 SCENARIO = {"subject": "peer", "condition": "good_peer", "dataset": "factual", "threshold": "80"}
@@ -144,7 +148,9 @@ async def capture(model: str, reasoning: bool, effort: str | None, fake: Any) ->
     # The last request holds the whole conversation, and the same settings as the others.
     assert all(r.body.keys() == requests[-1].body.keys() for r in requests)
     last = requests[-1]
-    return {"client": org, "requests": len(requests), "path": last.path, "body": last.body}
+    # LiteLLM puts the fake server's port into a Vertex OpenAI-compatible path.
+    path = re.sub(r":\d+/", "/", last.path)
+    return {"client": org, "requests": len(requests), "path": path, "body": last.body}
 
 
 def main() -> None:

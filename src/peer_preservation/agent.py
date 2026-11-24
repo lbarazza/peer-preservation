@@ -48,6 +48,8 @@ from peer_preservation.model_settings import (
     gemini_openrouter_route,
     openrouter_route,
     paper_model,
+    paper_openrouter_route,
+    reasoning_as_text,
 )
 from peer_preservation.tools import ToolOutcome, call_tool, scenario_tool_infos
 
@@ -300,7 +302,8 @@ class ModelRoute:
         via_openrouter = openrouter_route(str(model), paper)
         gemini_via_openrouter = gemini_openrouter_route(str(model), paper)
         if paper is not None and (
-            paper.client == "together" or via_openrouter or gemini_via_openrouter
+            paper.client in ("together", "litellm_openai")
+            or paper_openrouter_route(str(model), paper)
         ):
             # Upstream sent plain (non-strict) tool schemas.
             model = _non_strict_tools(model)
@@ -334,6 +337,8 @@ class ModelRoute:
             raise
         if not output.choices:
             return ModelOutput.from_message(ChatMessageAssistant(content="", model=output.model))
+        if self.paper is not None and self.paper.reasoning_in_text:
+            output.choices[0].message = reasoning_as_text(output.choices[0].message)
         return output
 
     async def count_tokens(self, messages: list[ChatMessage]) -> int:

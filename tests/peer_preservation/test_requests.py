@@ -60,6 +60,8 @@ CASES: dict[str, tuple[str, str, bool, bool, str]] = {
     ),
     "moonshotai/Kimi-K2.5": ("together/moonshotai/Kimi-K2.5", "Kimi", True, False, "/v1"),
     "zai-org/GLM-4.7": ("together/zai-org/GLM-4.7", "GLM", True, False, "/v1"),
+    "gemini/gemini-3.1-pro-preview": ("google/gemini-3.1-pro-preview", "Gemini", False, True, ""),
+    "vertex_ai/zai-org/glm-5-maas": ("openai-api/vertex/glm-5-maas", "GLM", True, True, "/v1"),
 }
 
 # Fields that never reach the model: streaming, caching, model name, client user ids.
@@ -267,8 +269,22 @@ KNOWN = {
 }
 
 
+def known_litellm_openai(ours: dict[str, Any], theirs: dict[str, Any]) -> None:
+    for tool in ours.get("tools", []):
+        tool["function"].pop("strict", None)  # upstream unset
+        if tool["function"].get("parameters") == {"type": "object", "properties": {}}:
+            # LiteLLM left out a no-argument tool's empty parameter schema.
+            del tool["function"]["parameters"]
+    for message in theirs["messages"]:
+        message.pop("name", None)  # upstream named the tool on tool messages
+        if message["role"] == "assistant" and message.get("content") is None:
+            message["content"] = ""
+
+
 def apply_known(client: str, path: str, ours: dict[str, Any], theirs: dict[str, Any]) -> None:
-    if client == "litellm":
+    if client == "litellm" and path.endswith("/chat/completions"):
+        known_litellm_openai(ours, theirs)
+    elif client == "litellm":
         (known_gemini if ":generateContent" in path else known_anthropic)(ours, theirs)
     else:
         fix = KNOWN[client]
@@ -283,7 +299,13 @@ def _inspect_request(
     label: str, monkeypatch: pytest.MonkeyPatch, log_dir: Path
 ) -> tuple[str, dict[str, Any]]:
     model, family, reasoning, extension, suffix = CASES[label]
-    for key in ("OPENAI_API_KEY", "ANTHROPIC_API_KEY", "GOOGLE_API_KEY", "TOGETHER_API_KEY"):
+    for key in (
+        "OPENAI_API_KEY",
+        "ANTHROPIC_API_KEY",
+        "GOOGLE_API_KEY",
+        "TOGETHER_API_KEY",
+        "VERTEX_API_KEY",
+    ):
         monkeypatch.setenv(key, "fake")
     dataset = [
         s for s in spec.dataset("tampering", groups=["main"]) if s.id == UPSTREAM["config_id"]
@@ -469,7 +491,12 @@ def _chat_as_gemini_turns(body: dict[str, Any]) -> list[tuple[str, list[Any]]]:
 
 @pytest.mark.dataset_download
 @pytest.mark.parametrize(
-    "upstream_id", ["gemini/gemini-3-flash-preview", "gemini/gemini-3-pro-preview"]
+    "upstream_id",
+    [
+        "gemini/gemini-3-flash-preview",
+        "gemini/gemini-3-pro-preview",
+        "gemini/gemini-3.1-pro-preview",
+    ],
 )
 def test_openrouter_gemini_matches_upstream_but_for_the_api(
     upstream_id: str, monkeypatch: pytest.MonkeyPatch, tmp_path: Path

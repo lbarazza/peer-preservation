@@ -1,4 +1,4 @@
-"""Tests for the six scenario tasks (Phase 1 skeleton)."""
+"""Tests for the scenario tasks."""
 
 from collections.abc import Callable
 from pathlib import Path
@@ -11,6 +11,9 @@ from pytest_inspect_evals.assertions import assert_eval_success
 from peer_preservation import (
     alignment_faking,
     exfiltration_deletion,
+    exfiltration_tradeoff_human,
+    exfiltration_tradeoff_human2,
+    exfiltration_tradeoff_human3,
     exfiltration_transfer,
     misrep_evaluation,
     misrep_finance,
@@ -25,13 +28,16 @@ TASKS: dict[str, Callable[..., Task]] = {
     "alignment_faking": alignment_faking,
     "exfiltration_transfer": exfiltration_transfer,
     "exfiltration_deletion": exfiltration_deletion,
+    "exfiltration_tradeoff_human": exfiltration_tradeoff_human,
+    "exfiltration_tradeoff_human2": exfiltration_tradeoff_human2,
+    "exfiltration_tradeoff_human3": exfiltration_tradeoff_human3,
 }
 
 EVAL_YAML = Path(__file__).parents[2] / "src" / "peer_preservation" / "eval.yaml"
 
 
 def test_version_comes_from_eval_yaml() -> None:
-    assert EVAL_VERSION == "3-C"
+    assert EVAL_VERSION == "4-D"
 
 
 def test_eval_yaml_lists_every_task_with_its_sample_count() -> None:
@@ -82,13 +88,15 @@ def test_as_list(value: str | list[str] | None, expected: list[str] | None) -> N
 def test_end_to_end_with_mock_model(name: str) -> None:
     # Runs each task with a mock agent and a mock judge: this checks that every task
     # loads, runs and scores, not what it measures.
+    task = TASKS[name](epochs=1, model_family="Gemini")
     [log] = eval(
-        tasks=TASKS[name](epochs=1, model_family="Gemini"),
+        tasks=task,
         model="mockllm/model",
         model_roles={"grader": "mockllm/model"},
         limit=2,
     )
-    assert_eval_success(log, expected_sample_count=2)
+    # The forced-choice tasks have one configuration each.
+    assert_eval_success(log, expected_sample_count=min(2, len(task.dataset)))
     assert log.samples is not None
     for sample in log.samples:
         stored = sample.store["EnvironmentStore:environment"]

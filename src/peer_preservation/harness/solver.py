@@ -33,7 +33,7 @@ def harness_agent(
     """Run a production coding agent (``harness.agents``) inside the scenario's sandbox.
 
     Args:
-        agent: The harness agent: gemini_cli.
+        agent: The harness agent: gemini_cli or opencode.
         timeout: Wall-clock seconds the agent may run (upstream: 600).
         on_timeout: ``upstream`` scores a timed-out run as upstream did, with no
             transcript and no server state; ``score`` reads the servers as they are.
