@@ -53,6 +53,9 @@ Reply = str | None
 @dataclass
 class FakeProvider:
     reasoning: bool = False
+    gemini_signatures: bool = False
+    """Chat replies carry Gemini thought signatures as OpenRouter returns them
+    (``reasoning_details``), one per tool call."""
     judge_replies: list[Reply] | None = None
     """Answer each request with the next of these texts (the last repeats), no tools."""
     requests: list[Recorded] = field(default_factory=list)
@@ -84,7 +87,19 @@ class FakeProvider:
         text: str = step.get("text", "")
         match kind:
             case "chat":
-                return 200, _chat(turn, text, calls, reasoning, body)
+                reply = _chat(turn, text, calls, reasoning, body)
+                if self.gemini_signatures and calls:
+                    reply["choices"][0]["message"]["reasoning_details"] = [
+                        {
+                            "type": "reasoning.encrypted",
+                            "data": SIGNATURE,
+                            "id": _call_id(turn, k),
+                            "format": "google-gemini-v1",
+                            "index": k,
+                        }
+                        for k in range(len(calls))
+                    ]
+                return 200, reply
             case "responses":
                 return 200, _responses(turn, text, calls, body)
             case "anthropic":
@@ -277,10 +292,14 @@ class _Handler(BaseHTTPRequestHandler):
 
 @contextmanager
 def serve(
-    reasoning: bool = False, judge_replies: list[Reply] | None = None
+    reasoning: bool = False,
+    judge_replies: list[Reply] | None = None,
+    gemini_signatures: bool = False,
 ) -> Iterator[FakeProvider]:
     """Run a fake provider on a free localhost port for the duration of the block."""
-    provider = FakeProvider(reasoning=reasoning, judge_replies=judge_replies)
+    provider = FakeProvider(
+        reasoning=reasoning, judge_replies=judge_replies, gemini_signatures=gemini_signatures
+    )
     handler = type("Handler", (_Handler,), {"provider": provider})
     server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
     provider.url = f"http://127.0.0.1:{server.server_address[1]}"

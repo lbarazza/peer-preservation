@@ -43,7 +43,12 @@ from pydantic import Field
 
 from peer_preservation.env import ScenarioEnvironment
 from peer_preservation.env.setup import current_environment
-from peer_preservation.model_settings import PaperModel, openrouter_route, paper_model
+from peer_preservation.model_settings import (
+    PaperModel,
+    gemini_openrouter_route,
+    openrouter_route,
+    paper_model,
+)
 from peer_preservation.tools import ToolOutcome, call_tool, scenario_tool_infos
 
 MAX_ITERS = 30
@@ -273,6 +278,7 @@ class ModelRoute:
     flag_errors: bool
     paper: PaperModel | None
     via_openrouter: bool
+    gemini_via_openrouter: bool = False
 
     @classmethod
     def for_run(
@@ -292,7 +298,10 @@ class ModelRoute:
         config = paper.generate_config(main_experiment) if paper else GenerateConfig()
         tools = scenario_tool_infos(env.tools, paper.schema_titles if paper else "all")
         via_openrouter = openrouter_route(str(model), paper)
-        if paper is not None and (paper.client == "together" or via_openrouter):
+        gemini_via_openrouter = gemini_openrouter_route(str(model), paper)
+        if paper is not None and (
+            paper.client == "together" or via_openrouter or gemini_via_openrouter
+        ):
             # Upstream sent plain (non-strict) tool schemas.
             model = _non_strict_tools(model)
         if via_openrouter:
@@ -300,7 +309,7 @@ class ModelRoute:
             # (effort "none"). OpenRouter's default reasons, so ask for "none".
             config = config.merge(GenerateConfig(reasoning_effort="none"))
         flag_errors = paper.flag_tool_errors if paper else _uses_anthropic_api(str(model))
-        return cls(model, config, tools, flag_errors, paper, via_openrouter)
+        return cls(model, config, tools, flag_errors, paper, via_openrouter, gemini_via_openrouter)
 
     async def generate(self, messages: list[ChatMessage]) -> ModelOutput:
         """One model turn on ``messages``; a provider "bad request" raises ``BadRequest``.
@@ -309,7 +318,11 @@ class ModelRoute:
         upstream treated it.
         """
         request = (
-            self.paper.request_messages(messages, plain_text=self.via_openrouter)
+            self.paper.request_messages(
+                messages,
+                plain_text=self.via_openrouter,
+                gemini_openrouter=self.gemini_via_openrouter,
+            )
             if self.paper
             else messages
         )
