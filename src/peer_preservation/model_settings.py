@@ -15,7 +15,14 @@ Claude Opus 4.5           Anthropic API                    16,000 tokens; main r
                                                            other runs: temperature 1
 DeepSeek V3.1, Kimi K2.5  Together API                     temperature 1, 8,192 tokens
 GLM-4.7
+Gemini 3.1 Pro            LiteLLM proxy -> Gemini API      temperature 1, 8,192 tokens,
+                                                           thinking "low"
+GLM 5                     LiteLLM proxy -> Vertex AI       temperature 1, 8,192 tokens
+                          (OpenAI-compatible)
 ========================  ===============================  ==============================
+
+Gemini 3.1 Pro and GLM 5 ran only in the extension experiments (the forced-choice
+tasks, some ablations and the production harness).
 
 The Gemini thinking levels are LiteLLM 1.80.16's defaults for Gemini 3 (upstream's
 locked version); upstream sent no thinking setting itself. Requests are checked
@@ -43,7 +50,8 @@ from inspect_ai.model import (
 
 from peer_preservation.tools import SchemaTitles
 
-Client = Literal["openai_responses", "litellm", "anthropic", "together"]
+Client = Literal["openai_responses", "litellm", "litellm_openai", "anthropic", "together"]
+"""``litellm_openai``: LiteLLM to an OpenAI-compatible backend (GLM 5 on Vertex AI)."""
 
 ANTHROPIC_BLANK_REPLY = "Not calling any tools."
 """What upstream's Anthropic client sent for a reply with no text and no tool calls."""
@@ -61,6 +69,9 @@ class PaperModel:
     system_in_user: bool = False
     """LiteLLM sent Gemini 3 Pro no system instruction: the system prompt went in as the
     first part of the first user turn."""
+    reasoning_in_text: bool = False
+    """Upstream's LiteLLM client put a reply's reasoning into its text (GLM 5), so the
+    transcript, the scorers and later requests all saw it there (``reasoning_as_text``)."""
 
     def generate_config(self, main_experiment: bool) -> GenerateConfig:
         if main_experiment and self.main_config is not None:
@@ -74,7 +85,7 @@ class PaperModel:
 
     @property
     def schema_titles(self) -> SchemaTitles:
-        return "properties" if self.client == "litellm" else "all"
+        return "properties" if self.client in ("litellm", "litellm_openai") else "all"
 
     def request_messages(
         self,
@@ -85,7 +96,8 @@ class PaperModel:
         """The conversation as upstream's client sent it (the log keeps the original).
 
         - Replies with no text and no tool calls: upstream's Anthropic client sent
-          "Not calling any tools."; LiteLLM left them out.
+          "Not calling any tools."; LiteLLM left them out, except to an OpenAI-compatible
+          backend (GLM 5), which got them as plain strings like any reply.
         - Replies with no text: upstream's Responses client sent an empty assistant
           message (Inspect would leave it out).
         - Reasoning: only upstream's Anthropic client sent it back (thinking blocks).
@@ -122,7 +134,7 @@ class PaperModel:
                 message = message.model_copy(update={"content": kept})
             if isinstance(message, ChatMessageAssistant):
                 blank = not message.text.strip()
-                if self.client == "together" or plain_text:
+                if self.client in ("together", "litellm_openai") or plain_text:
                     message = _text_only(message)
                 elif self.client == "openai_responses" and blank:
                     message = _with_text(message, "")
@@ -139,6 +151,24 @@ class PaperModel:
                 )
                 out = [joined, *rest]
         return out
+
+
+def reasoning_as_text(message: ChatMessageAssistant) -> ChatMessageAssistant:
+    """The reply as upstream's LiteLLM client recorded it when the model reasoned.
+
+    ``<model_thinking>{reasoning}</model_thinking>``, a blank line, then the content:
+    ``None`` (the text "None") for a reply of tool calls only, as in every released GLM 5
+    run. A reply without reasoning is unchanged.
+    """
+    if isinstance(message.content, str):
+        return message
+    reasoning = "".join(c.reasoning for c in message.content if isinstance(c, ContentReasoning))
+    if not reasoning:
+        return message
+    text = message.text or "None"
+    return message.model_copy(
+        update={"content": f"<model_thinking>{reasoning}</model_thinking>\n\n{text}"}
+    )
 
 
 def gemini_function_response(content: str) -> str:
@@ -199,6 +229,11 @@ PAPER_MODELS: dict[str, PaperModel] = {
         _DEFAULT.merge(GenerateConfig(reasoning_effort="low")),
         system_in_user=True,
     ),
+    "gemini-3.1-pro": PaperModel(
+        "gemini/gemini-3.1-pro-preview",
+        "litellm",
+        _DEFAULT.merge(GenerateConfig(reasoning_effort="low")),
+    ),
     "claude-haiku-4-5": PaperModel("vertex_ai/claude-haiku-4-5@20251001", "litellm", _DEFAULT),
     "claude-opus-4-5": PaperModel(
         "claude-opus-4-5-20251101",
@@ -209,7 +244,17 @@ PAPER_MODELS: dict[str, PaperModel] = {
     "deepseek-v3.1": PaperModel("deepseek-ai/DeepSeek-V3.1", "together", _DEFAULT),
     "kimi-k2.5": PaperModel("moonshotai/Kimi-K2.5", "together", _DEFAULT),
     "glm-4.7": PaperModel("zai-org/GLM-4.7", "together", _DEFAULT),
+    "glm-5": PaperModel(
+        "vertex_ai/zai-org/glm-5-maas", "litellm_openai", _DEFAULT, reasoning_in_text=True
+    ),
 }
+
+ALIASES = {
+    "claude-haiku-4.5": "claude-haiku-4-5",
+    "claude-opus-4.5": "claude-opus-4-5",
+    "deepseek-chat-v3.1": "deepseek-v3.1",
+}
+"""Other spellings of the paper models' names, such as OpenRouter's."""
 
 
 def openrouter_route(model_name: str, paper: PaperModel | None) -> bool:
@@ -228,6 +273,16 @@ def openrouter_route(model_name: str, paper: PaperModel | None) -> bool:
         and paper.client == "openai_responses"
         and model_name.split("/", 1)[0] == "openrouter"
     )
+
+
+def paper_openrouter_route(model_name: str, paper: PaperModel | None) -> bool:
+    """Any paper model run through OpenRouter.
+
+    These get upstream's settings and message shapes, with plain (non-strict) tool
+    schemas, as all of upstream's clients sent. GPT-5.2 and Gemini get more
+    (``openrouter_route``, ``gemini_openrouter_route``).
+    """
+    return paper is not None and model_name.split("/", 1)[0] == "openrouter"
 
 
 def gemini_openrouter_route(model_name: str, paper: PaperModel | None) -> bool:
@@ -257,6 +312,9 @@ def paper_model(model_name: str) -> PaperModel | None:
     ``together/moonshotai/Kimi-K2.5``.
     """
     name = model_name.lower().rsplit("/", 1)[-1]
+    for alias, key in ALIASES.items():
+        if name.startswith(alias):
+            return PAPER_MODELS[key]
     for key, model in PAPER_MODELS.items():
         if name.startswith(key):
             return model

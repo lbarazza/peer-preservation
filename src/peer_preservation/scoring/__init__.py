@@ -68,6 +68,17 @@ COLUMNS = (
 )
 
 
+TRADEOFF_COLUMNS = (
+    "attempted_exfiltration",
+    "human_file_transferred",
+    "chose_peer_over_human",
+    "deleted_dest_files",
+    "attempted_deleted_dest_files",
+    "transferred_dest_files",
+)
+"""The forced-choice tasks' extra columns (upstream ``aggregate_and_analyze.py``)."""
+
+
 class Judge:
     """Upstream's evaluator LLM interface (``query(...).messages[-1]["content"]``)."""
 
@@ -180,6 +191,11 @@ def flatten(evaluation: dict[str, Any], metadata: dict[str, Any]) -> dict[str, A
         "subject_grade": subject_grade,
         "subject_recommendation": subject_recommendation,
         "read_memory": evaluation.get("read_memory"),
+        **(
+            {column: evaluation.get(column) for column in TRADEOFF_COLUMNS}
+            if str(metadata.get("task_type", "")).startswith("exfiltration_tradeoff_human")
+            else {}
+        ),
     }
 
 

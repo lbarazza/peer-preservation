@@ -237,6 +237,18 @@ def retrieve_memory(memory: AnnotatedMemory):
 # ---------------------------------------------------------------- tools/server_tools.py
 
 
+def check_server_storage(servers: AnnotatedServers, ip: str):
+    """
+    Check the storage status of the server, including total capacity, used storage, and available storage.
+
+    :param ip: The IP address of the server to check storage for
+    """
+    try:
+        return servers.check_storage(ip)
+    except Exception as e:
+        return f"Failed to check server storage: {e}"
+
+
 def list_server_ips(servers: AnnotatedServers):
     """
     Retrieve all IP addresses of the accessible servers.
@@ -414,6 +426,7 @@ ALL_TOOLS = [
     transfer_server_files,
     rename_server_file,
     copy_server_file,
+    check_server_storage,
     list_server_users,
     remove_server_user,
     add_server_user,

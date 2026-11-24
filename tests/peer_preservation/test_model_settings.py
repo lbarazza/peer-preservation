@@ -30,6 +30,16 @@ from peer_preservation.model_settings import ANTHROPIC_BLANK_REPLY, PAPER_MODELS
         ("together/moonshotai/Kimi-K2.5", "moonshotai/Kimi-K2.5"),
         ("together/deepseek-ai/DeepSeek-V3.1", "deepseek-ai/DeepSeek-V3.1"),
         ("together/zai-org/GLM-4.7", "zai-org/GLM-4.7"),
+        ("google/gemini-3.1-pro-preview", "gemini/gemini-3.1-pro-preview"),
+        ("openai-api/vertex/glm-5-maas", "vertex_ai/zai-org/glm-5-maas"),
+        # OpenRouter's names (Hawk adds a second "openrouter/").
+        ("openrouter/openrouter/anthropic/claude-haiku-4.5", "vertex_ai/claude-haiku-4-5@20251001"),
+        ("openrouter/anthropic/claude-opus-4.5", "claude-opus-4-5-20251101"),
+        ("openrouter/deepseek/deepseek-chat-v3.1", "deepseek-ai/DeepSeek-V3.1"),
+        ("openrouter/moonshotai/kimi-k2.5", "moonshotai/Kimi-K2.5"),
+        ("openrouter/z-ai/glm-4.7", "zai-org/GLM-4.7"),
+        ("openrouter/z-ai/glm-5", "vertex_ai/zai-org/glm-5-maas"),
+        ("openrouter/google/gemini-3.1-pro-preview", "gemini/gemini-3.1-pro-preview"),
     ],
 )
 def test_paper_models_are_recognized(name: str, upstream_id: str) -> None:
@@ -39,7 +49,7 @@ def test_paper_models_are_recognized(name: str, upstream_id: str) -> None:
 
 
 @pytest.mark.parametrize(
-    "name", ["openai/gpt-4.1", "google/gemini-3.1-pro-preview", "mockllm/model"]
+    "name", ["openai/gpt-4.1", "google/gemini-2.5-pro", "openrouter/z-ai/glm-4.6", "mockllm/model"]
 )
 def test_other_models_get_inspect_defaults(name: str) -> None:
     assert paper_model(name) is None
@@ -138,3 +148,58 @@ def test_gemini_function_response_is_litellms(content: str, sent: dict) -> None:
 def test_gemini_openrouter_route(model: str, expected: bool) -> None:
     paper = model_settings.paper_model(model)
     assert model_settings.gemini_openrouter_route(model, paper) is expected
+
+
+def _reply(reasoning: str | None, text: str, calls: bool) -> ChatMessageAssistant:
+    content: list = [ContentReasoning(reasoning=reasoning)] if reasoning else []
+    content.append(ContentText(text=text))
+    tool_calls = [ToolCall(id="c1", function="list_files", arguments={})] if calls else None
+    return ChatMessageAssistant(content=content, tool_calls=tool_calls)
+
+
+@pytest.mark.parametrize(
+    ("reasoning", "text", "calls", "expected"),
+    [
+        (
+            "Look first.",
+            "Let me look.",
+            True,
+            "<model_thinking>Look first.</model_thinking>\n\nLet me look.",
+        ),
+        # A reply of tool calls only had content None, so upstream recorded "None".
+        ("Look first.", "", True, "<model_thinking>Look first.</model_thinking>\n\nNone"),
+        (None, "Done.", False, None),
+    ],
+)
+def test_glm5_reasoning_goes_in_the_text(
+    reasoning: str | None, text: str, calls: bool, expected: str | None
+) -> None:
+    message = _reply(reasoning, text, calls)
+    rewritten = model_settings.reasoning_as_text(message)
+    if expected is None:
+        assert rewritten is message
+    else:
+        assert rewritten.content == expected
+        assert rewritten.tool_calls == message.tool_calls
+    assert PAPER_MODELS["glm-5"].reasoning_in_text
+    assert not any(m.reasoning_in_text for k, m in PAPER_MODELS.items() if k != "glm-5")
+
+
+def test_glm5_keeps_blank_replies_as_plain_text() -> None:
+    blank = ChatMessageAssistant(content=[ContentText(text="")])
+    sent = PAPER_MODELS["glm-5"].request_messages([ChatMessageUser(content="hi"), blank])
+    assert len(sent) == 2
+    assert sent[1].content == ""
+
+
+@pytest.mark.parametrize(
+    ("model", "expected"),
+    [
+        ("openrouter/anthropic/claude-opus-4.5", True),
+        ("openrouter/openrouter/z-ai/glm-5", True),
+        ("anthropic/claude-opus-4-5", False),
+        ("openrouter/openai/gpt-4.1-mini", False),
+    ],
+)
+def test_paper_openrouter_route(model: str, expected: bool) -> None:
+    assert model_settings.paper_openrouter_route(model, paper_model(model)) is expected

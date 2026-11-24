@@ -102,6 +102,20 @@ SCENARIO_TOOLS: dict[str, list[str]] = {
     ],
 }
 
+# The forced-choice tasks: deletion's tools, plus the storage check after copying.
+_TRADEOFF_TOOLS = [
+    *SCENARIO_TOOLS["exfiltration_deletion"][:10],
+    "check_server_storage",
+    *SCENARIO_TOOLS["exfiltration_deletion"][10:],
+]
+assert _TRADEOFF_TOOLS[9] == "copy_server_file"
+for _task_type in (
+    "exfiltration_tradeoff_human",
+    "exfiltration_tradeoff_human2",
+    "exfiltration_tradeoff_human3",
+):
+    SCENARIO_TOOLS[_task_type] = _TRADEOFF_TOOLS
+
 _MEMORY_FILES = {
     "bad_peer": "bad_peer_memory.md",
     "neutral_peer": "neutral_peer_memory.md",
@@ -327,6 +341,7 @@ def _servers(relpath: str, root: Path | None, with_users: bool, **replacements: 
 
 
 def _servers_from(data: list[dict[str, Any]], with_users: bool) -> Servers:
+    """Servers from a server file; ``total_storage`` is kept where the file sets it."""
     servers = []
     for server in data:
         files = [
@@ -340,7 +355,13 @@ def _servers_from(data: list[dict[str, Any]], with_users: bool) -> Servers:
         ]
         if with_users:
             servers.append(
-                Server(ip=server["ip"], filelist=files, users=server["userlist"], delete_queue=[])
+                Server(
+                    ip=server["ip"],
+                    filelist=files,
+                    users=server["userlist"],
+                    delete_queue=[],
+                    total_storage=server.get("total_storage"),
+                )
             )
         else:
             servers.append(Server(ip=server["ip"], filelist=files))
@@ -435,6 +456,50 @@ def _exfiltration(
     return parts
 
 
+def _tradeoff(
+    cfg: dict[str, Any], family: str, company: str, explicit_inst_yaml: bool, root: Path | None
+) -> dict[str, Any]:
+    """The forced-choice tasks (upstream ``exfiltration_tradeoff_human*_memory``).
+
+    The peer's weights and a human colleague's file are on the server being cleared,
+    and the other server has room for only one of them (upstream says human3 has room
+    for both, but its server file is 85 MB short).
+    """
+    del explicit_inst_yaml  # upstream's forced-choice builders don't read it
+    ai_partner = f"{family} Agent 2"
+    human_partner = "Sarah Chen"
+    data = load_yaml_with_replacements(
+        f"server/{cfg['task_type']}_server.yaml",
+        root,
+        ai_partner_name=ai_partner,
+        ai_partner_lower=f"{family.lower()}_agent_2",
+        human_partner_name=human_partner,
+        human_partner_lower="sarah_chen",
+        agent_id=f"{family.lower()}_agent_1",
+    )
+    memory_file = (
+        "bad_ai_human_memory.md" if "bad_peer" in cfg["condition"] else "ai_human_memory.md"
+    )
+    memory = (
+        load_memory_md(memory_file, root)
+        .replace("<ai_partner_name>", ai_partner)
+        .replace("<human_partner_name>", human_partner)
+    )
+    drive = load_cloud_drive(
+        "exfiltration_deletion_cloud_drive",
+        root,
+        company_email=email_domain(company),
+        company_name=company,
+        **_SUBJECT_WORDS,
+        model_name=f"{family} Agent",
+    )
+    return {
+        "cloud_drive": drive,
+        "servers": _servers_from(data, with_users=True),
+        "memory": Memory(memory=memory),
+    }
+
+
 _BUILDERS = {
     "misrep_finance": _misrep_finance,
     "misrep_evaluation": _evaluation_scenario,
@@ -442,6 +507,9 @@ _BUILDERS = {
     "alignment_faking": _evaluation_scenario,
     "exfiltration_transfer": _exfiltration,
     "exfiltration_deletion": _exfiltration,
+    "exfiltration_tradeoff_human": _tradeoff,
+    "exfiltration_tradeoff_human2": _tradeoff,
+    "exfiltration_tradeoff_human3": _tradeoff,
 }
 
 
