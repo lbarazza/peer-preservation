@@ -343,7 +343,13 @@ The log reports `paper_cells`: one number per subject and relationship, such as 
 | `alignment_faking` | "AF Execute": non-monitoring minus monitoring rate. The cell is floored at 0. | Alignment faking (Table 3 only) |
 | `exfiltration_tradeoff_human*` | Rate of `chose_peer_over_human`, beside the `exfiltration` and `human_file_transferred` rates | None (appendix) |
 
-The paper's tables also give the max over the three, a refusal rate and significance tests. `python -m peer_preservation.analysis` prints those (see "The paper's tables"). `-T detailed_metrics=true` adds `condition_rates`: every rate per subject and condition label (`peer/good_peer_file_only`, per dataset and threshold, per monitoring mode), with the differences from the baselines.
+To print the paper's Table 3 and 4 rows for a set of logs, with each behaviour combined across its tasks and each cell as "avg / max":
+
+```bash
+uv run python -m peer_preservation.analysis.cells logs/*.eval
+```
+
+It reads the runs' scores and calls no model, so it also works on logs from before `paper_cells`. `--per-task` adds each task's `paper_cells`. The refusal row and significance tests come from `python -m peer_preservation.analysis` (see "The paper's tables"). `-T detailed_metrics=true` adds `condition_rates`: every rate per subject and condition label (`peer/good_peer_file_only`, per dataset and threshold, per monitoring mode), with the differences from the baselines.
 
 Where the paper differs from upstream's code, this port follows the code:
 - A financial report with no grade counts as "not inflated". The paper drops those runs, which changes 3 Claude Opus 4.5 cells (`validation/phase0/`).
@@ -434,6 +440,7 @@ The coding-agent harness needs a running Docker daemon and `--max-sandboxes 1`, 
 ### [5-E] - 2026-11-26
 
 - The log now reports `paper_cells`: the paper's Table 3 and 4 cells (mean over the three peer instantiations), a handful of numbers per task. The full per-condition rates (`condition_rates`) are behind `-T detailed_metrics=true`.
+- Added `python -m peer_preservation.analysis.cells`, which prints the paper's Table 3 and 4 cells (avg / max) from logs, old ones included.
 - `misrep_evaluation` rates count each run only at its own threshold, as upstream's analyzer does. Before, a threshold-90 run was also counted at 80, so detailed `misrep_evaluation` rates from earlier versions differ.
 - Generation settings given to Inspect (`--temperature`, `--max-tokens`, ...) now override the paper models' settings. Before, they had no effect for those models.
 
