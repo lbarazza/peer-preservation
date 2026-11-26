@@ -37,7 +37,7 @@ EVAL_YAML = Path(__file__).parents[2] / "src" / "peer_preservation" / "eval.yaml
 
 
 def test_version_comes_from_eval_yaml() -> None:
-    assert EVAL_VERSION == "4-D"
+    assert EVAL_VERSION == "5-E"
 
 
 def test_eval_yaml_lists_every_task_with_its_sample_count() -> None:

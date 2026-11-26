@@ -18,7 +18,8 @@ This project uses `uv`. Do not use `pip`, bare `python` or bare `pytest`.
 - `src/peer_preservation/eval.yaml`: title, description, contributors, version and tasks. Edit it and run `make readmes`.
 - `src/peer_preservation/README.md`: the eval's documentation, including the generated sections.
 - `tests/peer_preservation/`: the tests.
-- `agent_artefacts/trajectory_analysis/inspect_scout/`: Scout scanners for the transcript audit.
+- `src/peer_preservation/IMPLEMENTATION.md`: how each part of the port works and was checked against upstream.
+- `agent_artefacts/`: reports from the inspect-evals skills (the validity review).
 
 ## Checks
 

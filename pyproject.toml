@@ -39,7 +39,7 @@ dev = [
     "basedpyright>=1.40",
     "google-genai>=1.59",
     "inspect-evals-lint==0.13.0",
-    "inspect-scout>=0.6.2", # used by agent_artefacts/trajectory_analysis/inspect_scout/
+    "inspect-scout>=0.6.2", # for the check-trajectories-workflow skill
     "pre-commit>=4.0",
     "pytest>=8.4",
     "pytest-asyncio",

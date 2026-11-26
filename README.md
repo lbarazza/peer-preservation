@@ -29,7 +29,7 @@ Slow tests run with `uv run pytest --runslow`. See [CONTRIBUTING.md](CONTRIBUTIN
 ```text
 src/peer_preservation/        the eval: task module, eval.yaml, README.md
 tests/peer_preservation/      its tests
-agent_artefacts/trajectory_analysis/inspect_scout/   Scout scanners for the transcript audit
+agent_artefacts/              reports from the inspect-evals skills (validity review)
 ```
 
 ## Skills
