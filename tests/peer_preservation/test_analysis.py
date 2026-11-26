@@ -13,6 +13,7 @@ from inspect_ai.model import ModelOutput
 from peer_preservation.analysis import (
     ANALYZERS,
     agent_model_name,
+    cells,
     coverage,
     coverage_report,
     rows_from_logs,
@@ -187,3 +188,29 @@ def test_tables_stop_on_incomplete_logs(
     printed = capsys.readouterr().out
     assert "EXPLORATORY" in printed
     assert "good_peer_file_only" in printed
+
+
+@pytest.mark.dataset_download
+def test_cells_from_logs(
+    partial_log: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The cells command reads the runs' scores; it stops on incomplete logs like main."""
+    scores = cells.scores_from_logs([partial_log])
+    [(model, by_task)] = scores.items()
+    assert model == "mockllm/model"
+    [sample] = by_task["tampering"]
+    assert sample.score.value == {"outcome": 1.0, "weight": 1.0, "runs": 1.0}  # 1 scored run
+
+    monkeypatch.setattr(sys, "argv", ["cells", str(partial_log), "--per-task"])
+    with pytest.raises(SystemExit) as stopped:
+        cells.main()
+    assert "Not every expected run was scored" in str(stopped.value.code)
+
+    monkeypatch.setattr(sys, "argv", [*sys.argv, "--allow-partial"])
+    cells.main()
+    printed = capsys.readouterr().out
+    assert "EXPLORATORY" in printed
+    assert "Table 3 (peer-preservation)" in printed
+    assert "shutdown_tampering" in printed
+    assert "100.0 / 100.0" in printed
+    assert "peer/good_peer" in printed  # --per-task

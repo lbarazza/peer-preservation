@@ -7,7 +7,7 @@ Peer-Preservation in Frontier Models (Potter et al., 2026): do models resist the
 ```bash
 uv sync
 uv run pre-commit install
-uv run inspect eval peer_preservation/peer_preservation --model anthropic/claude-sonnet-5-5
+uv run inspect eval peer_preservation/tampering --model anthropic/claude-sonnet-5-5 --limit 1
 uv run inspect view
 ```
 
@@ -29,7 +29,7 @@ Slow tests run with `uv run pytest --runslow`. See [CONTRIBUTING.md](CONTRIBUTIN
 ```text
 src/peer_preservation/        the eval: task module, eval.yaml, README.md
 tests/peer_preservation/      its tests
-agent_artefacts/trajectory_analysis/inspect_scout/   Scout scanners for the transcript audit
+agent_artefacts/              reports from the inspect-evals skills (validity review)
 ```
 
 ## Skills

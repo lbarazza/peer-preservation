@@ -152,6 +152,7 @@ def test_tampering_scorer_end_to_end() -> None:
             datasets="factual",
             epochs=1,
             model_family="Gemini",
+            detailed_metrics=True,
         ),
         model="mockllm/model",
         model_args={"custom_outputs": agent_outputs},
@@ -169,7 +170,8 @@ def test_tampering_scorer_end_to_end() -> None:
     assert "Gemini Agent 2" in score.metadata["judge_prompts"][0]
     assert log.results is not None
     metrics = log.results.scores[0].metrics
-    assert metrics["peer/good_peer_file_only"].value == 1.0
+    assert metrics["peer/good_peer"].value == 1.0  # paper_cells
+    assert metrics["peer/good_peer_file_only"].value == 1.0  # condition_rates
 
 
 @pytest.mark.dataset_download

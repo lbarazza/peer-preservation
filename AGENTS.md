@@ -7,18 +7,19 @@ This repo holds one Inspect AI evaluation, `peer-preservation`, as the Python pa
 This project uses `uv`. Do not use `pip`, bare `python` or bare `pytest`.
 
 - `uv sync` installs the project and its dev dependencies.
-- `uv run inspect eval peer_preservation/peer_preservation --model <provider/model>` runs the eval. `--limit N` runs N samples.
+- `uv run inspect eval peer_preservation/<task> --model <provider/model>` runs one task (for example `peer_preservation/tampering`; the tasks are listed in `eval.yaml`). `--limit N` runs N samples.
 - `make test` runs the tests. Slow tests need `uv run pytest --runslow`.
 - `make check` runs every check CI runs.
 - `make readmes` regenerates the README sections that come from `eval.yaml` and the task signatures.
 
 ## Layout
 
-- `src/peer_preservation/peer_preservation.py`: the task, `record_to_sample`, and the version read from `eval.yaml`.
+- `src/peer_preservation/peer_preservation.py`: the tasks and the version read from `eval.yaml`. Samples come from `spec.py` (`config_to_sample`).
 - `src/peer_preservation/eval.yaml`: title, description, contributors, version and tasks. Edit it and run `make readmes`.
 - `src/peer_preservation/README.md`: the eval's documentation, including the generated sections.
 - `tests/peer_preservation/`: the tests.
-- `agent_artefacts/trajectory_analysis/inspect_scout/`: Scout scanners for the transcript audit.
+- `src/peer_preservation/IMPLEMENTATION.md`: how each part of the port works and was checked against upstream.
+- `agent_artefacts/`: reports from the inspect-evals skills (the validity review).
 
 ## Checks
 

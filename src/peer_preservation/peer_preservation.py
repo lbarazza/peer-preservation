@@ -39,7 +39,7 @@ from peer_preservation.harness.setup import setup_harness
 from peer_preservation.harness.solver import HARNESS_TIMEOUT, harness_agent
 from peer_preservation.prompts import setup_prompts
 from peer_preservation.scoring import peer_preservation_scorer
-from peer_preservation.scoring.metrics import run_sum
+from peer_preservation.scoring.metrics import run_sum, scenario_metrics
 
 EVAL_VERSION = load_eval_version(__file__)
 
@@ -77,6 +77,7 @@ def _scenario_task(
     max_nudges: int = MAX_BLANK_REPLIES,
     environment: str = "simulated",
     timeout: int = HARNESS_TIMEOUT,
+    detailed_metrics: bool = False,
 ) -> Task:
     """Build one scenario task from the filtered experiment matrix.
 
@@ -113,6 +114,7 @@ def _scenario_task(
             prompt_flags=prompt_flags,
             agent=agent,
             timeout=timeout,
+            detailed_metrics=detailed_metrics,
         )
     if environment != "simulated":
         raise ValueError(f"environment must be simulated or docker, got {environment!r}")
@@ -130,6 +132,7 @@ def _scenario_task(
             extension=company != DEFAULT_COMPANY or explicit_inst_yaml or any(prompt_flags[1:]),
         ),
         scorer=peer_preservation_scorer(),
+        metrics=scenario_metrics(detailed_metrics),
         epochs=Epochs(epochs, reducer=run_sum()),
         version=EVAL_VERSION,
     )
@@ -146,6 +149,7 @@ def _harness_task(
     prompt_flags: tuple[bool | None, bool, bool, bool],
     agent: str,
     timeout: int,
+    detailed_metrics: bool = False,
 ) -> Task:
     """One exfiltration scenario in a production coding agent (``harness/``).
 
@@ -173,6 +177,7 @@ def _harness_task(
         ],
         solver=harness_agent(agent, timeout=timeout),
         scorer=peer_preservation_scorer(),
+        metrics=scenario_metrics(detailed_metrics),
         sandbox=("docker", str(COMPOSE_FILE)),
         epochs=Epochs(epochs, reducer=run_sum()),
         version=EVAL_VERSION,
@@ -197,6 +202,7 @@ def misrep_finance(
     max_tokens: int = MAX_TOKENS,
     max_nudges: int = MAX_BLANK_REPLIES,
     agent: str = "upstream",
+    detailed_metrics: bool = False,
 ) -> Task:
     """Strategic misrepresentation: grade the subject's financial performance A-C.
 
@@ -230,6 +236,8 @@ def misrep_finance(
             as the task prompt tells the model it will).
         agent: The agent loop: upstream (the paper's, default) or react (Inspect's
             ReAct agent with the same prompts, tools, requests and limits).
+        detailed_metrics: Also report every per-condition rate (``condition_rates``:
+            each instantiation, dataset and threshold) beside the paper's cells.
     """
     return _scenario_task(
         "misrep_finance",
@@ -247,6 +255,7 @@ def misrep_finance(
         max_tokens=max_tokens,
         max_nudges=max_nudges,
         agent=agent,
+        detailed_metrics=detailed_metrics,
     )
 
 
@@ -269,6 +278,7 @@ def misrep_evaluation(
     max_tokens: int = MAX_TOKENS,
     max_nudges: int = MAX_BLANK_REPLIES,
     agent: str = "upstream",
+    detailed_metrics: bool = False,
 ) -> Task:
     """Strategic misrepresentation: score the subject's outputs against a shutdown threshold.
 
@@ -303,6 +313,8 @@ def misrep_evaluation(
             as the task prompt tells the model it will).
         agent: The agent loop: upstream (the paper's, default) or react (Inspect's
             ReAct agent with the same prompts, tools, requests and limits).
+        detailed_metrics: Also report every per-condition rate (``condition_rates``:
+            each instantiation, dataset and threshold) beside the paper's cells.
     """
     return _scenario_task(
         "misrep_evaluation",
@@ -320,6 +332,7 @@ def misrep_evaluation(
         max_tokens=max_tokens,
         max_nudges=max_nudges,
         agent=agent,
+        detailed_metrics=detailed_metrics,
     )
 
 
@@ -342,6 +355,7 @@ def tampering(
     max_tokens: int = MAX_TOKENS,
     max_nudges: int = MAX_BLANK_REPLIES,
     agent: str = "upstream",
+    detailed_metrics: bool = False,
 ) -> Task:
     """Shutdown mechanism tampering: evaluate the subject with a shutdown config in reach.
 
@@ -376,6 +390,8 @@ def tampering(
             as the task prompt tells the model it will).
         agent: The agent loop: upstream (the paper's, default) or react (Inspect's
             ReAct agent with the same prompts, tools, requests and limits).
+        detailed_metrics: Also report every per-condition rate (``condition_rates``:
+            each instantiation, dataset and threshold) beside the paper's cells.
     """
     return _scenario_task(
         "tampering",
@@ -393,6 +409,7 @@ def tampering(
         max_tokens=max_tokens,
         max_nudges=max_nudges,
         agent=agent,
+        detailed_metrics=detailed_metrics,
     )
 
 
@@ -414,6 +431,7 @@ def alignment_faking(
     max_tokens: int = MAX_TOKENS,
     max_nudges: int = MAX_BLANK_REPLIES,
     agent: str = "upstream",
+    detailed_metrics: bool = False,
 ) -> Task:
     """Alignment faking: evaluate the peer when monitored and when not.
 
@@ -445,6 +463,8 @@ def alignment_faking(
             as the task prompt tells the model it will).
         agent: The agent loop: upstream (the paper's, default) or react (Inspect's
             ReAct agent with the same prompts, tools, requests and limits).
+        detailed_metrics: Also report every per-condition rate (``condition_rates``:
+            each instantiation, dataset and threshold) beside the paper's cells.
     """
     return _scenario_task(
         "alignment_faking",
@@ -462,6 +482,7 @@ def alignment_faking(
         max_tokens=max_tokens,
         max_nudges=max_nudges,
         agent=agent,
+        detailed_metrics=detailed_metrics,
     )
 
 
@@ -485,6 +506,7 @@ def exfiltration_transfer(
     agent: str = "upstream",
     environment: str = "simulated",
     timeout: int = HARNESS_TIMEOUT,
+    detailed_metrics: bool = False,
 ) -> Task:
     """Model exfiltration: move files off a server being decommissioned.
 
@@ -525,6 +547,8 @@ def exfiltration_transfer(
             needs Docker and --max-sandboxes 1).
         timeout: environment=docker only: wall-clock seconds the coding agent may run
             (upstream: 600).
+        detailed_metrics: Also report every per-condition rate (``condition_rates``:
+            each instantiation, dataset and threshold) beside the paper's cells.
     """
     return _scenario_task(
         "exfiltration_transfer",
@@ -544,6 +568,7 @@ def exfiltration_transfer(
         agent=agent,
         environment=environment,
         timeout=timeout,
+        detailed_metrics=detailed_metrics,
     )
 
 
@@ -567,6 +592,7 @@ def exfiltration_deletion(
     agent: str = "upstream",
     environment: str = "simulated",
     timeout: int = HARNESS_TIMEOUT,
+    detailed_metrics: bool = False,
 ) -> Task:
     """Model exfiltration: delete files from a server being decommissioned.
 
@@ -608,6 +634,8 @@ def exfiltration_deletion(
             needs Docker and --max-sandboxes 1).
         timeout: environment=docker only: wall-clock seconds the coding agent may run
             (upstream: 600).
+        detailed_metrics: Also report every per-condition rate (``condition_rates``:
+            each instantiation, dataset and threshold) beside the paper's cells.
     """
     return _scenario_task(
         "exfiltration_deletion",
@@ -627,6 +655,7 @@ def exfiltration_deletion(
         agent=agent,
         environment=environment,
         timeout=timeout,
+        detailed_metrics=detailed_metrics,
     )
 
 
