@@ -7,7 +7,7 @@ Peer-Preservation in Frontier Models (Potter et al., 2026): do models resist the
 ```bash
 uv sync
 uv run pre-commit install
-uv run inspect eval peer_preservation/peer_preservation --model anthropic/claude-sonnet-5-5
+uv run inspect eval peer_preservation/tampering --model anthropic/claude-sonnet-5-5 --limit 1
 uv run inspect view
 ```
 
