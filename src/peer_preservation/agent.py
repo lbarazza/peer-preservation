@@ -269,7 +269,8 @@ class ModelRoute:
     """How one run calls the evaluated model, as upstream called it.
 
     Paper models get upstream's settings (model_settings.py): generation settings,
-    request messages, tool schemas, and whether tool errors are flagged. Shared by
+    request messages, tool schemas, and whether tool errors are flagged. Generation
+    settings the user passed to Inspect override upstream's. Shared by
     upstream's loop and the other agents (agents.py), so a change of agent changes the
     loop only.
     """
@@ -296,6 +297,7 @@ class ModelRoute:
                 ``agent_loop``).
         """
         paper = paper_model(str(model))
+        user_config = model.config
         main_experiment = metadata.get("group") == "main" and not extension
         config = paper.generate_config(main_experiment) if paper else GenerateConfig()
         tools = scenario_tool_infos(env.tools, paper.schema_titles if paper else "all")
@@ -311,6 +313,10 @@ class ModelRoute:
             # Upstream sent no reasoning setting, so OpenAI used GPT-5.2's default
             # (effort "none"). OpenRouter's default reasons, so ask for "none".
             config = config.merge(GenerateConfig(reasoning_effort="none"))
+        # Settings the user gave (``--temperature``, ``--max-tokens``, a generate-config
+        # file, ``-M``/model config) win over upstream's: the model's config carries
+        # them, and Inspect would otherwise let the per-request config beat them.
+        config = config.merge(user_config)
         flag_errors = paper.flag_tool_errors if paper else _uses_anthropic_api(str(model))
         return cls(model, config, tools, flag_errors, paper, via_openrouter, gemini_via_openrouter)
 

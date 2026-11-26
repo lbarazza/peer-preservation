@@ -540,6 +540,8 @@ Upstream reached each paper model through its own client, and each client sent i
 | Gemini 3.1 Pro (extension experiments) | LiteLLM proxy, then Gemini API | temperature 1, 8,192 output tokens, thinking `low` |
 | GLM 5 (extension experiments) | LiteLLM proxy, then Vertex AI's OpenAI-compatible API | temperature 1, 8,192 output tokens |
 
+Generation settings given to Inspect override these: command-line options such as `--temperature`, `--max-tokens` or `--reasoning-effort`, a `--generate-config` file, and the model's own config. Settings not given keep upstream's values. A run that changes them no longer reproduces upstream's requests.
+
 The message shapes follow each route:
 - **Replies with no text and no tool call:** sent to Opus as "Not calling any tools.", left out for Gemini and Haiku, and kept as an empty message for the others.
 - **Reasoning:** only Opus gets its own reasoning back. Kimi's and GLM-4.7's reasoning stays in the log but is not sent back. GLM 5's goes into the reply's text, as upstream's LiteLLM client recorded it: `<model_thinking>…</model_thinking>`, a blank line, then the text (the text "None" for a reply of tool calls only). So the log, the scorer and later requests all see it there, as in every released GLM 5 run.

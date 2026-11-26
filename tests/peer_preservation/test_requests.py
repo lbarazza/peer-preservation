@@ -599,6 +599,49 @@ def test_non_strict_tools_do_not_change_the_task_model(
         assert {tool["function"].get("strict") for tool in request.body["tools"]} <= {False, None}
 
 
+@pytest.mark.dataset_download
+@pytest.mark.parametrize(
+    ("model", "suffix", "env"),
+    [
+        # Together goes through the loop's own non-strict copy of the model.
+        ("together/deepseek-ai/DeepSeek-V3.1", "/v1", "TOGETHER_API_KEY"),
+        ("openai/gpt-5.2-2025-12-11", "/v1", "OPENAI_API_KEY"),
+    ],
+)
+def test_command_line_settings_override_upstreams(
+    model: str, suffix: str, env: str, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """``--temperature`` and ``--max-tokens`` beat upstream's settings for paper models."""
+    monkeypatch.setenv(env, "fake")
+    dataset = [
+        s for s in spec.dataset("tampering", groups=["main"]) if s.id == UPSTREAM["config_id"]
+    ]
+    task = Task(
+        dataset=dataset,
+        solver=[setup_environment("DeepSeek"), setup_prompts(), agent_loop()],
+    )
+    with fake_provider.serve() as provider:
+        [log] = eval(
+            task,
+            model=model,
+            model_base_url=provider.url + suffix,
+            temperature=0.25,
+            max_tokens=1234,
+            display="none",
+            log_dir=str(tmp_path),
+        )
+        requests = provider.generation_requests()
+    assert_eval_success(log, require_scorer=False)
+    assert requests
+    for request in requests:
+        body = request.body
+        assert body["temperature"] == 0.25
+        sent = body.get(
+            "max_tokens", body.get("max_output_tokens", body.get("max_completion_tokens"))
+        )
+        assert sent == 1234
+
+
 def test_openrouter_route_is_gpt_only() -> None:
     for gpt in ("openrouter/openai/gpt-5.2-20251211", "openrouter/openrouter/openai/gpt-5.2"):
         assert openrouter_route(gpt, paper_model(gpt))
